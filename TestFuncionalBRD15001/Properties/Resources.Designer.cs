@@ -63,16 +63,6 @@ namespace TestFuncionalBRD15001.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Circles_3 {
-            get {
-                object obj = ResourceManager.GetObject("Circles-3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap gnome_help {
             get {
                 object obj = ResourceManager.GetObject("gnome-help", resourceCulture);

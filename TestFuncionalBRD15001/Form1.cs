@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 using FTD2XX_NET;
 using System.IO;
+using System.Deployment.Application;
 
 namespace TestFuncionalBRD15001
 {
@@ -91,8 +92,8 @@ namespace TestFuncionalBRD15001
         private double[] test_adcs_medias = new double[16];
         private int[] test_adcs_ok_fallo = new int[16]; // -1 => no test superado, 0 => fallo, 1 => ok
         // Supervisores de Tension/corriente/temperatura
-        private double test_spv_temp1_med, test_spv_temp1_ref, test_spv_temp1_tol;
-        private double test_spv_temp2_med, test_spv_temp2_ref, test_spv_temp2_tol;
+        private double test_spv_temp1_med, test_spv_temp1_ref;
+        private double test_spv_temp2_med;
         private double test_spv_vin_med, test_spv_vin_ref, test_spv_vin_tol;
         private double test_spv_iin_med, test_spv_iin_ref, test_spv_iin_tol;
         private double test_spv_vdsp_med, test_spv_vdsp_ref, test_spv_vdsp_tol;
@@ -129,10 +130,13 @@ namespace TestFuncionalBRD15001
         private int test_fram_tiempo_test_desbloqueo;
         // control velocidad turbinas
         private int test_ctrlturbina1_ok_fallo;
+        private double test_ctrlturbina1_pulsos_sec_0;
         private double test_ctrlturbina1_pulsos_sec_50;
         private int test_ctrlturbina2_ok_fallo;
+        private double test_ctrlturbina2_pulsos_sec_0;
         private double test_ctrlturbina2_pulsos_sec_50;
         private int test_ctrlturbina3_ok_fallo;
+        private double test_ctrlturbina3_pulsos_sec_0;
         private double test_ctrlturbina3_pulsos_sec_50;
         // Entradas / salidas digitales
         private int[] test_io_reles_entradas_ok_fallo = new int[16];
@@ -154,10 +158,17 @@ namespace TestFuncionalBRD15001
         private PictureBox[] marcasErroresOpticos;
         private PictureBox[] marcasTurbinas;
 
+        // tablas de asignacion de canales ADC en el ComboBox
+        int[] canalesADCcombo = { 12, 8, 4, 0, 13, 9, 5, 1, 2, 6, 10, 14, 3, 7, 11, 15 };
+        // dimensiones fisicas de las medidas de cada canal ADC
+        string[] dimension_ref_adc = {"V", "V", "mA", "V", "V", "V", "mA", "V",
+                                          "mA", "V", "mA", "V", "mA", "V", "mA", "V"};
+
         // bandera para llamar a reset informes desde el timer2 a peticion de la isr de recepcion de puerto serie
         private bool flag_cambia_versiones = false;
 
-        private const string VER_SOFTWARE = "1.1.0";
+        private const string VER_SOFTWARE = "1.1.0.ND";
+        private string sLabelVersionSoftware = "V" + VER_SOFTWARE;
 
         public Form1()
         {
@@ -186,10 +197,9 @@ namespace TestFuncionalBRD15001
             }
             leeNTC = 0;
 
-            canal_adc_seleccionado = 0;
+            // canal seleccionado por defecto
             radioButtonADC_seleccionado = radioButtonADCA0;
-            radioButtonADCA0.Checked = true;
-            comboBoxCanalADCseleccionado.SelectedIndex = 3;
+            comboBoxCanalADCseleccionado.SelectedIndex = 0;
 
             // inicializa marcas de fallo/ok tests
             marcasADCs = new PictureBox[]{
@@ -210,7 +220,7 @@ namespace TestFuncionalBRD15001
                                     pictureBoxInput4, pictureBoxInput5, pictureBoxInput6, pictureBoxInput7,
                                     pictureBoxInput8, pictureBoxInput9, pictureBoxInput10, pictureBoxInput11,
                                     pictureBoxInput12, pictureBoxInput13, pictureBoxInput14, pictureBoxInput15};
-            marcasLEDs = new PictureBox[] { pictureBoxLed0, pictureBoxLed1, pictureBoxLed2, pictureBoxLed3, pictureBoxLed3 };
+            marcasLEDs = new PictureBox[] { pictureBoxLed0, pictureBoxLed1, pictureBoxLed2, pictureBoxLed3, pictureBoxLed4 };
             marcasDisparos = new PictureBox[]{ pictureBoxDisparoTopR, pictureBoxDisparoBotR,
                                     pictureBoxDisparoTopS, pictureBoxDisparoBotS,
                                     pictureBoxDisparoTopT, pictureBoxDisparoBotT };
@@ -222,7 +232,28 @@ namespace TestFuncionalBRD15001
             leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
             reset_informes_tests(true);
 
-            labelVersion.Text = "V" + VER_SOFTWARE;
+            try
+            {
+                Version version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+                sLabelVersionSoftware = "V" + version;
+            }
+            catch(Exception)
+            {
+            }
+
+            labelVersion.Text = sLabelVersionSoftware;
+        }
+
+        private void panelCanalADC_Click(object sender, EventArgs e)
+        {
+            Panel pn = sender as Panel;
+            if (pn != null)
+            {
+                string tag = pn.Tag.ToString();
+                int canal = Int32.Parse(tag);
+                int indiceComboBoxCanalesADC = Array.IndexOf(canalesADCcombo, canal);
+                comboBoxCanalADCseleccionado.SelectedIndex = indiceComboBoxCanalesADC;
+            }
         }
 
         private void actualiza_marcas_leyenda_resultados_tests()
@@ -263,25 +294,498 @@ namespace TestFuncionalBRD15001
         private void button2_Click(object sender, EventArgs e)
         {
             string nombreCOM = comboBoxCOMs.GetItemText(comboBoxCOMs.SelectedItem);
-            lee_pid_vid_serial_usb_uart(nombreCOM);
 
-            if ((cadena_USB_UART_VID.Length != 0) && (cadena_USB_UART_PID.Length != 0))
+            if ((cadena_USB_UART_VID.Length == 0) || (cadena_USB_UART_PID.Length == 0))
             {
+                if (test != TipoTest.NO_TEST)
+                {
+                    timer1.Enabled = false;
+                    DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Ignorar Serial Number", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (res == DialogResult.No)
+                    {
+                        timer1.Enabled = true;
+                        return;
+                    }
+                    else test = TipoTest.NO_TEST;
+                }
+
                 try
                 {
-                    RegistryKey rk = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\UsbFlags", true);
-                    rk.SetValue("IgnoreHWSerNum" + cadena_USB_UART_VID + cadena_USB_UART_PID, new byte[] { 1 }, RegistryValueKind.Binary);
+                    serialPort1.Close();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Ignorar Serial Number del puente USB-Serie");
+                    MessageBox.Show(ex.Message, "Ignorar Serial Number");
+                    return;
+                }
+                botonConectarDesconectar.Text = "Conectar";
+
+                lee_pid_vid_serial_usb_uart(nombreCOM);
+            }
+
+            if ((cadena_USB_UART_VID.Length != 0) && (cadena_USB_UART_PID.Length != 0))
+            {
+                FormIgnorar_USB_UART_SN formIgnorar = new FormIgnorar_USB_UART_SN(nombreCOM, cadena_USB_UART_VID, cadena_USB_UART_PID);
+                formIgnorar.ShowDialog();
+            }
+        }
+
+        private string genera_informe()
+        {
+            string informe = "";
+
+            informe = "****************************************************************\r\n\r\n";
+
+            informe += "********************* VERSIONES *********************\r\n\r\n";
+
+            informe += "********** Versiones software: **********\r\n";
+            informe += "* Versión de software PC/Windows: " + sLabelVersionSoftware + "\r\n";
+            informe += "* Version de diseño lógico en FPGA: " + ((cadena_ver_fpga.Length != 0)? cadena_ver_fpga:"NO CONOCIDO") + "\r\n";
+            informe += "* Versión Firmware de test DSP: " + ((cadena_ver_firmware.Length != 0)?cadena_ver_firmware:"NO CONOCIDO") + "\r\n\r\n";
+
+            informe += "********** Versiones hardware: **********\r\n";
+            informe += "* USB-SERIE VID: " + ((cadena_USB_UART_VID.Length!=0)? cadena_USB_UART_VID : "NO CONOCIDO") + "\r\n";
+            informe += "* USB-SERIE PID: " + ((cadena_USB_UART_PID.Length != 0) ? cadena_USB_UART_PID : "NO CONOCIDO") + "\r\n";
+            informe += "* USB-SERIE SN: " + ((cadena_USB_UART_SN.Length != 0) ? cadena_USB_UART_SN : "NO CONOCIDO") + "\r\n";
+            informe += "* ID unico de la FPGA (DNA): " + ((cadena_id_dna.Length != 0) ? cadena_id_dna : "NO CONOCIDO") + "\r\n";
+            informe += "* DSP PARTID = " + ((cadena_dsp_partid.Length != 0) ? cadena_dsp_partid : "NO CONOCIDO") + "\r\n";
+            informe += "* DSP CLASSID = " + ((cadena_dsp_classid.Length != 0) ? cadena_dsp_classid : "NO CONOCIDO") + "\r\n";
+            informe += "* DSP REVID = " + ((cadena_dsp_revid.Length != 0) ? cadena_dsp_revid : "NO CONOCIDO") + "\r\n\r\n";
+
+            informe += "******************* RESULTADOS *******************\r\n\r\n";
+
+            informe += "********** Resultado global: **********\r\n";
+            if ((leyenda_resultados_tests.Contains<int>(-1)) && (leyenda_resultados_tests.Contains<int>(0)))
+                informe += "* Existen tests no ejecutados, existen tests con indicacion de fallos\r\n";
+            else if (leyenda_resultados_tests.Contains<int>(-1))
+                informe += "* Existen tests no ejecutados\r\n";
+            else if (leyenda_resultados_tests.Contains<int>(0))
+                informe += "* Existen tests con indicacion de fallos\r\n";
+            else
+            {
+                bool res_ok = true;
+
+                foreach (int res in leyenda_resultados_tests)
+                    if (res != 1) res_ok = false;
+
+                if (res_ok)
+                    informe += "* Todos los tests ejecutados y OK\r\n";
+                else
+                    informe += "* ERROR: resultados no coherentes\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Tests de supervisores de tension/corriente/temperatura: **********\r\n";
+            informe += "**** Sensor de temperatura 1: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_temp1 == 1) informe += "OK\r\n";
+            else if(test_spv_ok_fallo_temp1 == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_temp1 == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_temp1 != -1)
+            {
+                informe += "* Medida = " + test_spv_temp1_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC\r\n";
+                double auxmin = test_spv_temp1_ref - 1.0;
+                double auxmax = test_spv_temp1_ref + 15.0;
+                informe += "* Referencia = " + test_spv_temp1_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + 
+                    "ºC. (Rango válido de medida: " + auxmin.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC a " + 
+                    auxmax.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC)\r\n";
+                //informe += "* Tolerancia = " + test_spv_temp1_tol.ToString() + "%\r\n";
+            }
+            informe += "**** Sensor de temperatura 2: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_temp2 == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_temp2 == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_temp2 == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_temp2 != -1)
+            {
+                informe += "* Medida = " + test_spv_temp2_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC\r\n";
+                double auxmin = test_spv_temp1_ref - 1.0;
+                double auxmax = test_spv_temp1_ref + 15.0;
+                informe += "* Referencia = " + test_spv_temp1_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + 
+                    "ºC. (Rango válido de medida: " + auxmin.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC a " +
+                    auxmax.ToString(System.Globalization.CultureInfo.InvariantCulture) + "ºC)\r\n";
+                //informe += "* Tolerancia = " + test_spv_temp2_tol.ToString() + "%\r\n";
+            }
+            informe += "**** Sensor de tension de alimentacion (Vin): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_vin == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_vin == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_vin == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_vin != -1)
+            {
+                informe += "* Medida = " + test_spv_vin_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_vin_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_vin_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de corriente de alimentacion (Iin): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_iin == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_iin == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_iin == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_iin != -1)
+            {
+                informe += "* Medida = " + test_spv_iin_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "A\r\n";
+                informe += "* Referencia = " + test_spv_iin_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "A\r\n";
+                informe += "* Tolerancia = " + test_spv_iin_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de tension de alimentacion a la placa DSP (Vdsp): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_vdsp == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_vdsp == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_vdsp == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_vdsp != -1)
+            {
+                informe += "* Medida = " + test_spv_vdsp_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_vdsp_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_vdsp_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de tension de alimentacion a transmisores fib optica (Vfo): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_vfo == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_vfo == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_vfo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_vfo != -1)
+            {
+                informe += "* Medida = " + test_spv_vfo_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_vfo_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_vfo_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de tension de alimentacion a reles (Vreles): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_vreles == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_vreles == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_vreles == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_vreles != -1)
+            {
+                informe += "* Medida = " + test_spv_vreles_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_vreles_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_vreles_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de tension de alimentacion de 3.3V (V_3.3V): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_v3_3v == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_v3_3v == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_v3_3v == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_v3_3v != -1)
+            {
+                informe += "* Medida = " + test_spv_v3_3v_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_v3_3v_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_v3_3v_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Sensor de tension de bateria (Vbat): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_spv_ok_fallo_vbat == 1) informe += "OK\r\n";
+            else if (test_spv_ok_fallo_vbat == 0) informe += "FALLO\r\n";
+            else if (test_spv_ok_fallo_vbat == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_spv_ok_fallo_vbat != -1)
+            {
+                informe += "* Medida = " + test_spv_vbat_med.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Referencia = " + test_spv_vbat_ref.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                informe += "* Tolerancia = " + test_spv_vbat_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Tests de puerto de comunicacion RS-422 (CON12): **********\r\n";
+            informe += "**** Test de transmision en bucle - RX deshabilitada - TX deshabilitada: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rs422_loop_rxdis_txdis_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rs422_loop_rxdis_txdis_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rs422_loop_rxdis_txdis_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "**** Test de transmision en bucle - RX deshabilitada - TX habilitada: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rs422_loop_rxdis_txena_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rs422_loop_rxdis_txena_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rs422_loop_rxdis_txena_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "**** Test de transmision en bucle - RX habilitada - TX deshabilitada: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rs422_loop_rxena_txdis_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rs422_loop_rxena_txdis_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rs422_loop_rxena_txdis_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "**** Test de transmision en bucle - RX habilitada - TX habilitada: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rs422_loop_rxena_txena_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rs422_loop_rxena_txena_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rs422_loop_rxena_txena_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+
+            informe += "\r\n";
+
+            informe += "********** Tests de puertos de comunicacion CAN (CON7 (A) y CON13 (B)): **********\r\n";
+            informe += "**** Test de nivel recesivo/dominante CAN A en bucle: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_cana_loop_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_cana_loop_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_cana_loop_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "**** Test de nivel recesivo/dominante CAN B en bucle: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_canb_loop_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_canb_loop_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_canb_loop_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "**** Test de nivel recesivo/dominante CAN A y CAN B interconectados: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_cana_canb_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_cana_canb_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_cana_canb_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+
+            informe += "\r\n";
+
+            informe += "********** Test de escritura/lectura de banco de memoria SRAM: **********\r\n";
+            informe += "* RESULTADO: ";
+            if (leyenda_resultados_tests[(int)TipoTest.TEST_SRAM] == 1) informe += "OK\r\n";
+            else if (leyenda_resultados_tests[(int)TipoTest.TEST_SRAM] == 0) informe += "FALLO\r\n";
+            else if (leyenda_resultados_tests[(int)TipoTest.TEST_SRAM] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (leyenda_resultados_tests[(int)TipoTest.TEST_SRAM] != -1)
+            {
+                double tiempo = 100.0*((double)test_sram_tiempo_test);
+                informe += "* Tiempo de test = " + tiempo.ToString(System.Globalization.CultureInfo.InvariantCulture) + " milisengundos\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Test de escritura/lectura/protección/desprotección escritura de banco de memoria FRAM: **********\r\n";
+            informe += "**** Test de escritura 1: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_fram_escritura1_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_fram_escritura1_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_fram_escritura1_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_fram_escritura1_ok_fallo != -1)
+            {
+                double tiempo = 100.0 * ((double)test_fram_tiempo_test_escritura1);
+                informe += "* Tiempo de test = " + tiempo.ToString(System.Globalization.CultureInfo.InvariantCulture) + " milisengundos\r\n";
+            }
+            informe += "**** Test de escritura 2: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_fram_escritura2_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_fram_escritura2_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_fram_escritura2_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_fram_escritura2_ok_fallo != -1)
+            {
+                double tiempo = 100.0 * ((double)test_fram_tiempo_test_escritura2);
+                informe += "* Tiempo de test = " + tiempo.ToString(System.Globalization.CultureInfo.InvariantCulture) + " milisengundos\r\n";
+            }
+            informe += "**** Test de protección de escritura: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_fram_bloqueo_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_fram_bloqueo_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_fram_bloqueo_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_fram_bloqueo_ok_fallo != -1)
+            {
+                double tiempo = 100.0 * ((double)test_fram_tiempo_test_bloqueo);
+                informe += "* Tiempo de test = " + tiempo.ToString(System.Globalization.CultureInfo.InvariantCulture) + " milisengundos\r\n";
+            }
+            informe += "**** Test de desprotección de escritura: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_fram_desbloqueo_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_fram_desbloqueo_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_fram_desbloqueo_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_fram_desbloqueo_ok_fallo != -1)
+            {
+                double tiempo = 100.0 * ((double)test_fram_tiempo_test_desbloqueo);
+                informe += "* Tiempo de test = " + tiempo.ToString(System.Globalization.CultureInfo.InvariantCulture) + " milisengundos\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Test de sensado de termistores NTC: **********\r\n";
+            informe += "**** Medida de resistencia NTC 1 (CON27): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ntcs_ok_fallo[0] == 1) informe += "OK\r\n";
+            else if (test_ntcs_ok_fallo[0] == 0) informe += "FALLO\r\n";
+            else if (test_ntcs_ok_fallo[0] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ntcs_ok_fallo[0] != -1)
+            {
+                informe += "* Medida = " + test_ntcs_medidas[0].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Referencia = " + test_ntcs_referencias[0].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Tolerancia = " + test_ntcs_tolerancias[0].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Medida de resistencia NTC 2 (CON28): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ntcs_ok_fallo[1] == 1) informe += "OK\r\n";
+            else if (test_ntcs_ok_fallo[1] == 0) informe += "FALLO\r\n";
+            else if (test_ntcs_ok_fallo[1] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ntcs_ok_fallo[1] != -1)
+            {
+                informe += "* Medida = " + test_ntcs_medidas[1].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Referencia = " + test_ntcs_referencias[1].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Tolerancia = " + test_ntcs_tolerancias[1].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Medida de resistencia NTC 3 (CON29): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ntcs_ok_fallo[2] == 1) informe += "OK\r\n";
+            else if (test_ntcs_ok_fallo[2] == 0) informe += "FALLO\r\n";
+            else if (test_ntcs_ok_fallo[2] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ntcs_ok_fallo[2] != -1)
+            {
+                informe += "* Medida = " + test_ntcs_medidas[2].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Referencia = " + test_ntcs_referencias[2].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Tolerancia = " + test_ntcs_tolerancias[2].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Medida de resistencia NTC 4 (CON30): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ntcs_ok_fallo[3] == 1) informe += "OK\r\n";
+            else if (test_ntcs_ok_fallo[3] == 0) informe += "FALLO\r\n";
+            else if (test_ntcs_ok_fallo[3] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ntcs_ok_fallo[3] != -1)
+            {
+                informe += "* Medida = " + test_ntcs_medidas[3].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Referencia = " + test_ntcs_referencias[3].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Tolerancia = " + test_ntcs_tolerancias[3].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+            informe += "**** Medida de resistencia NTC 5 (CON31): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ntcs_ok_fallo[4] == 1) informe += "OK\r\n";
+            else if (test_ntcs_ok_fallo[4] == 0) informe += "FALLO\r\n";
+            else if (test_ntcs_ok_fallo[4] == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ntcs_ok_fallo[4] != -1)
+            {
+                informe += "* Medida = " + test_ntcs_medidas[4].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Referencia = " + test_ntcs_referencias[4].ToString(System.Globalization.CultureInfo.InvariantCulture) + " Ohmios\r\n";
+                informe += "* Tolerancia = " + test_ntcs_tolerancias[4].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Test interfaces para control de velocidad de turbinas: **********\r\n";
+            informe += "**** Test de control de turbina 1 (CON46): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ctrlturbina1_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_ctrlturbina1_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_ctrlturbina1_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ctrlturbina1_pulsos_sec_0 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 0% : " + test_ctrlturbina1_pulsos_sec_0.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+            if (test_ctrlturbina1_pulsos_sec_50 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 50% : " + test_ctrlturbina1_pulsos_sec_50.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+            informe += "**** Test de control de turbina 2 (CON48): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ctrlturbina2_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_ctrlturbina2_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_ctrlturbina2_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ctrlturbina2_pulsos_sec_0 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 0% : " + test_ctrlturbina2_pulsos_sec_0.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+            if (test_ctrlturbina2_pulsos_sec_50 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 50% : " + test_ctrlturbina2_pulsos_sec_50.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+            informe += "**** Test de control de turbina 3 (CON49): ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_ctrlturbina3_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_ctrlturbina3_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_ctrlturbina3_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            if (test_ctrlturbina3_pulsos_sec_0 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 0% : " + test_ctrlturbina3_pulsos_sec_0.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+            if (test_ctrlturbina3_pulsos_sec_50 != -1)
+            {
+                informe += "* Medida de pulsos/s con duty cycle 50% : " + test_ctrlturbina3_pulsos_sec_50.ToString(System.Globalization.CultureInfo.InvariantCulture) + " pulsos/segundo\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Tests de reles, salidas optoacopladas y entradas digitales: **********\r\n";
+            informe += "**** Test de bucle rele-entrada digital: ****\r\n";
+            for(int i=0; i<16; i++)
+            {
+                informe += "* RESULTADO bucle rele" + i + "-entrada" + i + ": ";
+                if (test_io_reles_entradas_ok_fallo[i] == 1) informe += "OK\r\n";
+                else if (test_io_reles_entradas_ok_fallo[i] == 0) informe += "FALLO\r\n";
+                else if (test_io_reles_entradas_ok_fallo[i] == -1) informe += "TEST NO EJECUTADO\r\n";
+            }
+            informe += "**** Test de bucle salida optoacoplada-entrada digital: ****\r\n";
+            for (int i = 0; i < 5; i++)
+            {
+                informe += "* RESULTADO bucle salida optoacoplada" + i + "-entrada" + i + ": ";
+                if (test_io_leds_entradas_ok_fallo[i] == 1) informe += "OK\r\n";
+                else if (test_io_leds_entradas_ok_fallo[i] == 0) informe += "FALLO\r\n";
+                else if (test_io_leds_entradas_ok_fallo[i] == -1) informe += "TEST NO EJECUTADO\r\n";
+            }
+
+            informe += "\r\n";
+
+            informe += "********** Tests de transmisores y receptores ópticos: **********\r\n";
+            informe += "**** Tests de bucles transmisores de disparos-receptores de error de driver: ****\r\n";
+            informe += "* RESULTADO bucle XT1-XR1 (Disparo/Error TOP R): ";
+            if (test_fo_disp_error_ok_fallo[0] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[0] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[0] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT3-XR3 (Disparo/Error BOT R): ";
+            if (test_fo_disp_error_ok_fallo[3] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[3] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[3] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT5-XR6 (Disparo/Error TOP S): ";
+            if (test_fo_disp_error_ok_fallo[1] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[1] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[1] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT7-XR8 (Disparo/Error BOT S): ";
+            if (test_fo_disp_error_ok_fallo[4] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[4] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[4] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT9-XR11 (Disparo/Error TOP T): ";
+            if (test_fo_disp_error_ok_fallo[2] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[2] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[2] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT11-XR13 (Disparo/Error BOT T): ";
+            if (test_fo_disp_error_ok_fallo[5] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_error_ok_fallo[5] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_error_ok_fallo[5] == -1) informe += "TEST NO EJECUTADO\r\n";
+
+            informe += "**** Tests de bucles transmisores de disparos-receptores de error de sobretemperatura/sincronismo: ****\r\n";
+            informe += "* RESULTADO bucle XT1-XR5 (Disparo TOP R/Error Sobretemperatura R): ";
+            if (test_fo_disp_ovt_ok_fallo[0] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[0] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[0] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT3-XR10 (Disparo BOT R/Error Sobretemperatura S): ";
+            if (test_fo_disp_ovt_ok_fallo[1] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[1] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[1] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT5-XR15 (Disparo TOP S/Error Sobretemperatura T): ";
+            if (test_fo_disp_ovt_ok_fallo[2] == 1) informe += "OK\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[2] == 0) informe += "FALLO\r\n";
+            else if (test_fo_disp_ovt_ok_fallo[2] == -1) informe += "TEST NO EJECUTADO\r\n";
+            informe += "* RESULTADO bucle XT7-XR16 (Disparo BOT S/Receptor de sincronismo): ";
+            if (test_fo_bot_s_rxsynch_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_fo_bot_s_rxsynch_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_fo_bot_s_rxsynch_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+
+            informe += "\r\n";
+
+            informe += "********** Tests de canales ADC del DSP: **********\r\n";
+            
+            for (int i = 0; i < 16; i++ )
+            {
+                informe += "**** ";
+                informe += comboBoxCanalADCseleccionado.Items[i];
+                informe += " ****\r\n";
+
+                informe += "* RESULTADO: ";
+                int j = canalesADCcombo[i];
+                if (test_adcs_ok_fallo[j] == 1) informe += "OK\r\n";
+                else if (test_adcs_ok_fallo[j] == 0) informe += "FALLO\r\n";
+                else if (test_adcs_ok_fallo[j] == -1) informe += "TEST NO EJECUTADO\r\n";
+                if (test_adcs_ok_fallo[j] != -1)
+                {
+                    informe += "* Medida = " + test_adcs_medias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
+                    informe += "* Referencia = " + test_adcs_referencias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
+                    informe += "* Tolerancia = " + test_adcs_tolerancias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
                 }
             }
+
+            informe += "\r\n*****************************************************************";
+
+            return informe;
         }
 
         private void buttonInforme_Click(object sender, EventArgs e)
         {
-            FormInforme fi = new FormInforme();
+            string informe = genera_informe();
+            FormInforme fi = new FormInforme(informe, leyenda_resultados_tests, cadena_USB_UART_VID + cadena_USB_UART_PID + "_" + cadena_USB_UART_SN + "_" + cadena_id_dna);
             fi.ShowDialog();
             fi.Close();
         }
@@ -437,8 +941,14 @@ namespace TestFuncionalBRD15001
             test_fram_tiempo_test_desbloqueo = -1;
             // control velocidad turbinas
             test_ctrlturbina1_ok_fallo = -1;
+            test_ctrlturbina1_pulsos_sec_0 = -1;
+            test_ctrlturbina1_pulsos_sec_50 = -1;
             test_ctrlturbina2_ok_fallo = -1;
+            test_ctrlturbina2_pulsos_sec_0 = -1;
+            test_ctrlturbina2_pulsos_sec_50 = -1;
             test_ctrlturbina3_ok_fallo = -1;
+            test_ctrlturbina3_pulsos_sec_0 = -1;
+            test_ctrlturbina3_pulsos_sec_50 = -1;
             // Entradas / salidas digitales
             for (int i = 0; i < 16; i++)
             {
@@ -458,6 +968,11 @@ namespace TestFuncionalBRD15001
                 test_fo_disp_ovt_ok_fallo[i] = -1;
             }
             test_fo_bot_s_rxsynch_ok_fallo = -1;
+            // medida de NTCs
+            for(int i=0; i<5; i++)
+            {
+                test_ntcs_ok_fallo[i] = -1;
+            }
 
             for (int i = 0; i < marcasADCs.Length; i++)
             {
@@ -534,7 +1049,7 @@ namespace TestFuncionalBRD15001
             if (test != TipoTest.NO_TEST)
             {
                 timer1.Enabled = false;
-                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Reset informe de resultados", MessageBoxButtons.YesNo);
+                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Reset informe de resultados", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (res == DialogResult.No)
                 {
                     timer1.Enabled = true;
@@ -559,16 +1074,17 @@ namespace TestFuncionalBRD15001
             double[] ref_adc_por_defecto = { 4.0, 4.0, 20.0, 4.0, 4.0, 4.0, 20.0, 4.0,
                                              20.0, 4.0, 20.0, 4.0, 20, 4.0, 20.0, 4.0};
 
-            string[] dimension_ref_adc = {"V", "V", "mA", "V", "V", "V", "mA", "V",
-                                          "mA", "V", "mA", "V", "mA", "V", "mA", "V"};
+            double[] tol_adc_por_defecto = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+                                             1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0};
 
-            textBoxRefInADC.Text = ref_adc_por_defecto[canal].ToString();
+            textBoxRefInADC.Text = ref_adc_por_defecto[canal].ToString(System.Globalization.CultureInfo.InvariantCulture);
             labelDimRefADC.Text = dimension_ref_adc[canal];
+            textBoxToleranciaADC.Text = tol_adc_por_defecto[canal].ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private void radioButtonADC_CheckedChanged(object sender, EventArgs e)
         {
-            int[] indiceComboBoxCanalesADC = { 3, 7, 8, 12, 2, 6, 9, 13, 1, 5, 10, 14, 0, 4, 11, 15 };
+            //int[] indiceComboBoxCanalesADC = { 3, 7, 8, 12, 2, 6, 9, 13, 1, 5, 10, 14, 0, 4, 11, 15 };
 
             RadioButton rb = (RadioButton)sender;
 
@@ -578,22 +1094,30 @@ namespace TestFuncionalBRD15001
                 radioButtonADC_seleccionado = rb;
 
                 string tag = rb.Tag.ToString();
-                canal_adc_seleccionado = Int32.Parse(tag);
-                comboBoxCanalADCseleccionado.SelectedIndex = indiceComboBoxCanalesADC[canal_adc_seleccionado];
+                int canal = Int32.Parse(tag);
+                int indiceComboBoxCanalesADC = Array.IndexOf(canalesADCcombo, canal);
+                comboBoxCanalADCseleccionado.SelectedIndex = indiceComboBoxCanalesADC;
             }
         }
 
         private void comboBoxCanalADCseleccionado_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int[] canalesADCcombo = { 12, 8, 4, 0, 13, 9, 5, 1, 2, 6, 10, 14, 3, 7, 11, 15 };
             RadioButton[] radioButtonsCanalesADC = { radioButtonADCA0, radioButtonADCB0, radioButtonADCA1, radioButtonADCB1,
                                                      radioButtonADCA2, radioButtonADCB2, radioButtonADCA3, radioButtonADCB3,
                                                      radioButtonADCA4, radioButtonADCB4, radioButtonADCA5, radioButtonADCB5,
                                                      radioButtonADCA6, radioButtonADCB6, radioButtonADCA7, radioButtonADCB7};
 
+            GroupBox[] groupBoxesCanalesADC = { groupBoxADC0, groupBoxADC1, groupBoxADC2, groupBoxADC3,
+                                                groupBoxADC4, groupBoxADC5, groupBoxADC6, groupBoxADC7,
+                                                groupBoxADC8, groupBoxADC9, groupBoxADC10, groupBoxADC11,
+                                                groupBoxADC12, groupBoxADC13, groupBoxADC14, groupBoxADC15};
+
             ComboBox cb = (ComboBox)sender;
+            int canal_anterior = canal_adc_seleccionado;
             canal_adc_seleccionado = canalesADCcombo[cb.SelectedIndex];
             radioButtonsCanalesADC[canal_adc_seleccionado].Checked = true;
+            groupBoxesCanalesADC[canal_anterior].BackColor = groupBoxesCanalesADC[canal_adc_seleccionado].BackColor;
+            groupBoxesCanalesADC[canal_adc_seleccionado].BackColor = Color.GhostWhite;
             inicializa_ref_adc_por_defecto(canal_adc_seleccionado);
         }
 
@@ -632,9 +1156,9 @@ namespace TestFuncionalBRD15001
 
             if ((textBoxRefInADC.Text.Length == 0) || (textBoxToleranciaADC.Text.Length == 0))
             {
-                MessageBox.Show("Este test compara las medidas de canales ADCs (tension o corriente)\n" +
-                    "con valores definidos como referecia. Antes de ejecutar el test deben\n" +
-                    "definirse los valores de referencia.", "Test de canales ADC");
+                MessageBox.Show("Este test compara las medidas de canales ADCs (tension o corriente)" +
+                    " con valores definidos como referecia. Antes de ejecutar el test deben" +
+                    " definirse los valores de referencia.", "Test de canales ADC");
                 return;
             }
 
@@ -772,7 +1296,7 @@ namespace TestFuncionalBRD15001
                 if (test != TipoTest.NO_TEST)
                 {
                     timer1.Enabled = false;
-                    DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Desconexión USB-Serie", MessageBoxButtons.YesNo);
+                    DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Desconexión USB-Serie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (res == DialogResult.No)
                     {
                         timer1.Enabled = true;
@@ -946,10 +1470,10 @@ namespace TestFuncionalBRD15001
 
             test_spv_temp1_med = temperatura1;
             test_spv_temp1_ref = ref_temp1;
-            test_spv_temp1_tol = double.Parse(textBoxToleranciaTemp1.Text, System.Globalization.CultureInfo.InvariantCulture);
+            //test_spv_temp1_tol = double.Parse(textBoxToleranciaTemp1.Text, System.Globalization.CultureInfo.InvariantCulture);
 
-
-            if ((Math.Abs(test_spv_temp1_med - test_spv_temp1_ref) / test_spv_temp1_ref) > (test_spv_temp1_tol / 100.0))
+            double aux = test_spv_temp1_med - test_spv_temp1_ref;
+            if (!((aux >= -1.0) && (aux <= 15.0)))
             {
                 pictureBoxTemp1.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                 test_spv_ok_fallo_temp1 = 0;
@@ -961,10 +1485,11 @@ namespace TestFuncionalBRD15001
             }
 
             test_spv_temp2_med = temperatura2;
-            test_spv_temp2_ref = ref_temp2;
-            test_spv_temp2_tol = double.Parse(textBoxToleranciaTemp2.Text, System.Globalization.CultureInfo.InvariantCulture);
+            //test_spv_temp2_ref = ref_temp2;
+            //test_spv_temp2_tol = double.Parse(textBoxToleranciaTemp2.Text, System.Globalization.CultureInfo.InvariantCulture);
 
-            if ((Math.Abs(test_spv_temp2_med - test_spv_temp2_ref) / test_spv_temp2_ref) > (test_spv_temp2_tol / 100.0))
+            aux = test_spv_temp2_med - test_spv_temp1_ref;
+            if (!((aux >= -1.0) && (aux <= 15.0)))
             {
                 pictureBoxTemp2.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                 test_spv_ok_fallo_temp2 = 0;
@@ -1096,21 +1621,37 @@ namespace TestFuncionalBRD15001
 
             if (!serialPort1.IsOpen) return;
 
-            if ((ref_temp1 == -1.0) || (ref_temp2 == -1.0) || (ref_vin == -1.0) || (ref_iin == -1.0)
-                || (ref_vbat == -1.0) || (textBoxToleranciaTemp1.Text.Length == 0) || (textBoxToleranciaTemp2.Text.Length == 0)
+            if ((ref_temp1 == -1.0) || (ref_vin == -1.0) || (ref_iin == -1.0)
+                || (ref_vbat == -1.0)
                 || (textBoxToleranciaVin.Text.Length == 0) || (textBoxToleranciaIin.Text.Length == 0)
                 || (textBoxToleranciaVreles.Text.Length == 0) || (textBoxToleranciaVdsp.Text.Length == 0)
                 || (textBoxToleranciaV3_3V.Text.Length == 0) || (textBoxToleranciaVfo.Text.Length == 0)
                 || (textBoxToleranciaVbat.Text.Length == 0))
             {
-                MessageBox.Show("Este test compara las medidas de temperaturas/tensiones/corrientes\n" +
-                    "de los supervisores de la placa con valores nominales de los diferentes\n" +
-                    "reguladores (+5V, +3.3V), de la bateria (+3V) o de valolres configurados\n" +
-                    "como referencia tal como la temperatura ambiente en proximidad a los sensores\n" +
-                    "de temperatura o la tensión de entrada. Antes de ejecutar el test deben\n" +
-                    "definirse los valores de referencia.", "Test de supervisores V/I/TEMP");
+                MessageBox.Show("Este test compara las medidas de temperaturas/tensiones/corrientes" +
+                    " de los supervisores de la placa con valores nominales de los diferentes" +
+                    " reguladores (+5V, +3.3V), o con valores configurados como" +
+                    " referencia tal como las medidas de la tensión de la bateria, la de entrada de alimentación" + 
+                    " (+10V a +24V), o la de la corriente de alimentación." +
+                    "\nEn el caso de los sensores de temperatura se usara como referencia la" + 
+                    " temperatura ambiente medida en la proximidad de la placa." +
+                    " NOTA: El chequeo será en este caso un chequeo de lectura 'absurda'," +
+                    " es decir se comprueba que la lectura de ambos se encuentra en el" +
+                    " rango (Tamb - 1ºC) a (Tamb + 15ºC)." +
+                    "\n\nAntes de ejecutar el test deben definirse los valores de referencia.",
+                    "Test de supervisores V/I/TEMP", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+
+            test_spv_ok_fallo_temp1 = -1;
+            test_spv_ok_fallo_temp2 = -1;
+            test_spv_ok_fallo_vin = -1;
+            test_spv_ok_fallo_iin = -1;
+            test_spv_ok_fallo_vdsp = -1;
+            test_spv_ok_fallo_vfo = -1;
+            test_spv_ok_fallo_vreles = -1;
+            test_spv_ok_fallo_v3_3v = -1;
+            test_spv_ok_fallo_vbat = -1;
 
             leyenda_resultados_tests[(int)TipoTest.TEST_SPVS] = -1;
             actualiza_marcas_leyenda_resultados_tests();
@@ -1192,7 +1733,8 @@ namespace TestFuncionalBRD15001
 
                         // Aqui mensaje al usuario para que conecte cables entre reles y entradas
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar cables entre conectores:\n* CON22<->CON4\n* CON32<->CON45\n* CON33<->CON54\n* CON34<->CON55.", "Prueba de reles y entradas.");
+                        MessageBox.Show("Conectar cables entre conectores:\n* CON22<->CON4\n* CON32<->CON45\n* CON33<->CON54\n* CON34<->CON55.\n" +
+                            "A continuación pulsar Aceptar.", "Prueba de reles y entradas.");
                         timer1.Enabled = true;
 
                         output = 0;
@@ -1247,13 +1789,18 @@ namespace TestFuncionalBRD15001
                         int num_entradas;
                         int fallos;
                         int input_probada;
-                        if ((output & ~0xffff) == 0) input_probada = output;
-                        else input_probada = outputleds;
+                        if ((output & ~0xffff) == 0)
+                        {
+                            input_probada = output;
+                            num_entradas = 16;
+                        }
+                        else
+                        {
+                            input_probada = outputleds;
+                            num_entradas = 5;
+                        }
 
                         fallos = input ^ input_probada;
-
-                        if (input_probada == output) num_entradas = 16;
-                        else num_entradas = 5;
 
                         for (int i = 0; i < num_entradas; i++)
                         {
@@ -1261,7 +1808,7 @@ namespace TestFuncionalBRD15001
                             {
                                 marcasInputs[i].Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                                 marcasInputs[i].Visible = true;
-                                if (input_probada == output)
+                                if (num_entradas == 16)
                                 {
                                     marcasReles[i].Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                                     marcasReles[i].Visible = true;
@@ -1274,12 +1821,13 @@ namespace TestFuncionalBRD15001
                                     test_io_leds_entradas_ok_fallo[i] = 0;
                                 }
                                 leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 0;
+                                actualiza_marcas_leyenda_resultados_tests();
                             }
                             else if (marcasInputs[i].Visible != true)
                             {
                                 marcasInputs[i].Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
                                 marcasInputs[i].Visible = true;
-                                if (input_probada == output)
+                                if (num_entradas == 16)
                                 {
                                     marcasReles[i].Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
                                     marcasReles[i].Visible = true;
@@ -1291,8 +1839,6 @@ namespace TestFuncionalBRD15001
                                 }
                             }
                         }
-
-                        contador_test = 1;
 
                         if (output == 0)
                         {
@@ -1306,10 +1852,17 @@ namespace TestFuncionalBRD15001
                         }
                         else if (output == 0x8000)
                         {
+                            for (int i = 0; i < 16; i++)
+                            {
+                                if (test_io_reles_entradas_ok_fallo[i] == -1) test_io_reles_entradas_ok_fallo[i] = 1;
+                            }
+
                             output <<= 1;
+                            checkBoxesReles[15].Checked = false;
                             // Aqui mensaje al usuario para que conecte cables entre leds y entradas
                             timer1.Enabled = false;
-                            MessageBox.Show("Conectar cable plano entre conector IDC CON53 y conectores CON4 y CON45.", "Prueba de salidas de LEDs (usando entradas).");
+                            MessageBox.Show("Conectar cable entre conector CON35 y conectores CON4 y CON45.\n" +
+                                "A continuación pulsar Aceptar.", "Prueba de salidas optoacopladas (usando entradas).");
                             timer1.Enabled = true;
 
                             for (int i = 0; i < 5; i++)
@@ -1338,15 +1891,14 @@ namespace TestFuncionalBRD15001
                             if (leyenda_resultados_tests[(int)TipoTest.TEST_IO] == -1) leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 1;
                             actualiza_marcas_leyenda_resultados_tests();
 
-                            for (int i = 0; i < 16; i++)
-                            {
-                                if (test_io_reles_entradas_ok_fallo[i] == -1) test_io_reles_entradas_ok_fallo[i] = 1;
-                            }
                             for (int i = 0; i < 5; i++)
                             {
                                 if (test_io_leds_entradas_ok_fallo[i] == -1) test_io_leds_entradas_ok_fallo[i] = 1;
                             }
                         }
+
+                        contador_test = 1;
+                        timeout_secuencia_test = 0;
                     }
 
                     if (test == TipoTest.NO_TEST)
@@ -1403,7 +1955,8 @@ namespace TestFuncionalBRD15001
 
                         // Aqui mensaje al usuario para que conecte elaces opticos de disparos a errores de driver
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar enlaces ópticos de disparos a errores de driver:\n* XT1 <-> XR1\n* XT3 <-> XR3\n* XT5 <-> XR6\n* XT7 <-> XR8\n* XT9 <-> XR11\n XT11 <-> XR13", "Prueba de transmisores y receptores ópticos.");
+                        MessageBox.Show("Conectar enlaces ópticos de disparos a errores de driver:\n* XT1 <-> XR1\n* XT3 <-> XR3\n* XT5 <-> XR6\n* XT7 <-> XR8\n* XT9 <-> XR11\n XT11 <-> XR13\n" +
+                            "A continuación pulsar Aceptar.", "Prueba de transmisores y receptores ópticos.");
                         timer1.Enabled = true;
 
                         disparos = 0;
@@ -1488,6 +2041,7 @@ namespace TestFuncionalBRD15001
                                 marcasErroresOpticos[i + errorinicial].Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                                 marcasErroresOpticos[i + errorinicial].Visible = true;
                                 leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 0;
+                                actualiza_marcas_leyenda_resultados_tests();
 
                                 if (num_errores_a_comprobar == 6)
                                 {
@@ -1511,6 +2065,7 @@ namespace TestFuncionalBRD15001
                                 pictureBoxSynchSD.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                                 pictureBoxSynchSD.Visible = true;
                                 leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 0;
+                                actualiza_marcas_leyenda_resultados_tests();
 
                                 test_fo_bot_s_rxsynch_ok_fallo = 0;
                             }
@@ -1521,14 +2076,18 @@ namespace TestFuncionalBRD15001
                             }
                         }
 
-                        contador_test = 1;
-
                         if (disparos == 7)
                         {
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (test_fo_disp_error_ok_fallo[i] == -1) test_fo_disp_error_ok_fallo[i] = 1;
+                            }
+
                             // Aqui mensaje al usuario para que conecte enlaces opticos de disparos top a errores temp y de botR
                             // a receptor de sincronismo
                             timer1.Enabled = false;
-                            MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)", "Prueba de transmisores y receptores ópticos.");
+                            MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)\n" +
+                                "A continuación pulsar Aceptar.", "Prueba de transmisores y receptores ópticos.");
                             timer1.Enabled = true;
                         }
 
@@ -1537,10 +2096,6 @@ namespace TestFuncionalBRD15001
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
 
-                            for (int i = 0; i < 6; i++)
-                            {
-                                if (test_fo_disp_error_ok_fallo[i] == -1) test_fo_disp_error_ok_fallo[i] = 1;
-                            }
                             for (int i = 0; i < 3; i++)
                             {
                                 if (test_fo_disp_ovt_ok_fallo[i] == -1) test_fo_disp_ovt_ok_fallo[i] = 1;
@@ -1555,6 +2110,9 @@ namespace TestFuncionalBRD15001
                             disparos++;
                             respuesta_disparos_ok = 0;
                         }
+
+                        contador_test = 1;
+                        timeout_secuencia_test = 0;
                     }
 
                     if (test == TipoTest.NO_TEST)
@@ -1580,12 +2138,19 @@ namespace TestFuncionalBRD15001
                         progressBarTestActual.Value = 0;
 
                         test_ctrlturbina1_ok_fallo = -1;
+                        test_ctrlturbina1_pulsos_sec_0 = -1;
+                        test_ctrlturbina1_pulsos_sec_50 = -1;
                         test_ctrlturbina2_ok_fallo = -1;
+                        test_ctrlturbina2_pulsos_sec_0 = -1;
+                        test_ctrlturbina2_pulsos_sec_50 = -1;
                         test_ctrlturbina3_ok_fallo = -1;
+                        test_ctrlturbina3_pulsos_sec_0 = -1;
+                        test_ctrlturbina3_pulsos_sec_50 = -1;
 
                         // Aqui mensaje al usuario para que conecte conectores puente en los conectores de turbinas
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar conectores puente en conectores CON46, CON48 y CON49.", "Prueba de interfaces de control de velocidad de turbinas.");
+                        MessageBox.Show("Conectar conectores puente en conectores CON46, CON48 y CON49.\n" +
+                            "A continuación pulsar Aceptar.", "Prueba de interfaces de control de velocidad de turbinas.");
                         timer1.Enabled = true;
 
                         dutyturbina1 = 0;
@@ -1619,11 +2184,18 @@ namespace TestFuncionalBRD15001
                     }
                     else if (contador_test == 30)
                     {
+                        if ((dutyturbina1 == 0) && (dutyturbina2 == 0) && (dutyturbina3 == 0))
+                        {
+                            test_ctrlturbina1_pulsos_sec_0 = rpm1;
+                            test_ctrlturbina2_pulsos_sec_0 = rpm2;
+                            test_ctrlturbina3_pulsos_sec_0 = rpm3;
+                        }
+
                         if (dutyturbina1 == 50) test_ctrlturbina1_pulsos_sec_50 = rpm1;
                         if (dutyturbina2 == 50) test_ctrlturbina2_pulsos_sec_50 = rpm2;
                         if (dutyturbina3 == 50) test_ctrlturbina3_pulsos_sec_50 = rpm3;
 
-                        if (((dutyturbina1 == 0) && (rpm1 == 0)) || ((dutyturbina1 == 50) && (rpm1 > 3254000) && (rpm1 < 3255000)))
+                        if (((dutyturbina1 == 0) && (rpm1 == 0)) || ((dutyturbina1 == 50) && (rpm1 > 4950) && (rpm1 < 5050)))
                         {
                             if (pictureBoxTurbina1.Visible == false)
                             {
@@ -1633,12 +2205,18 @@ namespace TestFuncionalBRD15001
                         }
                         else
                         {
+                            if (dutyturbina1 == 0)
+                            {
+                                test_ctrlturbina1_pulsos_sec_0 = rpm1;
+                            }
+
                             pictureBoxTurbina1.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                             pictureBoxTurbina1.Visible = true;
                             leyenda_resultados_tests[(int)TipoTest.TEST_TURBINAS] = 0;
                             test_ctrlturbina1_ok_fallo = 0;
+                            actualiza_marcas_leyenda_resultados_tests();
                         }
-                        if (((dutyturbina2 == 0) && (rpm2 == 0)) || ((dutyturbina2 == 50) && (rpm2 > 3254000) && (rpm2 < 3255000)))
+                        if (((dutyturbina2 == 0) && (rpm2 == 0)) || ((dutyturbina2 == 50) && (rpm2 > 4950) && (rpm2 < 5050)))
                         {
                             if (pictureBoxTurbina2.Visible == false)
                             {
@@ -1648,12 +2226,18 @@ namespace TestFuncionalBRD15001
                         }
                         else
                         {
+                            if (dutyturbina2 == 0)
+                            {
+                                test_ctrlturbina2_pulsos_sec_0 = rpm1;
+                            }
+
                             pictureBoxTurbina2.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                             pictureBoxTurbina2.Visible = true;
                             leyenda_resultados_tests[(int)TipoTest.TEST_TURBINAS] = 0;
                             test_ctrlturbina2_ok_fallo = 0;
+                            actualiza_marcas_leyenda_resultados_tests();
                         }
-                        if (((dutyturbina3 == 0) && (rpm3 == 0)) || ((dutyturbina3 == 50) && (rpm3 > 3254000) && (rpm3 < 3255000)))
+                        if (((dutyturbina3 == 0) && (rpm3 == 0)) || ((dutyturbina3 == 50) && (rpm3 > 4950) && (rpm3 < 5050)))
                         {
                             if (pictureBoxTurbina3.Visible == false)
                             {
@@ -1663,10 +2247,16 @@ namespace TestFuncionalBRD15001
                         }
                         else
                         {
+                            if (dutyturbina3 == 0)
+                            {
+                                test_ctrlturbina3_pulsos_sec_0 = rpm1;
+                            }
+
                             pictureBoxTurbina3.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                             pictureBoxTurbina3.Visible = true;
                             leyenda_resultados_tests[(int)TipoTest.TEST_TURBINAS] = 0;
                             test_ctrlturbina3_ok_fallo = 0;
+                            actualiza_marcas_leyenda_resultados_tests();
                         }
 
                         if ((dutyturbina1 == 0) && (dutyturbina2 == 0) && (dutyturbina3 == 0))
@@ -1736,7 +2326,8 @@ namespace TestFuncionalBRD15001
 
                         // Aqui mensaje al usuario 
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar conector puente en conector de puerto RS422 (CON12).", "Prueba de puerto RS422.");
+                        MessageBox.Show("Conectar conector puente en conector de puerto RS422 (CON12).\n" + 
+                            "A continuación pulsar Aceptar.", "Prueba de puerto RS422.");
                         timer1.Enabled = true;
 
                         enabletx_rs422 = 0;
@@ -1805,49 +2396,48 @@ namespace TestFuncionalBRD15001
 
                             pictureBoxRS422.Visible = true;
                             pictureBoxRS422.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
-                            timer1.Enabled = false;
-                            test = TipoTest.NO_TEST;
+                            //timer1.Enabled = false;
+                            //test = TipoTest.NO_TEST;
                             leyenda_resultados_tests[(int)TipoTest.TEST_RS422] = 0;
                             actualiza_marcas_leyenda_resultados_tests();
                         }
                         else
                         {
+                            if ((enabletx_rs422 == 0) && (enablerx_rs422 == 0)) test_rs422_loop_rxdis_txdis_ok_fallo = 1;
+                            if ((enabletx_rs422 == 1) && (enablerx_rs422 == 0)) test_rs422_loop_rxdis_txena_ok_fallo = 1;
+                            if ((enabletx_rs422 == 0) && (enablerx_rs422 == 1)) test_rs422_loop_rxena_txdis_ok_fallo = 1;
+                            if ((enabletx_rs422 == 1) && (enablerx_rs422 == 1)) test_rs422_loop_rxena_txena_ok_fallo = 1;
+                        }
 
-                            if ((enabletx_rs422 == 0) && (enablerx_rs422 == 0))
+                        if ((enabletx_rs422 == 0) && (enablerx_rs422 == 0))
+                        {
+                            enabletx_rs422 = 1;
+                        }
+                        else if ((enabletx_rs422 == 1) && (enablerx_rs422 == 0))
+                        {
+                            enabletx_rs422 = 0;
+                            enablerx_rs422 = 1;
+                        }
+                        else if ((enabletx_rs422 == 0) && (enablerx_rs422 == 1))
+                        {
+                            enabletx_rs422 = 1;
+                            enablerx_rs422 = 1;
+                        }
+                        else if ((enabletx_rs422 == 1) && (enablerx_rs422 == 1))
+                        {
+                            timer1.Enabled = false;
+                            test = TipoTest.NO_TEST;
+
+                            if (leyenda_resultados_tests[(int)TipoTest.TEST_RS422] == -1)
                             {
-                                test_rs422_loop_rxdis_txdis_ok_fallo = 1;
-
-                                enabletx_rs422 = 1;
-                            }
-                            else if ((enabletx_rs422 == 1) && (enablerx_rs422 == 0))
-                            {
-                                test_rs422_loop_rxdis_txena_ok_fallo = 1;
-
-                                enabletx_rs422 = 0;
-                                enablerx_rs422 = 1;
-                            }
-                            else if ((enabletx_rs422 == 0) && (enablerx_rs422 == 1))
-                            {
-                                test_rs422_loop_rxena_txdis_ok_fallo = 1;
-
-                                enabletx_rs422 = 1;
-                                enablerx_rs422 = 1;
-                            }
-                            else if ((enabletx_rs422 == 1) && (enablerx_rs422 == 1))
-                            {
-                                test_rs422_loop_rxena_txena_ok_fallo = 1;
-
-                                timer1.Enabled = false;
-                                test = TipoTest.NO_TEST;
                                 pictureBoxRS422.Visible = true;
                                 pictureBoxRS422.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
                                 leyenda_resultados_tests[(int)TipoTest.TEST_RS422] = 1;
                                 actualiza_marcas_leyenda_resultados_tests();
                             }
-
-                            contador_test = 1;
-
                         }
+
+                        contador_test = 1;
                     }
 
                     if (test == TipoTest.NO_TEST)
@@ -1889,7 +2479,8 @@ namespace TestFuncionalBRD15001
 
                         // Aqui mensaje al usuario para que el cable CAN este desconectado
                         timer1.Enabled = false;
-                        MessageBox.Show("Desconecte (si lo estaba) el cable entre ambos puertos CAN.", "Prueba de puertos CAN A y CAN B.");
+                        MessageBox.Show("Desconecte (si lo estaba) el cable entre ambos puertos CAN.\n" +
+                            "A continuación pulsar Aceptar.", "Prueba de puertos CAN A y CAN B.");
                         timer1.Enabled = true;
                         con_cable_can = false;
 
@@ -1948,7 +2539,9 @@ namespace TestFuncionalBRD15001
                             if ((((canatx == 0) || (canbtx == 0)) && (canarx == 0) && (canbrx == 0)) || (((canatx == 1) && (canbtx == 1)) && (canarx == 1) && (canbrx == 1)))
                             {
                                 error = false;
-                                if ((canatx == 1) && (canbtx == 1)) test_cana_canb_ok_fallo = 1;
+                                if ((canatx == 1) && (canbtx == 1))
+                                    if(test_cana_canb_ok_fallo == -1)
+                                        test_cana_canb_ok_fallo = 1;
                             }
                             else
                             {
@@ -1961,51 +2554,53 @@ namespace TestFuncionalBRD15001
                         {
                             pictureBoxCAN.Visible = true;
                             pictureBoxCAN.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
-                            timer1.Enabled = false;
-                            test = TipoTest.NO_TEST;
+                            //timer1.Enabled = false;
+                            //test = TipoTest.NO_TEST;
                             leyenda_resultados_tests[(int)TipoTest.TEST_CAN] = 0;
                             actualiza_marcas_leyenda_resultados_tests();
                         }
-                        else
+
+                        if (!con_cable_can)
                         {
-                            if (!con_cable_can)
-                            {
-                                if (canatx == 0)
-                                    canatx = 1;
-                                else
-                                {
-                                    if (canbtx == 0)
-                                    {
-                                        canatx = 0;
-                                        canbtx = 1;
-                                    }
-                                    else
-                                    {
-                                        // Aqui mensaje al usuario para que el cable CAN se conecte
-                                        timer1.Enabled = false;
-                                        MessageBox.Show("Conectar el cable entre ambos puertos CAN.", "Prueba de puertos CAN A y CAN B.");
-                                        timer1.Enabled = true;
-                                        con_cable_can = true;
-                                        canatx = 0;
-                                        canbtx = 0;
-                                    }
-                                }
-                            }
+                            if (canatx == 0)
+                                canatx = 1;
                             else
                             {
-                                if (canatx == 0)
-                                    canatx = 1;
+                                if (canbtx == 0)
+                                {
+                                    canatx = 0;
+                                    canbtx = 1;
+                                }
                                 else
                                 {
-                                    if (canbtx == 0)
+                                    // Aqui mensaje al usuario para que el cable CAN se conecte
+                                    timer1.Enabled = false;
+                                    MessageBox.Show("Conectar el cable entre ambos puertos CAN.\n" +
+                                        "A continuación pulsar Aceptar.", "Prueba de puertos CAN A y CAN B.");
+                                    timer1.Enabled = true;
+                                    con_cable_can = true;
+                                    canatx = 0;
+                                    canbtx = 0;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (canatx == 0)
+                                canatx = 1;
+                            else
+                            {
+                                if (canbtx == 0)
+                                {
+                                    canatx = 0;
+                                    canbtx = 1;
+                                }
+                                else
+                                {
+                                    timer1.Enabled = false;
+                                    test = TipoTest.NO_TEST;
+                                    if (leyenda_resultados_tests[(int)TipoTest.TEST_CAN] == -1)
                                     {
-                                        canatx = 0;
-                                        canbtx = 1;
-                                    }
-                                    else
-                                    {
-                                        timer1.Enabled = false;
-                                        test = TipoTest.NO_TEST;
                                         pictureBoxCAN.Visible = true;
                                         pictureBoxCAN.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
                                         leyenda_resultados_tests[(int)TipoTest.TEST_CAN] = 1;
@@ -2013,11 +2608,11 @@ namespace TestFuncionalBRD15001
                                     }
                                 }
                             }
-
-                            contador_test = 1;
-                            respuesta_canatx_ok = 0;
-                            respuesta_canbtx_ok = 0;
                         }
+
+                        contador_test = 1;
+                        respuesta_canatx_ok = 0;
+                        respuesta_canbtx_ok = 0;
 
                     }
 
@@ -2027,8 +2622,8 @@ namespace TestFuncionalBRD15001
                     {
                         progreso = 0;
                         if (con_cable_can) progreso += 50;
-                        if (canatx == 1) progreso += 25;
-                        if (canbtx == 1) progreso += 50;
+                        if (canatx == 1) progreso += 12;
+                        if (canbtx == 1) progreso += 25;
                         if (progreso > 100) progreso = 100;
 
                         progressBarTestActual.Value = progreso;
@@ -2238,88 +2833,104 @@ namespace TestFuncionalBRD15001
                     case 0: // CON23: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A0
                         medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA0.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCA0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 1: // CON18: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B0
                         medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB0.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 2: // CON11: Tension AC compuesta Vrs -- CANAL A1
                         medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA1.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 3: // CON5: Corriente AC Ir (HAT-1500S, 1350Arms x 1.3) -- CANAL B1
                         medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB1.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 4: // CON24: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A2
                         medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA2.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 5: // CON19: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B2
                         medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB2.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 6: // CON10: Tension AC compuesta Vst ---------------- CANAL A3
                         medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA3.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 7: // CON3: Corriente AC Is (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B3
                         medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB3.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 8: // CON25: Vdc2 (sensor LV-25) ---------------- CANAL A4
                         medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA4.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 9: // CON20: Idc2 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B4
                         medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB4.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 10: // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
                         medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA5.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 11: // CON2: Corriente AC It (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B5
                         medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB5.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 12: // CON26: Vdc1 (sensor DVL-1500) ---------------- CANAL A6
                         medida = medida * (20.0 / (3.74 * 100.0)) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA6.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 13: // CON21: Idc1 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B6
                         medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB6.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 14: // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
                         medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCA7.Text = (medida / 10000.0) + "mA";
+                        medida /= 10000.0;
+                        labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 15: // CON1: Libre ---------------- CANAL B7
                         medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        labelMediaADCB7.Text = (medida / 10000.0) + "V";
+                        medida /= 10000.0;
+                        labelMediaADCB7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     default:
                         break;
                 }
 
-                medias_adcs_vi[i] = medida / 10000.0;
+                medias_adcs_vi[i] = medida;
             }
         }
 
@@ -2598,6 +3209,8 @@ namespace TestFuncionalBRD15001
                 {
                     ref_temp1 = double.Parse(tb.Text, System.Globalization.CultureInfo.InvariantCulture);
                 }
+
+                textBoxRefTemp2.Text = tb.Text;
             }
             else if (tb.Tag.Equals("RefTemp2"))
             {
@@ -2834,7 +3447,7 @@ namespace TestFuncionalBRD15001
                                     if (buffer_rx.Contains("\r\n"))
                                     {
                                         string corriente = buffer_rx.Substring(cad_parser[5].Length, buffer_rx.IndexOf("\r\n") - cad_parser[5].Length);
-                                        iin = double.Parse(corriente, System.Globalization.CultureInfo.InvariantCulture);
+                                        iin = Math.Round(double.Parse(corriente, System.Globalization.CultureInfo.InvariantCulture)) / 1000.0;
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
                                     }
@@ -2843,13 +3456,13 @@ namespace TestFuncionalBRD15001
                                     if (buffer_rx.Contains("\r\n"))
                                     {
                                         string rps = buffer_rx.Substring(cad_parser[6].Length, buffer_rx.IndexOf(",") - cad_parser[6].Length);
-                                        rpm1 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture) * 60.0;
+                                        rpm1 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture);
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf(",") + 1);
                                         rps = buffer_rx.Substring(0, buffer_rx.IndexOf(","));
-                                        rpm2 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture) * 60.0;
+                                        rpm2 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture);
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf(",") + 1);
                                         rps = buffer_rx.Substring(0, buffer_rx.IndexOf("\r\n"));
-                                        rpm3 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture) * 60.0;
+                                        rpm3 = double.Parse(rps, System.Globalization.CultureInfo.InvariantCulture);
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
                                     }
@@ -3153,7 +3766,20 @@ namespace TestFuncionalBRD15001
             {
                 if ((refNTCs[i] == -1.0) || (textBox_ntcs_tolerancias[i].Text.Length == 0))
                 {
-                    MessageBox.Show("Este test compara las medidas de resistencia de la placa con los valores conectados a los conectores CON27 a CON31.\nAntes de ejecutar el test deben definirse los 5 valores de referencia.", "Test de medidas de resistencias NTCs");
+                    MessageBox.Show("Este test compara las medidas de resistencia de la placa con los valores conectados a los conectores CON27 a CON31.\n" + 
+                        "Antes de ejecutar el test deben definirse los 5 valores de referencia.\n" + 
+                        "Los valores ohmicos de estos deben estar comprendidos en el rango 500 Ohmios a 100 KOhmios.",
+                        "Test de medidas de resistencias NTCs", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+
+            // Comprobar que los valores de referencia se encuentran en rangos admitidos
+            for (int i = 0; i < 5; i++)
+            {
+                if ((refNTCs[i] < 500.0) || (refNTCs[i] > 100000.0))
+                {
+                    MessageBox.Show("Los valores ohmicos de las referecias usadas deben estar comprendidos en el rango 500 Ohmios a 100 KOhmios.", "Test de medidas de resistencias NTCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -3193,7 +3819,7 @@ namespace TestFuncionalBRD15001
             if (test != TipoTest.NO_TEST)
             {
                 timer1.Enabled = false;
-                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Carga de firmware de test", MessageBoxButtons.YesNo);
+                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Carga de firmware de test", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (res == DialogResult.No)
                 {
                     timer1.Enabled = true;
