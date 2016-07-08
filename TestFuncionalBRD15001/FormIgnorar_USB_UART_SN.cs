@@ -88,12 +88,5 @@ namespace TestFuncionalBRD15001
                 MessageBox.Show(ex.Message, "Ignorar Serial Number del puente USB-Serie");
             }
         }
-
-        private void buttonAyuda_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("De forma predeterminada cada vez que se conecta un adaptador USB-Serie el SO instala un nuevo" +
-                " driver para cada numero de serie diferente aunque sus VID y PID sean el mismo. Se puede modificar este comportamiento" +
-                " añadiendo un valor bajo una llave de registro.\n\n", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
     }
 }

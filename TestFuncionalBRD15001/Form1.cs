@@ -242,6 +242,8 @@ namespace TestFuncionalBRD15001
             }
 
             labelVersion.Text = sLabelVersionSoftware;
+
+            //buttonIgnorarSN.Visible = false;
         }
 
         private void panelCanalADC_Click(object sender, EventArgs e)

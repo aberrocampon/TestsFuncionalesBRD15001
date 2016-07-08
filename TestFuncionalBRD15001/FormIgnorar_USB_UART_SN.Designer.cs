@@ -38,7 +38,8 @@
             this.buttonNoIgnorarSN = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxEstadoSN = new System.Windows.Forms.TextBox();
-            this.buttonAyuda = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxCOM
@@ -129,22 +130,31 @@
             this.textBoxEstadoSN.Size = new System.Drawing.Size(196, 22);
             this.textBoxEstadoSN.TabIndex = 11;
             // 
-            // buttonAyuda
+            // label4
             // 
-            this.buttonAyuda.Location = new System.Drawing.Point(214, 170);
-            this.buttonAyuda.Name = "buttonAyuda";
-            this.buttonAyuda.Size = new System.Drawing.Size(31, 32);
-            this.buttonAyuda.TabIndex = 13;
-            this.buttonAyuda.Text = "?";
-            this.buttonAyuda.UseVisualStyleBackColor = true;
-            this.buttonAyuda.Click += new System.EventHandler(this.buttonAyuda_Click);
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 158);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(60, 17);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "* NOTA:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 175);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(255, 17);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Se necesitan privilegios administrativos";
             // 
             // FormIgnorar_USB_UART_SN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 233);
-            this.Controls.Add(this.buttonAyuda);
+            this.ClientSize = new System.Drawing.Size(284, 217);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxEstadoSN);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.buttonNoIgnorarSN);
@@ -177,6 +187,7 @@
         private System.Windows.Forms.Button buttonNoIgnorarSN;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxEstadoSN;
-        private System.Windows.Forms.Button buttonAyuda;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }

@@ -128,7 +128,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonIgnorarSN = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.botonConectarDesconectar = new System.Windows.Forms.Button();
             this.comboBoxCOMs = new System.Windows.Forms.ComboBox();
@@ -1754,7 +1754,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.buttonIgnorarSN);
             this.groupBox2.Controls.Add(this.button12);
             this.groupBox2.Controls.Add(this.botonConectarDesconectar);
             this.groupBox2.Controls.Add(this.comboBoxCOMs);
@@ -1768,16 +1768,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Conexion USB-SERIE";
             // 
-            // button2
+            // buttonIgnorarSN
             // 
-            this.button2.Location = new System.Drawing.Point(124, 49);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(107, 25);
-            this.button2.TabIndex = 69;
-            this.button2.Text = "Ignorar SN";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonIgnorarSN.Location = new System.Drawing.Point(124, 49);
+            this.buttonIgnorarSN.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonIgnorarSN.Name = "buttonIgnorarSN";
+            this.buttonIgnorarSN.Size = new System.Drawing.Size(107, 25);
+            this.buttonIgnorarSN.TabIndex = 69;
+            this.buttonIgnorarSN.Text = "Ignorar SN";
+            this.buttonIgnorarSN.UseVisualStyleBackColor = true;
+            this.buttonIgnorarSN.Click += new System.EventHandler(this.button2_Click);
             // 
             // button12
             // 
@@ -6005,7 +6005,7 @@
         private System.Windows.Forms.ToolStripStatusLabel labelContadorComandos;
         private System.IO.Ports.SerialPort serialPort2;
         private System.Windows.Forms.ToolStripStatusLabel labelVersion;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonIgnorarSN;
         private System.Windows.Forms.Button buttonInforme;
         private System.Windows.Forms.TextBox textBoxRefTemp2;
     }
