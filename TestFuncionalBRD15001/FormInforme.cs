@@ -26,7 +26,7 @@ namespace TestFuncionalBRD15001
             this.cad_versiones_hw = cad_versiones_hw;
 
             dateTime = DateTime.UtcNow;
-            textBoxFecha.Text = dateTime.ToString("hh:mm:ss-dd/MM/yyyy");
+            textBoxFecha.Text = dateTime.ToString("HH:mm:ss-dd/MM/yyyy");
             textBoxInforme.Text = informe;
         }
 

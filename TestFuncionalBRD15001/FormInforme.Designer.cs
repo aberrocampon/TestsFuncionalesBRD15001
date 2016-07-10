@@ -51,44 +51,39 @@
             // 
             // textBoxFecha
             // 
-            this.textBoxFecha.Location = new System.Drawing.Point(592, 14);
-            this.textBoxFecha.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxFecha.Location = new System.Drawing.Point(428, 11);
             this.textBoxFecha.Name = "textBoxFecha";
             this.textBoxFecha.ReadOnly = true;
-            this.textBoxFecha.Size = new System.Drawing.Size(134, 22);
+            this.textBoxFecha.Size = new System.Drawing.Size(118, 20);
             this.textBoxFecha.TabIndex = 10;
             // 
             // textBoxIDTecnico
             // 
-            this.textBoxIDTecnico.Location = new System.Drawing.Point(11, 165);
-            this.textBoxIDTecnico.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxIDTecnico.Location = new System.Drawing.Point(8, 134);
             this.textBoxIDTecnico.Name = "textBoxIDTecnico";
-            this.textBoxIDTecnico.Size = new System.Drawing.Size(716, 22);
+            this.textBoxIDTecnico.Size = new System.Drawing.Size(538, 20);
             this.textBoxIDTecnico.TabIndex = 3;
             // 
             // textBoxFuenteTension
             // 
-            this.textBoxFuenteTension.Location = new System.Drawing.Point(11, 261);
-            this.textBoxFuenteTension.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxFuenteTension.Location = new System.Drawing.Point(8, 212);
             this.textBoxFuenteTension.Name = "textBoxFuenteTension";
-            this.textBoxFuenteTension.Size = new System.Drawing.Size(716, 22);
+            this.textBoxFuenteTension.Size = new System.Drawing.Size(538, 20);
             this.textBoxFuenteTension.TabIndex = 5;
             // 
             // textBoxFuente4_20mA
             // 
-            this.textBoxFuente4_20mA.Location = new System.Drawing.Point(11, 213);
-            this.textBoxFuente4_20mA.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxFuente4_20mA.Location = new System.Drawing.Point(8, 173);
             this.textBoxFuente4_20mA.Name = "textBoxFuente4_20mA";
-            this.textBoxFuente4_20mA.Size = new System.Drawing.Size(716, 22);
+            this.textBoxFuente4_20mA.Size = new System.Drawing.Size(538, 20);
             this.textBoxFuente4_20mA.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 193);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(5, 157);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(548, 17);
+            this.label1.Size = new System.Drawing.Size(413, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Fabricante/Modelo o ID de la fuente de referencia  de 4-20mA (test de canales ADC" +
     "): ";
@@ -96,115 +91,103 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 97);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(5, 79);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(374, 17);
+            this.label3.Size = new System.Drawing.Size(281, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Referencia de la placa BRD15001 (placa base o soporte):";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(456, 17);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(323, 14);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(128, 17);
+            this.label4.Size = new System.Drawing.Size(99, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Hora/Fecha (UTC):";
             // 
             // textBoxRef10030_2001
             // 
-            this.textBoxRef10030_2001.Location = new System.Drawing.Point(11, 69);
-            this.textBoxRef10030_2001.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxRef10030_2001.Location = new System.Drawing.Point(8, 56);
             this.textBoxRef10030_2001.Name = "textBoxRef10030_2001";
-            this.textBoxRef10030_2001.Size = new System.Drawing.Size(716, 22);
+            this.textBoxRef10030_2001.Size = new System.Drawing.Size(538, 20);
             this.textBoxRef10030_2001.TabIndex = 1;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 145);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(5, 118);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(161, 17);
+            this.label5.Size = new System.Drawing.Size(123, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "ID o nombre del técnico:";
             // 
             // textBoxLocalizacion
             // 
-            this.textBoxLocalizacion.Location = new System.Drawing.Point(103, 14);
-            this.textBoxLocalizacion.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxLocalizacion.Location = new System.Drawing.Point(77, 11);
             this.textBoxLocalizacion.Name = "textBoxLocalizacion";
-            this.textBoxLocalizacion.Size = new System.Drawing.Size(345, 22);
+            this.textBoxLocalizacion.Size = new System.Drawing.Size(240, 20);
             this.textBoxLocalizacion.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 17);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(5, 14);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(90, 17);
+            this.label6.Size = new System.Drawing.Size(69, 13);
             this.label6.TabIndex = 11;
             this.label6.Text = "Localizacion:";
             // 
             // textBoxRefBRD15001
             // 
-            this.textBoxRefBRD15001.Location = new System.Drawing.Point(11, 117);
-            this.textBoxRefBRD15001.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxRefBRD15001.Location = new System.Drawing.Point(8, 95);
             this.textBoxRefBRD15001.Name = "textBoxRefBRD15001";
-            this.textBoxRefBRD15001.Size = new System.Drawing.Size(716, 22);
+            this.textBoxRefBRD15001.Size = new System.Drawing.Size(538, 20);
             this.textBoxRefBRD15001.TabIndex = 2;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 49);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(5, 40);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(356, 17);
+            this.label7.Size = new System.Drawing.Size(271, 13);
             this.label7.TabIndex = 13;
             this.label7.Text = "Referencia de la placa10030_2001 (Placa DSP/FPGA):";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(7, 241);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Location = new System.Drawing.Point(5, 196);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(537, 17);
+            this.label8.Size = new System.Drawing.Size(405, 13);
             this.label8.TabIndex = 14;
             this.label8.Text = "Fabricante/Modelo o ID de la fuente de referencia de tension (test de canales ADC" +
     "):";
             // 
             // textBoxInforme
             // 
-            this.textBoxInforme.Location = new System.Drawing.Point(11, 321);
-            this.textBoxInforme.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxInforme.Location = new System.Drawing.Point(8, 261);
             this.textBoxInforme.Multiline = true;
             this.textBoxInforme.Name = "textBoxInforme";
             this.textBoxInforme.ReadOnly = true;
             this.textBoxInforme.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxInforme.Size = new System.Drawing.Size(716, 265);
+            this.textBoxInforme.Size = new System.Drawing.Size(538, 216);
             this.textBoxInforme.TabIndex = 15;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 294);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(8, 239);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(83, 17);
+            this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 16;
             this.label2.Text = "Resultados:";
             // 
             // buttonGuardar
             // 
-            this.buttonGuardar.Location = new System.Drawing.Point(11, 594);
-            this.buttonGuardar.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonGuardar.Location = new System.Drawing.Point(8, 483);
             this.buttonGuardar.Name = "buttonGuardar";
-            this.buttonGuardar.Size = new System.Drawing.Size(121, 28);
+            this.buttonGuardar.Size = new System.Drawing.Size(91, 23);
             this.buttonGuardar.TabIndex = 6;
             this.buttonGuardar.Text = "Guardar...";
             this.buttonGuardar.UseVisualStyleBackColor = true;
@@ -217,9 +200,10 @@
             // 
             // buttonInformeCerrar
             // 
-            this.buttonInformeCerrar.Location = new System.Drawing.Point(157, 594);
+            this.buttonInformeCerrar.Location = new System.Drawing.Point(118, 483);
+            this.buttonInformeCerrar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonInformeCerrar.Name = "buttonInformeCerrar";
-            this.buttonInformeCerrar.Size = new System.Drawing.Size(121, 28);
+            this.buttonInformeCerrar.Size = new System.Drawing.Size(91, 23);
             this.buttonInformeCerrar.TabIndex = 7;
             this.buttonInformeCerrar.Text = "Cerrar";
             this.buttonInformeCerrar.UseVisualStyleBackColor = true;
@@ -227,9 +211,9 @@
             // 
             // FormInforme
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(739, 629);
+            this.ClientSize = new System.Drawing.Size(554, 511);
             this.Controls.Add(this.buttonInformeCerrar);
             this.Controls.Add(this.buttonGuardar);
             this.Controls.Add(this.label2);
@@ -249,7 +233,6 @@
             this.Controls.Add(this.textBoxIDTecnico);
             this.Controls.Add(this.textBoxFecha);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormInforme";

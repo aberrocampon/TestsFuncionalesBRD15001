@@ -78,6 +78,9 @@ namespace TestFuncionalBRD15001
         private bool con_cable_can;
         private int respuesta_test_sram;
         private int respuesta_test_fram;
+        private int respuesta_leertc;
+        private int respuesta_escrtc;
+        private string cadena_hora_dsp = "";
         private int timeout_secuencia_test;
         private int periodo_peticion_ping;
         private double[] medias_adcs = new double[16];
@@ -270,6 +273,20 @@ namespace TestFuncionalBRD15001
                 if (leyenda_resultados_tests[i] == -1) marcasLeyendaResultadosTests[i].Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
                 else if (leyenda_resultados_tests[i] == 0) marcasLeyendaResultadosTests[i].Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
                 else marcasLeyendaResultadosTests[i].Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+            }
+        }
+
+        private void buttonPonHora_Click(object sender, EventArgs e)
+        {
+            if ((test == TipoTest.NO_TEST) && serialPort1.IsOpen)
+            {
+                if (buffer_tx.Length < 100)
+                {
+                    DateTime dateTime;
+                    dateTime = DateTime.Now;
+                    buffer_tx += "escrtc " + dateTime.ToString("HH:mm:ss") + "\r";
+                    contador_comandos++;
+                }
             }
         }
 
@@ -1119,7 +1136,7 @@ namespace TestFuncionalBRD15001
             canal_adc_seleccionado = canalesADCcombo[cb.SelectedIndex];
             radioButtonsCanalesADC[canal_adc_seleccionado].Checked = true;
             groupBoxesCanalesADC[canal_anterior].BackColor = groupBoxesCanalesADC[canal_adc_seleccionado].BackColor;
-            groupBoxesCanalesADC[canal_adc_seleccionado].BackColor = Color.GhostWhite;
+            groupBoxesCanalesADC[canal_adc_seleccionado].BackColor = SystemColors.Info;
             inicializa_ref_adc_por_defecto(canal_adc_seleccionado);
         }
 
@@ -3061,10 +3078,13 @@ namespace TestFuncionalBRD15001
                         case 18:
                             buffer_tx += "canbrx\r";
                             break;
+                        case 19:
+                            buffer_tx += "leertc\r";
+                            break;
                     }
                     comando_actual++;
                     if ((comando_actual == 10) && (tabControl1.SelectedIndex != 2)) comando_actual++;
-                    if (comando_actual > 18) comando_actual = 0;
+                    if (comando_actual > 19) comando_actual = 0;
                     if ((tabControl1.SelectedIndex == 2) && (test == TipoTest.NO_TEST)) comando_actual = 10;
                     contador_comandos++;
 
@@ -3195,6 +3215,12 @@ namespace TestFuncionalBRD15001
 
             // valores medios medidos por los canales adc del dsp
             actualiza_medias_ADCs();
+
+            // Actualiza hora actual del PC y RTC 
+            DateTime dateTime;
+            dateTime = DateTime.Now;
+            textBoxHoraPC.Text = dateTime.ToString("HH:mm:ss");
+            textBoxHoraDSP.Text = cadena_hora_dsp;
         }
 
         private void textBoxRefSupv_TextChanged(object sender, EventArgs e)
@@ -3279,7 +3305,7 @@ namespace TestFuncionalBRD15001
                 "canal15=", "outputreles:ok", "dutyturbina:ok", "disparos:ok", "outputleds:ok",
                 "enabletx_rs422:ok", "enablerx_rs422:ok", "canatx:ok", "canarx=", "canbtx:ok", "canbrx=",
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
-                "testfram:ok", "testfram:fallo"};
+                "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok"};
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -3681,6 +3707,31 @@ namespace TestFuncionalBRD15001
                                     if (buffer_rx.Length >= (cad_parser[j].Length + 2))
                                     {
                                         respuesta_test_fram = 0;
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        contador_comandos--;
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
+                                    break;
+                                case 42:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + "00:00:00".Length + 2))
+                                    {
+                                        respuesta_leertc = 1;
+                                        cadena_hora_dsp = buffer_rx.Substring(cad_parser[j].Length, + "00:00:00".Length);
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + "00:00:00".Length + 2);
+                                        contador_comandos--;
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
+                                    break;
+                                case 43:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        respuesta_escrtc = 4;
                                         buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
                                         contador_comandos--;
                                     }
