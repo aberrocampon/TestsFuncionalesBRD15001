@@ -62,11 +62,11 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>X7PakxLi6W9zdyoojvQ8aA2L5dDF7XH+BUFbK83nAF4=</dsig:DigestValue>
+        <dsig:DigestValue>3GmoOb3AetLsbGGQ3Rle57d1XEI9NB9AwwRjwFHwSBY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Pruebas_funcionales_brd15001.a00" size="62114">
+  <file name="Pruebas_funcionales_brd15001_DSP.a00" size="62114">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
