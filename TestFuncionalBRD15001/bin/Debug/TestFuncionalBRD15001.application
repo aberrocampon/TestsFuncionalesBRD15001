@@ -8,7 +8,7 @@
         <beforeApplicationStartup />
       </update>
     </subscription>
-    <deploymentProvider codebase="https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_1_0_0_4/TestFuncionalBRD15001.application" />
+    <deploymentProvider codebase="https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/TestFuncionalBRD15001.application" />
   </deployment>
   <compatibleFrameworks xmlns="urn:schemas-microsoft-com:clickonce.v2">
     <framework targetVersion="4.5.2" profile="Full" supportedRuntime="4.0.30319" />
@@ -21,7 +21,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>lEbdygGHB2N1qP/8sjmpA0WKqZ8p4gKE2E50f2hDGLc=</dsig:DigestValue>
+        <dsig:DigestValue>Mne9LACzcdrNphis+YoDLgVB2fcVVoSU3RLXTK4pYIQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
