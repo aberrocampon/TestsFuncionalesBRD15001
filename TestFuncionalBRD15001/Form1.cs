@@ -3944,7 +3944,7 @@ namespace TestFuncionalBRD15001
             StreamReader reader;
             try
             {
-                reader = new StreamReader(@"Pruebas_funcionales_brd15001_DSP.a00");
+                reader = new StreamReader(@"Pruebas_funcionales_brd15001.a00");
             }
             catch(Exception ex)
             {
