@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy_1_0_0_4/</InstallUrl>
-    <UpdateUrl>https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/</UpdateUrl>
+    <UpdateUrl>https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_1_0_0_4/</UpdateUrl>
     <ProductName>TestFuncionalBRD15001</ProductName>
     <PublisherName>Tests Funcionales WD3</PublisherName>
     <SuiteName>BRD15001</SuiteName>
