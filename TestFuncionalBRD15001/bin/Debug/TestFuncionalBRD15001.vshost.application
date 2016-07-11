@@ -14,14 +14,14 @@
     <framework targetVersion="4.5.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="TestFuncionalBRD15001.exe.manifest" size="5073">
+    <dependentAssembly dependencyType="install" codebase="TestFuncionalBRD15001.exe.manifest" size="5144">
       <assemblyIdentity name="TestFuncionalBRD15001.exe" version="1.0.0.4" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>A3b28i/uI5pu1tFYwTqcyLFa61DxaUwObRKGESpNuS8=</dsig:DigestValue>
+        <dsig:DigestValue>/AQSViT2Ic9a8wnudJBfgbaqpp5w0Lu6/LoE1g8TvwY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

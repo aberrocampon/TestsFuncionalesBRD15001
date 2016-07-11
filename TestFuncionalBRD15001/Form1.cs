@@ -247,6 +247,7 @@ namespace TestFuncionalBRD15001
             labelVersion.Text = sLabelVersionSoftware;
 
             //buttonIgnorarSN.Visible = false;
+            buttonTestRTC.Visible = false;
         }
 
         private void panelCanalADC_Click(object sender, EventArgs e)
@@ -284,7 +285,7 @@ namespace TestFuncionalBRD15001
                 {
                     DateTime dateTime;
                     dateTime = DateTime.Now;
-                    buffer_tx += "escrtc " + dateTime.ToString("HH:mm:ss") + "\r";
+                    buffer_tx += "escrtc " + dateTime.ToString("HH:mm:ss-dd/MM/yy") + "\r";
                     contador_comandos++;
                 }
             }
@@ -2997,6 +2998,8 @@ namespace TestFuncionalBRD15001
                             break;
                         case 2:
                             buffer_tx += "leeNTC " + leeNTC + "\r";
+                            leeNTC++;
+                            if (leeNTC > 4) leeNTC = 0;
                             break;
                         case 3:
                             buffer_tx += "supervisores\r";
@@ -3139,10 +3142,6 @@ namespace TestFuncionalBRD15001
                 MessageBox.Show(ex.Message, "Error USB-Serie");
             }
 
-
-            leeNTC++;
-            if (leeNTC > 4) leeNTC = 0;
-
             for (int i = 0; i < 5; i++)
             {
                 textNTCs[i].Text = resistenciasNTC[i];
@@ -3219,7 +3218,7 @@ namespace TestFuncionalBRD15001
             // Actualiza hora actual del PC y RTC 
             DateTime dateTime;
             dateTime = DateTime.Now;
-            textBoxHoraPC.Text = dateTime.ToString("HH:mm:ss");
+            textBoxHoraPC.Text = dateTime.ToString("HH:mm:ss-dd/MM/yy");
             textBoxHoraDSP.Text = cadena_hora_dsp;
         }
 
@@ -3716,11 +3715,11 @@ namespace TestFuncionalBRD15001
                                     }
                                     break;
                                 case 42:
-                                    if (buffer_rx.Length >= (cad_parser[j].Length + "00:00:00".Length + 2))
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + "00:00:00-01/01/01".Length + 2))
                                     {
                                         respuesta_leertc = 1;
-                                        cadena_hora_dsp = buffer_rx.Substring(cad_parser[j].Length, + "00:00:00".Length);
-                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + "00:00:00".Length + 2);
+                                        cadena_hora_dsp = buffer_rx.Substring(cad_parser[j].Length, + "00:00:00-01/01/01".Length);
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + "00:00:00-01/01/01".Length + 2);
                                         contador_comandos--;
                                     }
                                     else
