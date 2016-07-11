@@ -12,10 +12,10 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>..\deploy\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
+    <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -23,13 +23,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy/</InstallUrl>
     <UpdateUrl>https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/</UpdateUrl>
     <ProductName>TestFuncionalBRD15001</ProductName>
     <PublisherName>Tests Funcionales WD3</PublisherName>
     <SuiteName>BRD15001</SuiteName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -145,6 +144,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Pruebas_funcionales_brd15001.a00" />
     <None Include="TestFuncionalBRD15001_ClaveTemporal.pfx" />
   </ItemGroup>
   <ItemGroup>
