@@ -16,3 +16,4 @@ C:\Users\aberro\Documents\Visual Studio 2015\Projects\TestsFuncionalesBRD15001\T
 C:\Users\aberro\Documents\Visual Studio 2015\Projects\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.application
 C:\Users\aberro\Documents\Visual Studio 2015\Projects\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.exe
 C:\Users\aberro\Documents\Visual Studio 2015\Projects\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.pdb
+C:\Users\aberro\Documents\Visual Studio 2015\Projects\TestsFuncionalesBRD15001\TestFuncionalBRD15001\bin\Debug\Pruebas_funcionales_brd15001.a00
