@@ -62,19 +62,10 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>foSWhk6LcFo+P1nJcfo+oHvEvIi47hHSsmEWlyT6XSI=</dsig:DigestValue>
+        <dsig:DigestValue>JKICyTm2uMrAAEWq4ChKGbfL3uDg/4qiI+3hSa/zNWM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Pruebas_funcionales_brd15001.a00" size="62114">
-    <hash>
-      <dsig:Transforms>
-        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-      </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>PZMRwXAyw7aN9N6Dc5i1T9ar1Q3BwX9KdqCGxT7oDCk=</dsig:DigestValue>
-    </hash>
-  </file>
   <file name="test_icono.ico" size="112457">
     <hash>
       <dsig:Transforms>
