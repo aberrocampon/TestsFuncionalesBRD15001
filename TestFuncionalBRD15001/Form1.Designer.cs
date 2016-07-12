@@ -1777,7 +1777,7 @@
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(104, 20);
             this.button12.TabIndex = 65;
-            this.button12.Text = ">>Firmware de test";
+            this.button12.Text = "<<Firmware de test";
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
@@ -4910,11 +4910,11 @@
             // 
             // buttonPonHora
             // 
-            this.buttonPonHora.Location = new System.Drawing.Point(86, 36);
+            this.buttonPonHora.Location = new System.Drawing.Point(50, 36);
             this.buttonPonHora.Name = "buttonPonHora";
-            this.buttonPonHora.Size = new System.Drawing.Size(23, 23);
+            this.buttonPonHora.Size = new System.Drawing.Size(92, 23);
             this.buttonPonHora.TabIndex = 4;
-            this.buttonPonHora.Text = "▼";
+            this.buttonPonHora.Text = "▼ Hora / Fecha";
             this.buttonPonHora.UseVisualStyleBackColor = true;
             this.buttonPonHora.Click += new System.EventHandler(this.buttonPonHora_Click);
             // 
