@@ -408,12 +408,13 @@
             this.button7 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxPuestaEnHoraRTC = new System.Windows.Forms.PictureBox();
+            this.labelEnHoraRTC = new System.Windows.Forms.Label();
+            this.pictureBoxEnHoraRTC = new System.Windows.Forms.PictureBox();
             this.buttonPonHora = new System.Windows.Forms.Button();
             this.label92 = new System.Windows.Forms.Label();
             this.textBoxHoraDSP = new System.Windows.Forms.TextBox();
             this.textBoxHoraPC = new System.Windows.Forms.TextBox();
-            this.buttonTestRTC = new System.Windows.Forms.Button();
             this.label91 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label88 = new System.Windows.Forms.Label();
@@ -424,6 +425,8 @@
             this.textBoxRefInADC = new System.Windows.Forms.TextBox();
             this.comboBoxCanalADCseleccionado = new System.Windows.Forms.ComboBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxResultadoRTC = new System.Windows.Forms.PictureBox();
+            this.label93 = new System.Windows.Forms.Label();
             this.buttonInforme = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.pictureBoxWorking = new System.Windows.Forms.PictureBox();
@@ -590,9 +593,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCAN)).BeginInit();
             this.tabPage1.SuspendLayout();
             this.groupBox12.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPuestaEnHoraRTC)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.groupBox29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoRTC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWorking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoFRAM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoSRAM)).BeginInit();
@@ -4885,32 +4890,51 @@
             // 
             // groupBox12
             // 
-            this.groupBox12.Controls.Add(this.pictureBox1);
+            this.groupBox12.Controls.Add(this.pictureBoxPuestaEnHoraRTC);
+            this.groupBox12.Controls.Add(this.labelEnHoraRTC);
+            this.groupBox12.Controls.Add(this.pictureBoxEnHoraRTC);
             this.groupBox12.Controls.Add(this.buttonPonHora);
             this.groupBox12.Controls.Add(this.label92);
             this.groupBox12.Controls.Add(this.textBoxHoraDSP);
             this.groupBox12.Controls.Add(this.textBoxHoraPC);
-            this.groupBox12.Controls.Add(this.buttonTestRTC);
             this.groupBox12.Controls.Add(this.label91);
             this.groupBox12.Location = new System.Drawing.Point(26, 342);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(221, 86);
+            this.groupBox12.Size = new System.Drawing.Size(267, 86);
             this.groupBox12.TabIndex = 41;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "RTC";
             // 
-            // pictureBox1
+            // pictureBoxPuestaEnHoraRTC
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(192, 39);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(21, 14);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 139;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxPuestaEnHoraRTC.Location = new System.Drawing.Point(139, 40);
+            this.pictureBoxPuestaEnHoraRTC.Name = "pictureBoxPuestaEnHoraRTC";
+            this.pictureBoxPuestaEnHoraRTC.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxPuestaEnHoraRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPuestaEnHoraRTC.TabIndex = 142;
+            this.pictureBoxPuestaEnHoraRTC.TabStop = false;
+            // 
+            // labelEnHoraRTC
+            // 
+            this.labelEnHoraRTC.AutoSize = true;
+            this.labelEnHoraRTC.Location = new System.Drawing.Point(156, 64);
+            this.labelEnHoraRTC.Name = "labelEnHoraRTC";
+            this.labelEnHoraRTC.Size = new System.Drawing.Size(76, 13);
+            this.labelEnHoraRTC.TabIndex = 140;
+            this.labelEnHoraRTC.Text = "En hora: 0 seg";
+            // 
+            // pictureBoxEnHoraRTC
+            // 
+            this.pictureBoxEnHoraRTC.Location = new System.Drawing.Point(238, 63);
+            this.pictureBoxEnHoraRTC.Name = "pictureBoxEnHoraRTC";
+            this.pictureBoxEnHoraRTC.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxEnHoraRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxEnHoraRTC.TabIndex = 139;
+            this.pictureBoxEnHoraRTC.TabStop = false;
             // 
             // buttonPonHora
             // 
-            this.buttonPonHora.Location = new System.Drawing.Point(50, 36);
+            this.buttonPonHora.Location = new System.Drawing.Point(41, 36);
             this.buttonPonHora.Name = "buttonPonHora";
             this.buttonPonHora.Size = new System.Drawing.Size(92, 23);
             this.buttonPonHora.TabIndex = 4;
@@ -4942,16 +4966,6 @@
             this.textBoxHoraPC.ReadOnly = true;
             this.textBoxHoraPC.Size = new System.Drawing.Size(109, 20);
             this.textBoxHoraPC.TabIndex = 0;
-            // 
-            // buttonTestRTC
-            // 
-            this.buttonTestRTC.Location = new System.Drawing.Point(159, 15);
-            this.buttonTestRTC.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonTestRTC.Name = "buttonTestRTC";
-            this.buttonTestRTC.Size = new System.Drawing.Size(54, 19);
-            this.buttonTestRTC.TabIndex = 5;
-            this.buttonTestRTC.Text = "TEST";
-            this.buttonTestRTC.UseVisualStyleBackColor = true;
             // 
             // label91
             // 
@@ -5079,6 +5093,8 @@
             // 
             // groupBox29
             // 
+            this.groupBox29.Controls.Add(this.pictureBoxResultadoRTC);
+            this.groupBox29.Controls.Add(this.label93);
             this.groupBox29.Controls.Add(this.buttonInforme);
             this.groupBox29.Controls.Add(this.button10);
             this.groupBox29.Controls.Add(this.pictureBoxWorking);
@@ -5111,9 +5127,27 @@
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "Resultados de tests";
             // 
+            // pictureBoxResultadoRTC
+            // 
+            this.pictureBoxResultadoRTC.Location = new System.Drawing.Point(108, 197);
+            this.pictureBoxResultadoRTC.Name = "pictureBoxResultadoRTC";
+            this.pictureBoxResultadoRTC.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxResultadoRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxResultadoRTC.TabIndex = 136;
+            this.pictureBoxResultadoRTC.TabStop = false;
+            // 
+            // label93
+            // 
+            this.label93.AutoSize = true;
+            this.label93.Location = new System.Drawing.Point(8, 197);
+            this.label93.Name = "label93";
+            this.label93.Size = new System.Drawing.Size(29, 13);
+            this.label93.TabIndex = 135;
+            this.label93.Text = "RTC";
+            // 
             // buttonInforme
             // 
-            this.buttonInforme.Location = new System.Drawing.Point(8, 237);
+            this.buttonInforme.Location = new System.Drawing.Point(11, 252);
             this.buttonInforme.Name = "buttonInforme";
             this.buttonInforme.Size = new System.Drawing.Size(75, 23);
             this.buttonInforme.TabIndex = 134;
@@ -5123,7 +5157,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(8, 208);
+            this.button10.Location = new System.Drawing.Point(11, 223);
             this.button10.Margin = new System.Windows.Forms.Padding(2);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(46, 24);
@@ -5578,11 +5612,13 @@
             this.tabPage1.ResumeLayout(false);
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPuestaEnHoraRTC)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoRTC)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWorking)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoFRAM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoSRAM)).EndInit();
@@ -6028,9 +6064,12 @@
         private System.Windows.Forms.Label label91;
         private System.Windows.Forms.TextBox textBoxHoraDSP;
         private System.Windows.Forms.TextBox textBoxHoraPC;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button buttonTestRTC;
+        private System.Windows.Forms.PictureBox pictureBoxEnHoraRTC;
         private System.Windows.Forms.Button buttonPonHora;
+        private System.Windows.Forms.PictureBox pictureBoxResultadoRTC;
+        private System.Windows.Forms.Label label93;
+        private System.Windows.Forms.PictureBox pictureBoxPuestaEnHoraRTC;
+        private System.Windows.Forms.Label labelEnHoraRTC;
     }
 }
 

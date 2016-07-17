@@ -31,11 +31,13 @@ namespace TestFuncionalBRD15001
         TEST_CAN = 8,
         TEST_SRAM = 9,
         TEST_FRAM = 10,
+        TEST_RTC = 11,
+        TEST_NUMERO_TOTAL = 12,
     }
 
     public partial class Form1 : Form
     {
-        private int[] leyenda_resultados_tests = new int[11];
+        private int[] leyenda_resultados_tests = new int[(int)TipoTest.TEST_NUMERO_TOTAL];
         private int comando_actual = 0;
         private int contador_comandos = 0;
         private int timeout_esperarespuesta = 0;
@@ -80,6 +82,8 @@ namespace TestFuncionalBRD15001
         private int respuesta_test_fram;
         private int respuesta_leertc;
         private int respuesta_escrtc;
+        private DateTime hora_inicio_rtc_enhora;
+        private bool estado_en_hora;
         private string cadena_hora_dsp = "";
         private int timeout_secuencia_test;
         private int periodo_peticion_ping;
@@ -148,6 +152,10 @@ namespace TestFuncionalBRD15001
         private int[] test_fo_disp_error_ok_fallo = new int[6];
         private int[] test_fo_disp_ovt_ok_fallo = new int[3];
         private int test_fo_bot_s_rxsynch_ok_fallo;
+        // rtc
+        private int test_rtc_puesta_en_hora_ok_fallo;
+        private int test_rtc_en_hora_ok_fallo;
+        private int test_rtc_duracion_en_hora;
 
 
         // Marcas de ok fallo de tests
@@ -188,7 +196,7 @@ namespace TestFuncionalBRD15001
             timeout_esperarespuesta = 0;
             enabletx_rs422 = 0;
             enablerx_rs422 = 0;
-            disparos = 0;
+            disparos = 7;
             canatx = 0;
             canarx = 0;
             canbtx = 0;
@@ -247,7 +255,6 @@ namespace TestFuncionalBRD15001
             labelVersion.Text = sLabelVersionSoftware;
 
             //buttonIgnorarSN.Visible = false;
-            buttonTestRTC.Visible = false;
         }
 
         private void panelCanalADC_Click(object sender, EventArgs e)
@@ -267,7 +274,7 @@ namespace TestFuncionalBRD15001
             PictureBox[] marcasLeyendaResultadosTests = {pictureBoxResultadoNTCs, pictureBoxResultadoSPVs,
                 pictureBoxResultadoADCs, pictureBoxResultadoIO, pictureBoxResultadoTXRXOpt, pictureBoxResultadoTurbinas,
                 pictureBoxResultadoRS422, pictureBoxLeerVersiones, pictureBoxResultadoCAN, pictureBoxResultadoSRAM,
-                pictureBoxResultadoFRAM};
+                pictureBoxResultadoFRAM, pictureBoxResultadoRTC};
 
             for (int i = 0; i < leyenda_resultados_tests.Length; i++)
             {
@@ -281,13 +288,9 @@ namespace TestFuncionalBRD15001
         {
             if ((test == TipoTest.NO_TEST) && serialPort1.IsOpen)
             {
-                if (buffer_tx.Length < 100)
-                {
-                    DateTime dateTime;
-                    dateTime = DateTime.Now;
-                    buffer_tx += "escrtc " + dateTime.ToString("HH:mm:ss-dd/MM/yy") + "\r";
-                    contador_comandos++;
-                }
+                test = TipoTest.TEST_RTC;
+                contador_test = 0;
+                timer1.Enabled = true;
             }
         }
 
@@ -797,6 +800,24 @@ namespace TestFuncionalBRD15001
                 }
             }
 
+            informe += "\r\n";
+
+            informe += "********** Test del Real Time Clock (RTC): **********\r\n";
+            informe += "**** Test de puesta en hora: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rtc_puesta_en_hora_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rtc_puesta_en_hora_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rtc_puesta_en_hora_ok_fallo == -1) informe += "TEST NO EJECUTADO\r\n";
+            
+            informe += "**** Test de estado en hora: ****\r\n";
+            informe += "* RESULTADO: ";
+            if (test_rtc_en_hora_ok_fallo == 1) informe += "OK\r\n";
+            else if (test_rtc_en_hora_ok_fallo == 0) informe += "FALLO\r\n";
+            else if (test_rtc_en_hora_ok_fallo == -1) informe += "INDETERMINADO (TIEMPO EN HORA INFERIOR A 5 SEGUNDOS)\r\n";
+            informe += "* Tiempo en hora = " + test_rtc_duracion_en_hora + " segundos\r\n";
+
+            informe += "\r\n";
+
             informe += "\r\n*****************************************************************";
 
             return informe;
@@ -993,6 +1014,11 @@ namespace TestFuncionalBRD15001
             {
                 test_ntcs_ok_fallo[i] = -1;
             }
+            // rtc
+            estado_en_hora = false;
+            test_rtc_puesta_en_hora_ok_fallo = -1;
+            test_rtc_en_hora_ok_fallo = 0;
+            test_rtc_duracion_en_hora = 0;
 
             for (int i = 0; i < marcasADCs.Length; i++)
             {
@@ -1038,6 +1064,8 @@ namespace TestFuncionalBRD15001
             pictureBoxFRAMEscritura2.Visible = false;
             pictureBoxFRAMBloqueo.Visible = false;
             pictureBoxFRAMDesbloqueo.Visible = false;
+            pictureBoxPuestaEnHoraRTC.Visible = false;
+            pictureBoxEnHoraRTC.Visible = false;
 
             if (borra_versiones)
             {
@@ -1771,6 +1799,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de reles, salidas optoacopladas y entradas", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -1991,6 +2020,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de transmisores y receptores ópticos", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -2188,6 +2218,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de interfaces de control de velocidad de turbinas", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -2306,6 +2337,7 @@ namespace TestFuncionalBRD15001
 
                         respuesta_dutyturbina_ok = 0;
                         contador_test = 1;
+                        timeout_secuencia_test = 0;
                     }
 
                     if (test == TipoTest.NO_TEST)
@@ -2366,6 +2398,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de puerto RS422", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -2458,6 +2491,7 @@ namespace TestFuncionalBRD15001
                         }
 
                         contador_test = 1;
+                        timeout_secuencia_test = 0;
                     }
 
                     if (test == TipoTest.NO_TEST)
@@ -2518,6 +2552,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de puertos CAN A y CAN B", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -2631,6 +2666,7 @@ namespace TestFuncionalBRD15001
                         }
 
                         contador_test = 1;
+                        timeout_secuencia_test = 0;
                         respuesta_canatx_ok = 0;
                         respuesta_canbtx_ok = 0;
 
@@ -2670,6 +2706,7 @@ namespace TestFuncionalBRD15001
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+                            MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de memoria SRAM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
 
@@ -2831,6 +2868,58 @@ namespace TestFuncionalBRD15001
                     {
                         timer1.Enabled = false;
                         test = TipoTest.NO_TEST;
+                        MessageBox.Show("Test abortado: Duracion excesiva", "Prueba de memoria FRAM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    break;
+                case TipoTest.TEST_RTC:
+                    if (contador_test == 0)
+                    {
+                        progressBarTestActual.Value = 0;
+
+                        test_rtc_puesta_en_hora_ok_fallo = -1;
+                        pictureBoxPuestaEnHoraRTC.Visible = false;
+                        leyenda_resultados_tests[(int)TipoTest.TEST_RTC] = -1;
+                        actualiza_marcas_leyenda_resultados_tests();
+
+                        DateTime dateTime;
+                        dateTime = DateTime.Now;
+                        respuesta_escrtc = 0;
+                        buffer_tx += "escrtc " + dateTime.ToString("HH:mm:ss-dd/MM/yy") + "\r";
+                        contador_comandos++;
+
+                        contador_test = 1;
+                        timeout_secuencia_test = 0;
+                    }
+                    if (contador_test == 1)
+                    {
+                        if (respuesta_escrtc == 1)
+                        {
+                            test_rtc_puesta_en_hora_ok_fallo = 1;
+                            pictureBoxPuestaEnHoraRTC.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                            pictureBoxPuestaEnHoraRTC.Visible = true;
+
+                            estado_en_hora = false;
+                            progressBarTestActual.Value = 100;
+
+                            timer1.Enabled = false;
+                            test = TipoTest.NO_TEST;
+                        }
+                        else
+                        {
+                            timeout_secuencia_test++;
+
+                            if (timeout_secuencia_test > 5 * 10) //5 segundos 
+                            {
+                                timer1.Enabled = false;
+                                test = TipoTest.NO_TEST;
+
+                                test_rtc_puesta_en_hora_ok_fallo = 0;
+                                pictureBoxPuestaEnHoraRTC.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
+                                pictureBoxPuestaEnHoraRTC.Visible = true;
+
+                                MessageBox.Show("Test abortado: Duracion excesiva", "Prueba del Real Time Clock (RTC)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
                     }
                     break;
                 case TipoTest.NO_TEST:
@@ -2952,6 +3041,42 @@ namespace TestFuncionalBRD15001
 
                 medias_adcs_vi[i] = medida;
             }
+        }
+
+        private DateTime hora_fecha_dsp_a_datetime(string hora_fecha)
+        {
+            string s_hora = hora_fecha.Substring(0, hora_fecha.IndexOf(":"));
+            hora_fecha = hora_fecha.Substring(hora_fecha.IndexOf(":") + 1);
+            string s_minuto = hora_fecha.Substring(0, hora_fecha.IndexOf(":"));
+            hora_fecha = hora_fecha.Substring(hora_fecha.IndexOf(":") + 1);
+            string s_segundo = hora_fecha.Substring(0, hora_fecha.IndexOf("-"));
+            hora_fecha = hora_fecha.Substring(hora_fecha.IndexOf("-") + 1);
+            string s_dia = hora_fecha.Substring(0, hora_fecha.IndexOf("/"));
+            hora_fecha = hora_fecha.Substring(hora_fecha.IndexOf("/") + 1);
+            string s_mes = hora_fecha.Substring(0, hora_fecha.IndexOf("/"));
+            hora_fecha = hora_fecha.Substring(hora_fecha.IndexOf("/") + 1);
+            string s_anual = hora_fecha;
+
+            int segundo = int.Parse(s_segundo);
+            int minuto = int.Parse(s_minuto);
+            int hora = int.Parse(s_hora);
+            int dia = int.Parse(s_dia);
+            int mes = int.Parse(s_mes);
+            int anual = int.Parse(s_anual);
+
+            DateTime dt = new DateTime(anual, mes, dia, hora, minuto, segundo);
+            return dt;
+        }
+
+        private bool en_hora(DateTime hora_pc, string s_hora_dsp)
+        {
+            DateTime hora_pc_century0 = new DateTime(hora_pc.Year - ((hora_pc.Year / 100) * 100), hora_pc.Month,
+                hora_pc.Day, hora_pc.Hour, hora_pc.Minute, hora_pc.Second);
+            DateTime hora_dsp = hora_fecha_dsp_a_datetime(s_hora_dsp);
+
+            TimeSpan diferencia = new TimeSpan(hora_pc_century0.Ticks - hora_dsp.Ticks);
+            if (Math.Abs(diferencia.Seconds) > 2) return false;
+            else return true;
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -3220,6 +3345,79 @@ namespace TestFuncionalBRD15001
             dateTime = DateTime.Now;
             textBoxHoraPC.Text = dateTime.ToString("HH:mm:ss-dd/MM/yy");
             textBoxHoraDSP.Text = cadena_hora_dsp;
+
+            if(respuesta_leertc == 1)
+            {
+                respuesta_leertc = 0;
+
+                bool estado_en_hora_actual = en_hora(dateTime, cadena_hora_dsp);
+
+                if(!estado_en_hora)
+                {
+                    test_rtc_duracion_en_hora = 0;
+
+                    if (estado_en_hora_actual)
+                    {
+                        estado_en_hora = true;
+                        hora_inicio_rtc_enhora = dateTime;
+                        test_rtc_en_hora_ok_fallo = -1;
+                        pictureBoxEnHoraRTC.Visible = false;
+                    }
+                    else
+                    {
+                        test_rtc_en_hora_ok_fallo = 0;
+                        pictureBoxEnHoraRTC.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
+                        pictureBoxEnHoraRTC.Visible = true;
+                    }
+                }
+                else
+                {
+                    if(!estado_en_hora_actual)
+                    {
+                        estado_en_hora = false;
+                        test_rtc_duracion_en_hora = 0;
+                        test_rtc_en_hora_ok_fallo = 0;
+                        pictureBoxEnHoraRTC.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
+                        pictureBoxEnHoraRTC.Visible = true;
+                    }
+                    else
+                    {
+                        long ticks = dateTime.Ticks - hora_inicio_rtc_enhora.Ticks;
+                        TimeSpan ts = new TimeSpan(ticks);
+                        test_rtc_duracion_en_hora = ts.Seconds;
+                        if(test_rtc_duracion_en_hora > 5)
+                        {
+                            test_rtc_en_hora_ok_fallo = 1;
+                            pictureBoxEnHoraRTC.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                            pictureBoxEnHoraRTC.Visible = true;
+                        }
+                    }
+                }
+
+                int nueva_leyenda;
+                if ((test_rtc_puesta_en_hora_ok_fallo == -1) || (test_rtc_en_hora_ok_fallo == -1))
+                {
+                    nueva_leyenda = -1;
+                }
+                else if ((test_rtc_puesta_en_hora_ok_fallo == 0) || (test_rtc_en_hora_ok_fallo == 0))
+                {
+                    nueva_leyenda = 0;
+                }
+                else
+                {
+                    nueva_leyenda = 1;
+                }
+
+                if(nueva_leyenda != leyenda_resultados_tests[(int)TipoTest.TEST_RTC])
+                {
+                    leyenda_resultados_tests[(int)TipoTest.TEST_RTC] = nueva_leyenda;
+                    actualiza_marcas_leyenda_resultados_tests();
+                }
+
+                if (test_rtc_duracion_en_hora > 5) labelEnHoraRTC.Text = "En hora: > 5 seg";
+                else labelEnHoraRTC.Text = "En hora: " + test_rtc_duracion_en_hora + " seg";
+            }
+
         }
 
         private void textBoxRefSupv_TextChanged(object sender, EventArgs e)
@@ -3730,7 +3928,7 @@ namespace TestFuncionalBRD15001
                                 case 43:
                                     if (buffer_rx.Length >= (cad_parser[j].Length + 2))
                                     {
-                                        respuesta_escrtc = 4;
+                                        respuesta_escrtc = 1;
                                         buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
                                         contador_comandos--;
                                     }
