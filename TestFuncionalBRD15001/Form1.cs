@@ -3075,7 +3075,7 @@ namespace TestFuncionalBRD15001
             DateTime hora_dsp = hora_fecha_dsp_a_datetime(s_hora_dsp);
 
             TimeSpan diferencia = new TimeSpan(hora_pc_century0.Ticks - hora_dsp.Ticks);
-            if (Math.Abs(diferencia.Seconds) > 2) return false;
+            if (Math.Abs(diferencia.TotalSeconds) > 2) return false;
             else return true;
         }
 
