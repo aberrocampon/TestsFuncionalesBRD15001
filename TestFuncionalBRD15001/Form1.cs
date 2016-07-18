@@ -3105,6 +3105,12 @@ namespace TestFuncionalBRD15001
 
                     timeout_esperarespuesta = 0;
                     contador_comandos = 0;
+                    try
+                    {
+                        if(serialPort1.IsOpen) serialPort1.DiscardInBuffer();
+                    }
+                    catch(Exception)
+                    { }
                 }
             }
             else timeout_esperarespuesta = 0;
