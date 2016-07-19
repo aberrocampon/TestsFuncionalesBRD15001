@@ -3100,7 +3100,7 @@ namespace TestFuncionalBRD15001
             if (contador_comandos > 0)
             {
                 timeout_esperarespuesta++;
-                if (timeout_esperarespuesta > 50)
+                if (timeout_esperarespuesta > 10)
                 {
 
                     timeout_esperarespuesta = 0;
@@ -3125,7 +3125,7 @@ namespace TestFuncionalBRD15001
                             buffer_tx += "input\r";
                             break;
                         case 1:
-                            buffer_tx += "outputreles " + (output & 0xffff) + "\r";
+                            buffer_tx += "outputreles " + (output & 0xffff) + " " + ((output ^ (output>>8)) & 0xff) + "\r";
                             break;
                         case 2:
                             buffer_tx += "leeNTC " + leeNTC + "\r";
@@ -3508,7 +3508,7 @@ namespace TestFuncionalBRD15001
                 "canal15=", "outputreles:ok", "dutyturbina:ok", "disparos:ok", "outputleds:ok",
                 "enabletx_rs422:ok", "enablerx_rs422:ok", "canatx:ok", "canarx=", "canbtx:ok", "canbrx=",
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
-                "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok"};
+                "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:"};
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -3936,6 +3936,17 @@ namespace TestFuncionalBRD15001
                                     {
                                         respuesta_escrtc = 1;
                                         buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        contador_comandos--;
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
+                                    break;
+                                case 44:
+                                    if ((buffer_rx.Length > cad_parser[j].Length) && (buffer_rx.Contains("\r\n")))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
                                     }
                                     else
