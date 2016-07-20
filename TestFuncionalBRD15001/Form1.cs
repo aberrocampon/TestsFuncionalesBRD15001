@@ -3104,8 +3104,8 @@ namespace TestFuncionalBRD15001
                 {
 
                     timeout_esperarespuesta = 0;
-                    buffer_tx = "ping\r";
-                    contador_comandos = 1;
+                    buffer_tx += "ping\r";
+                    contador_comandos++;
                     try
                     {
                         if(serialPort1.IsOpen) serialPort1.DiscardInBuffer();
@@ -3944,11 +3944,13 @@ namespace TestFuncionalBRD15001
                                         return;
                                     }
                                     break;
-                                case 44:
+                                case 44: // Error de interprete
                                     if ((buffer_rx.Length > cad_parser[j].Length) && (buffer_rx.Contains("\r\n")))
                                     {
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
+                                        buffer_tx += "ping\r";
+                                        contador_comandos++;
                                     }
                                     else
                                     {
