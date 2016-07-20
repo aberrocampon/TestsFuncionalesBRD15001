@@ -3100,11 +3100,12 @@ namespace TestFuncionalBRD15001
             if (contador_comandos > 0)
             {
                 timeout_esperarespuesta++;
-                if (timeout_esperarespuesta > 10)
+                if (timeout_esperarespuesta > 25)
                 {
 
                     timeout_esperarespuesta = 0;
-                    contador_comandos = 0;
+                    buffer_tx = "ping\r";
+                    contador_comandos = 1;
                     try
                     {
                         if(serialPort1.IsOpen) serialPort1.DiscardInBuffer();
@@ -3390,7 +3391,7 @@ namespace TestFuncionalBRD15001
                     {
                         long ticks = dateTime.Ticks - hora_inicio_rtc_enhora.Ticks;
                         TimeSpan ts = new TimeSpan(ticks);
-                        test_rtc_duracion_en_hora = ts.Seconds;
+                        test_rtc_duracion_en_hora = (int)ts.TotalSeconds;
                         if(test_rtc_duracion_en_hora > 5)
                         {
                             test_rtc_en_hora_ok_fallo = 1;
@@ -3420,8 +3421,8 @@ namespace TestFuncionalBRD15001
                     actualiza_marcas_leyenda_resultados_tests();
                 }
 
-                if (test_rtc_duracion_en_hora > 5) labelEnHoraRTC.Text = "En hora: > 5 seg";
-                else labelEnHoraRTC.Text = "En hora: " + test_rtc_duracion_en_hora + " seg";
+                if (test_rtc_duracion_en_hora > 5) labelEnHoraRTC.Text = "> 5 seg";
+                else labelEnHoraRTC.Text = test_rtc_duracion_en_hora + " seg";
             }
 
         }
@@ -4241,8 +4242,8 @@ namespace TestFuncionalBRD15001
                 serialPort1.PortName = nombreCOM;
                 serialPort1.Open();
 
-                buffer_tx += "ping\r";
-                contador_comandos++;
+                buffer_tx = "ping\r";
+                contador_comandos = 1;
             }
             catch (Exception ex)
             {
