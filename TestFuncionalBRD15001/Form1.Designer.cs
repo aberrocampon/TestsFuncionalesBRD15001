@@ -408,6 +408,7 @@
             this.button7 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.label94 = new System.Windows.Forms.Label();
             this.pictureBoxPuestaEnHoraRTC = new System.Windows.Forms.PictureBox();
             this.labelEnHoraRTC = new System.Windows.Forms.Label();
             this.pictureBoxEnHoraRTC = new System.Windows.Forms.PictureBox();
@@ -460,7 +461,6 @@
             this.progressBarTestActual = new System.Windows.Forms.ToolStripProgressBar();
             this.labelVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
-            this.label94 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -943,7 +943,7 @@
             // pictureBoxLed4
             // 
             this.pictureBoxLed4.Location = new System.Drawing.Point(291, 133);
-            this.pictureBoxLed4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLed4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLed4.Name = "pictureBoxLed4";
             this.pictureBoxLed4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLed4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -953,7 +953,7 @@
             // pictureBoxLed3
             // 
             this.pictureBoxLed3.Location = new System.Drawing.Point(291, 111);
-            this.pictureBoxLed3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLed3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLed3.Name = "pictureBoxLed3";
             this.pictureBoxLed3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLed3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -963,7 +963,7 @@
             // pictureBoxLed2
             // 
             this.pictureBoxLed2.Location = new System.Drawing.Point(291, 89);
-            this.pictureBoxLed2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLed2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLed2.Name = "pictureBoxLed2";
             this.pictureBoxLed2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLed2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -973,7 +973,7 @@
             // pictureBoxLed1
             // 
             this.pictureBoxLed1.Location = new System.Drawing.Point(291, 66);
-            this.pictureBoxLed1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLed1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLed1.Name = "pictureBoxLed1";
             this.pictureBoxLed1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLed1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -983,7 +983,7 @@
             // pictureBoxLed0
             // 
             this.pictureBoxLed0.Location = new System.Drawing.Point(291, 44);
-            this.pictureBoxLed0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLed0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLed0.Name = "pictureBoxLed0";
             this.pictureBoxLed0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLed0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -993,7 +993,7 @@
             // pictureBoxInput15
             // 
             this.pictureBoxInput15.Location = new System.Drawing.Point(207, 377);
-            this.pictureBoxInput15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput15.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput15.Name = "pictureBoxInput15";
             this.pictureBoxInput15.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1003,7 +1003,7 @@
             // pictureBoxInput14
             // 
             this.pictureBoxInput14.Location = new System.Drawing.Point(207, 354);
-            this.pictureBoxInput14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput14.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput14.Name = "pictureBoxInput14";
             this.pictureBoxInput14.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1013,7 +1013,7 @@
             // pictureBoxInput13
             // 
             this.pictureBoxInput13.Location = new System.Drawing.Point(207, 332);
-            this.pictureBoxInput13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput13.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput13.Name = "pictureBoxInput13";
             this.pictureBoxInput13.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1023,7 +1023,7 @@
             // pictureBoxInput12
             // 
             this.pictureBoxInput12.Location = new System.Drawing.Point(207, 310);
-            this.pictureBoxInput12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput12.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput12.Name = "pictureBoxInput12";
             this.pictureBoxInput12.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1033,7 +1033,7 @@
             // pictureBoxInput11
             // 
             this.pictureBoxInput11.Location = new System.Drawing.Point(207, 288);
-            this.pictureBoxInput11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput11.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput11.Name = "pictureBoxInput11";
             this.pictureBoxInput11.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1043,7 +1043,7 @@
             // pictureBoxInput10
             // 
             this.pictureBoxInput10.Location = new System.Drawing.Point(207, 266);
-            this.pictureBoxInput10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput10.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput10.Name = "pictureBoxInput10";
             this.pictureBoxInput10.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1053,7 +1053,7 @@
             // pictureBoxInput9
             // 
             this.pictureBoxInput9.Location = new System.Drawing.Point(207, 244);
-            this.pictureBoxInput9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput9.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput9.Name = "pictureBoxInput9";
             this.pictureBoxInput9.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1063,7 +1063,7 @@
             // pictureBoxInput8
             // 
             this.pictureBoxInput8.Location = new System.Drawing.Point(207, 222);
-            this.pictureBoxInput8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput8.Name = "pictureBoxInput8";
             this.pictureBoxInput8.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1073,7 +1073,7 @@
             // pictureBoxInput7
             // 
             this.pictureBoxInput7.Location = new System.Drawing.Point(207, 199);
-            this.pictureBoxInput7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput7.Name = "pictureBoxInput7";
             this.pictureBoxInput7.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1083,7 +1083,7 @@
             // pictureBoxInput6
             // 
             this.pictureBoxInput6.Location = new System.Drawing.Point(207, 177);
-            this.pictureBoxInput6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput6.Name = "pictureBoxInput6";
             this.pictureBoxInput6.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1093,7 +1093,7 @@
             // pictureBoxInput5
             // 
             this.pictureBoxInput5.Location = new System.Drawing.Point(207, 155);
-            this.pictureBoxInput5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput5.Name = "pictureBoxInput5";
             this.pictureBoxInput5.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1103,7 +1103,7 @@
             // pictureBoxInput4
             // 
             this.pictureBoxInput4.Location = new System.Drawing.Point(207, 133);
-            this.pictureBoxInput4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput4.Name = "pictureBoxInput4";
             this.pictureBoxInput4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1113,7 +1113,7 @@
             // pictureBoxInput3
             // 
             this.pictureBoxInput3.Location = new System.Drawing.Point(207, 111);
-            this.pictureBoxInput3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput3.Name = "pictureBoxInput3";
             this.pictureBoxInput3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1123,7 +1123,7 @@
             // pictureBoxInput2
             // 
             this.pictureBoxInput2.Location = new System.Drawing.Point(207, 89);
-            this.pictureBoxInput2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput2.Name = "pictureBoxInput2";
             this.pictureBoxInput2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1133,7 +1133,7 @@
             // pictureBoxInput1
             // 
             this.pictureBoxInput1.Location = new System.Drawing.Point(207, 66);
-            this.pictureBoxInput1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput1.Name = "pictureBoxInput1";
             this.pictureBoxInput1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1143,7 +1143,7 @@
             // pictureBoxInput0
             // 
             this.pictureBoxInput0.Location = new System.Drawing.Point(207, 44);
-            this.pictureBoxInput0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxInput0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxInput0.Name = "pictureBoxInput0";
             this.pictureBoxInput0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxInput0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1153,7 +1153,7 @@
             // pictureBoxRele15
             // 
             this.pictureBoxRele15.Location = new System.Drawing.Point(131, 377);
-            this.pictureBoxRele15.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele15.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele15.Name = "pictureBoxRele15";
             this.pictureBoxRele15.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1163,7 +1163,7 @@
             // pictureBoxRele14
             // 
             this.pictureBoxRele14.Location = new System.Drawing.Point(131, 354);
-            this.pictureBoxRele14.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele14.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele14.Name = "pictureBoxRele14";
             this.pictureBoxRele14.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1173,7 +1173,7 @@
             // pictureBoxRele13
             // 
             this.pictureBoxRele13.Location = new System.Drawing.Point(131, 332);
-            this.pictureBoxRele13.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele13.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele13.Name = "pictureBoxRele13";
             this.pictureBoxRele13.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1183,7 +1183,7 @@
             // pictureBoxRele12
             // 
             this.pictureBoxRele12.Location = new System.Drawing.Point(131, 310);
-            this.pictureBoxRele12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele12.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele12.Name = "pictureBoxRele12";
             this.pictureBoxRele12.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1193,7 +1193,7 @@
             // pictureBoxRele11
             // 
             this.pictureBoxRele11.Location = new System.Drawing.Point(131, 288);
-            this.pictureBoxRele11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele11.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele11.Name = "pictureBoxRele11";
             this.pictureBoxRele11.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1203,7 +1203,7 @@
             // pictureBoxRele10
             // 
             this.pictureBoxRele10.Location = new System.Drawing.Point(131, 266);
-            this.pictureBoxRele10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele10.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele10.Name = "pictureBoxRele10";
             this.pictureBoxRele10.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1213,7 +1213,7 @@
             // pictureBoxRele9
             // 
             this.pictureBoxRele9.Location = new System.Drawing.Point(131, 244);
-            this.pictureBoxRele9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele9.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele9.Name = "pictureBoxRele9";
             this.pictureBoxRele9.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1223,7 +1223,7 @@
             // pictureBoxRele8
             // 
             this.pictureBoxRele8.Location = new System.Drawing.Point(131, 222);
-            this.pictureBoxRele8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele8.Name = "pictureBoxRele8";
             this.pictureBoxRele8.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1233,7 +1233,7 @@
             // pictureBoxRele7
             // 
             this.pictureBoxRele7.Location = new System.Drawing.Point(131, 199);
-            this.pictureBoxRele7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele7.Name = "pictureBoxRele7";
             this.pictureBoxRele7.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1243,7 +1243,7 @@
             // pictureBoxRele6
             // 
             this.pictureBoxRele6.Location = new System.Drawing.Point(131, 177);
-            this.pictureBoxRele6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele6.Name = "pictureBoxRele6";
             this.pictureBoxRele6.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1253,7 +1253,7 @@
             // pictureBoxRele5
             // 
             this.pictureBoxRele5.Location = new System.Drawing.Point(131, 155);
-            this.pictureBoxRele5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele5.Name = "pictureBoxRele5";
             this.pictureBoxRele5.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1263,7 +1263,7 @@
             // pictureBoxRele4
             // 
             this.pictureBoxRele4.Location = new System.Drawing.Point(131, 133);
-            this.pictureBoxRele4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele4.Name = "pictureBoxRele4";
             this.pictureBoxRele4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1273,7 +1273,7 @@
             // pictureBoxRele3
             // 
             this.pictureBoxRele3.Location = new System.Drawing.Point(131, 111);
-            this.pictureBoxRele3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele3.Name = "pictureBoxRele3";
             this.pictureBoxRele3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1283,7 +1283,7 @@
             // pictureBoxRele2
             // 
             this.pictureBoxRele2.Location = new System.Drawing.Point(131, 89);
-            this.pictureBoxRele2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele2.Name = "pictureBoxRele2";
             this.pictureBoxRele2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1293,7 +1293,7 @@
             // pictureBoxRele1
             // 
             this.pictureBoxRele1.Location = new System.Drawing.Point(131, 66);
-            this.pictureBoxRele1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele1.Name = "pictureBoxRele1";
             this.pictureBoxRele1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1303,7 +1303,7 @@
             // pictureBoxRele0
             // 
             this.pictureBoxRele0.Location = new System.Drawing.Point(131, 44);
-            this.pictureBoxRele0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRele0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRele0.Name = "pictureBoxRele0";
             this.pictureBoxRele0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRele0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1798,7 +1798,7 @@
             // button12
             // 
             this.button12.Location = new System.Drawing.Point(93, 20);
-            this.button12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button12.Margin = new System.Windows.Forms.Padding(4);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(139, 25);
             this.button12.TabIndex = 65;
@@ -1908,7 +1908,7 @@
             // textBoxToleranciaNTC4
             // 
             this.textBoxToleranciaNTC4.Location = new System.Drawing.Point(285, 169);
-            this.textBoxToleranciaNTC4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaNTC4.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaNTC4.Name = "textBoxToleranciaNTC4";
             this.textBoxToleranciaNTC4.ReadOnly = true;
             this.textBoxToleranciaNTC4.Size = new System.Drawing.Size(37, 22);
@@ -1919,7 +1919,7 @@
             // textBoxToleranciaNTC3
             // 
             this.textBoxToleranciaNTC3.Location = new System.Drawing.Point(285, 142);
-            this.textBoxToleranciaNTC3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaNTC3.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaNTC3.Name = "textBoxToleranciaNTC3";
             this.textBoxToleranciaNTC3.ReadOnly = true;
             this.textBoxToleranciaNTC3.Size = new System.Drawing.Size(37, 22);
@@ -1930,7 +1930,7 @@
             // textBoxToleranciaNTC2
             // 
             this.textBoxToleranciaNTC2.Location = new System.Drawing.Point(285, 113);
-            this.textBoxToleranciaNTC2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaNTC2.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaNTC2.Name = "textBoxToleranciaNTC2";
             this.textBoxToleranciaNTC2.ReadOnly = true;
             this.textBoxToleranciaNTC2.Size = new System.Drawing.Size(37, 22);
@@ -1941,7 +1941,7 @@
             // textBoxToleranciaNTC1
             // 
             this.textBoxToleranciaNTC1.Location = new System.Drawing.Point(285, 86);
-            this.textBoxToleranciaNTC1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaNTC1.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaNTC1.Name = "textBoxToleranciaNTC1";
             this.textBoxToleranciaNTC1.ReadOnly = true;
             this.textBoxToleranciaNTC1.Size = new System.Drawing.Size(37, 22);
@@ -1952,7 +1952,7 @@
             // textBoxToleranciaNTC0
             // 
             this.textBoxToleranciaNTC0.Location = new System.Drawing.Point(285, 57);
-            this.textBoxToleranciaNTC0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaNTC0.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaNTC0.Name = "textBoxToleranciaNTC0";
             this.textBoxToleranciaNTC0.ReadOnly = true;
             this.textBoxToleranciaNTC0.Size = new System.Drawing.Size(37, 22);
@@ -1963,7 +1963,7 @@
             // pictureBoxNTC4
             // 
             this.pictureBoxNTC4.Location = new System.Drawing.Point(331, 174);
-            this.pictureBoxNTC4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxNTC4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxNTC4.Name = "pictureBoxNTC4";
             this.pictureBoxNTC4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxNTC4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1973,7 +1973,7 @@
             // pictureBoxNTC3
             // 
             this.pictureBoxNTC3.Location = new System.Drawing.Point(331, 145);
-            this.pictureBoxNTC3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxNTC3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxNTC3.Name = "pictureBoxNTC3";
             this.pictureBoxNTC3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxNTC3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1983,7 +1983,7 @@
             // pictureBoxNTC2
             // 
             this.pictureBoxNTC2.Location = new System.Drawing.Point(331, 117);
-            this.pictureBoxNTC2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxNTC2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxNTC2.Name = "pictureBoxNTC2";
             this.pictureBoxNTC2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxNTC2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1993,7 +1993,7 @@
             // pictureBoxNTC1
             // 
             this.pictureBoxNTC1.Location = new System.Drawing.Point(331, 89);
-            this.pictureBoxNTC1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxNTC1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxNTC1.Name = "pictureBoxNTC1";
             this.pictureBoxNTC1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxNTC1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2003,7 +2003,7 @@
             // pictureBoxNTC0
             // 
             this.pictureBoxNTC0.Location = new System.Drawing.Point(331, 60);
-            this.pictureBoxNTC0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxNTC0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxNTC0.Name = "pictureBoxNTC0";
             this.pictureBoxNTC0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxNTC0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2328,7 +2328,7 @@
             // textBoxToleranciaVbat
             // 
             this.textBoxToleranciaVbat.Location = new System.Drawing.Point(187, 290);
-            this.textBoxToleranciaVbat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaVbat.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaVbat.Name = "textBoxToleranciaVbat";
             this.textBoxToleranciaVbat.ReadOnly = true;
             this.textBoxToleranciaVbat.Size = new System.Drawing.Size(37, 22);
@@ -2339,7 +2339,7 @@
             // textBoxToleranciaV3_3V
             // 
             this.textBoxToleranciaV3_3V.Location = new System.Drawing.Point(187, 263);
-            this.textBoxToleranciaV3_3V.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaV3_3V.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaV3_3V.Name = "textBoxToleranciaV3_3V";
             this.textBoxToleranciaV3_3V.ReadOnly = true;
             this.textBoxToleranciaV3_3V.Size = new System.Drawing.Size(37, 22);
@@ -2350,7 +2350,7 @@
             // textBoxToleranciaVreles
             // 
             this.textBoxToleranciaVreles.Location = new System.Drawing.Point(187, 235);
-            this.textBoxToleranciaVreles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaVreles.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaVreles.Name = "textBoxToleranciaVreles";
             this.textBoxToleranciaVreles.ReadOnly = true;
             this.textBoxToleranciaVreles.Size = new System.Drawing.Size(37, 22);
@@ -2361,7 +2361,7 @@
             // textBoxToleranciaVfo
             // 
             this.textBoxToleranciaVfo.Location = new System.Drawing.Point(187, 206);
-            this.textBoxToleranciaVfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaVfo.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaVfo.Name = "textBoxToleranciaVfo";
             this.textBoxToleranciaVfo.ReadOnly = true;
             this.textBoxToleranciaVfo.Size = new System.Drawing.Size(37, 22);
@@ -2372,7 +2372,7 @@
             // textBoxToleranciaVdsp
             // 
             this.textBoxToleranciaVdsp.Location = new System.Drawing.Point(187, 178);
-            this.textBoxToleranciaVdsp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaVdsp.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaVdsp.Name = "textBoxToleranciaVdsp";
             this.textBoxToleranciaVdsp.ReadOnly = true;
             this.textBoxToleranciaVdsp.Size = new System.Drawing.Size(37, 22);
@@ -2383,7 +2383,7 @@
             // textBoxToleranciaIin
             // 
             this.textBoxToleranciaIin.Location = new System.Drawing.Point(187, 151);
-            this.textBoxToleranciaIin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaIin.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaIin.Name = "textBoxToleranciaIin";
             this.textBoxToleranciaIin.ReadOnly = true;
             this.textBoxToleranciaIin.Size = new System.Drawing.Size(37, 22);
@@ -2394,7 +2394,7 @@
             // textBoxToleranciaVin
             // 
             this.textBoxToleranciaVin.Location = new System.Drawing.Point(187, 123);
-            this.textBoxToleranciaVin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaVin.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaVin.Name = "textBoxToleranciaVin";
             this.textBoxToleranciaVin.ReadOnly = true;
             this.textBoxToleranciaVin.Size = new System.Drawing.Size(37, 22);
@@ -2415,7 +2415,7 @@
             // pictureBoxVbat
             // 
             this.pictureBoxVbat.Location = new System.Drawing.Point(232, 295);
-            this.pictureBoxVbat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxVbat.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxVbat.Name = "pictureBoxVbat";
             this.pictureBoxVbat.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxVbat.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2425,7 +2425,7 @@
             // pictureBoxV3_3V
             // 
             this.pictureBoxV3_3V.Location = new System.Drawing.Point(232, 267);
-            this.pictureBoxV3_3V.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxV3_3V.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxV3_3V.Name = "pictureBoxV3_3V";
             this.pictureBoxV3_3V.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxV3_3V.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2435,7 +2435,7 @@
             // pictureBoxVreles
             // 
             this.pictureBoxVreles.Location = new System.Drawing.Point(232, 238);
-            this.pictureBoxVreles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxVreles.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxVreles.Name = "pictureBoxVreles";
             this.pictureBoxVreles.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxVreles.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2445,7 +2445,7 @@
             // pictureBoxVfibopt
             // 
             this.pictureBoxVfibopt.Location = new System.Drawing.Point(232, 209);
-            this.pictureBoxVfibopt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxVfibopt.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxVfibopt.Name = "pictureBoxVfibopt";
             this.pictureBoxVfibopt.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxVfibopt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2455,7 +2455,7 @@
             // pictureBoxVdsp
             // 
             this.pictureBoxVdsp.Location = new System.Drawing.Point(232, 183);
-            this.pictureBoxVdsp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxVdsp.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxVdsp.Name = "pictureBoxVdsp";
             this.pictureBoxVdsp.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxVdsp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2465,7 +2465,7 @@
             // pictureBoxIin
             // 
             this.pictureBoxIin.Location = new System.Drawing.Point(232, 155);
-            this.pictureBoxIin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxIin.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxIin.Name = "pictureBoxIin";
             this.pictureBoxIin.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxIin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2475,7 +2475,7 @@
             // pictureBoxVin
             // 
             this.pictureBoxVin.Location = new System.Drawing.Point(232, 126);
-            this.pictureBoxVin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxVin.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxVin.Name = "pictureBoxVin";
             this.pictureBoxVin.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxVin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2485,7 +2485,7 @@
             // pictureBoxTemp2
             // 
             this.pictureBoxTemp2.Location = new System.Drawing.Point(232, 98);
-            this.pictureBoxTemp2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxTemp2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxTemp2.Name = "pictureBoxTemp2";
             this.pictureBoxTemp2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxTemp2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2495,7 +2495,7 @@
             // pictureBoxTemp1
             // 
             this.pictureBoxTemp1.Location = new System.Drawing.Point(232, 71);
-            this.pictureBoxTemp1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxTemp1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxTemp1.Name = "pictureBoxTemp1";
             this.pictureBoxTemp1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxTemp1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2867,9 +2867,9 @@
             this.groupBox5.Controls.Add(this.label35);
             this.groupBox5.Controls.Add(this.label33);
             this.groupBox5.Location = new System.Drawing.Point(376, 399);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox5.Size = new System.Drawing.Size(249, 132);
             this.groupBox5.TabIndex = 38;
             this.groupBox5.TabStop = false;
@@ -2878,7 +2878,7 @@
             // pictureBoxTurbina3
             // 
             this.pictureBoxTurbina3.Location = new System.Drawing.Point(208, 108);
-            this.pictureBoxTurbina3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxTurbina3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxTurbina3.Name = "pictureBoxTurbina3";
             this.pictureBoxTurbina3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxTurbina3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2888,7 +2888,7 @@
             // pictureBoxTurbina2
             // 
             this.pictureBoxTurbina2.Location = new System.Drawing.Point(208, 79);
-            this.pictureBoxTurbina2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxTurbina2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxTurbina2.Name = "pictureBoxTurbina2";
             this.pictureBoxTurbina2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxTurbina2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2898,7 +2898,7 @@
             // pictureBoxTurbina1
             // 
             this.pictureBoxTurbina1.Location = new System.Drawing.Point(208, 49);
-            this.pictureBoxTurbina1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxTurbina1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxTurbina1.Name = "pictureBoxTurbina1";
             this.pictureBoxTurbina1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxTurbina1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -2928,7 +2928,7 @@
             // numericUpDownTurbina3
             // 
             this.numericUpDownTurbina3.Location = new System.Drawing.Point(75, 105);
-            this.numericUpDownTurbina3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownTurbina3.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownTurbina3.Name = "numericUpDownTurbina3";
             this.numericUpDownTurbina3.Size = new System.Drawing.Size(45, 22);
             this.numericUpDownTurbina3.TabIndex = 88;
@@ -2955,7 +2955,7 @@
             // numericUpDownTurbina2
             // 
             this.numericUpDownTurbina2.Location = new System.Drawing.Point(75, 76);
-            this.numericUpDownTurbina2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownTurbina2.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownTurbina2.Name = "numericUpDownTurbina2";
             this.numericUpDownTurbina2.Size = new System.Drawing.Size(45, 22);
             this.numericUpDownTurbina2.TabIndex = 85;
@@ -2992,7 +2992,7 @@
             // numericUpDownTurbina1
             // 
             this.numericUpDownTurbina1.Location = new System.Drawing.Point(75, 46);
-            this.numericUpDownTurbina1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownTurbina1.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownTurbina1.Name = "numericUpDownTurbina1";
             this.numericUpDownTurbina1.Size = new System.Drawing.Size(45, 22);
             this.numericUpDownTurbina1.TabIndex = 81;
@@ -3025,9 +3025,9 @@
             this.groupBox6.Controls.Add(this.checkBoxEnableRX_RS422);
             this.groupBox6.Controls.Add(this.checkBoxEnableTX_RS422);
             this.groupBox6.Location = new System.Drawing.Point(296, 4);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox6.Size = new System.Drawing.Size(209, 130);
             this.groupBox6.TabIndex = 39;
             this.groupBox6.TabStop = false;
@@ -3036,7 +3036,7 @@
             // pictureBoxRS422
             // 
             this.pictureBoxRS422.Location = new System.Drawing.Point(164, 26);
-            this.pictureBoxRS422.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRS422.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRS422.Name = "pictureBoxRS422";
             this.pictureBoxRS422.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxRS422.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3057,7 +3057,7 @@
             // textBoxRS422
             // 
             this.textBoxRS422.Location = new System.Drawing.Point(11, 78);
-            this.textBoxRS422.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxRS422.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxRS422.Multiline = true;
             this.textBoxRS422.Name = "textBoxRS422";
             this.textBoxRS422.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -3069,7 +3069,7 @@
             // 
             this.checkBoxEnableRX_RS422.AutoSize = true;
             this.checkBoxEnableRX_RS422.Location = new System.Drawing.Point(103, 49);
-            this.checkBoxEnableRX_RS422.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxEnableRX_RS422.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxEnableRX_RS422.Name = "checkBoxEnableRX_RS422";
             this.checkBoxEnableRX_RS422.Size = new System.Drawing.Size(97, 21);
             this.checkBoxEnableRX_RS422.TabIndex = 108;
@@ -3081,7 +3081,7 @@
             // 
             this.checkBoxEnableTX_RS422.AutoSize = true;
             this.checkBoxEnableTX_RS422.Location = new System.Drawing.Point(8, 49);
-            this.checkBoxEnableTX_RS422.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxEnableTX_RS422.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxEnableTX_RS422.Name = "checkBoxEnableTX_RS422";
             this.checkBoxEnableTX_RS422.Size = new System.Drawing.Size(96, 21);
             this.checkBoxEnableTX_RS422.TabIndex = 107;
@@ -3132,7 +3132,7 @@
             // pictureBoxSynchSD
             // 
             this.pictureBoxSynchSD.Location = new System.Drawing.Point(129, 22);
-            this.pictureBoxSynchSD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxSynchSD.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxSynchSD.Name = "pictureBoxSynchSD";
             this.pictureBoxSynchSD.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxSynchSD.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3180,7 +3180,7 @@
             // pictureBoxErrorOvtT
             // 
             this.pictureBoxErrorOvtT.Location = new System.Drawing.Point(131, 82);
-            this.pictureBoxErrorOvtT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorOvtT.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorOvtT.Name = "pictureBoxErrorOvtT";
             this.pictureBoxErrorOvtT.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorOvtT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3190,7 +3190,7 @@
             // pictureBoxErrorBotT
             // 
             this.pictureBoxErrorBotT.Location = new System.Drawing.Point(131, 59);
-            this.pictureBoxErrorBotT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorBotT.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorBotT.Name = "pictureBoxErrorBotT";
             this.pictureBoxErrorBotT.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorBotT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3200,7 +3200,7 @@
             // pictureBoxDisparoBotT
             // 
             this.pictureBoxDisparoBotT.Location = new System.Drawing.Point(69, 59);
-            this.pictureBoxDisparoBotT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoBotT.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoBotT.Name = "pictureBoxDisparoBotT";
             this.pictureBoxDisparoBotT.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoBotT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3210,7 +3210,7 @@
             // pictureBoxErrorTopT
             // 
             this.pictureBoxErrorTopT.Location = new System.Drawing.Point(131, 38);
-            this.pictureBoxErrorTopT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorTopT.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorTopT.Name = "pictureBoxErrorTopT";
             this.pictureBoxErrorTopT.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorTopT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3220,7 +3220,7 @@
             // pictureBoxDisparoTopT
             // 
             this.pictureBoxDisparoTopT.Location = new System.Drawing.Point(69, 37);
-            this.pictureBoxDisparoTopT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoTopT.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoTopT.Name = "pictureBoxDisparoTopT";
             this.pictureBoxDisparoTopT.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoTopT.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3357,7 +3357,7 @@
             // pictureBoxErrorOvtS
             // 
             this.pictureBoxErrorOvtS.Location = new System.Drawing.Point(129, 82);
-            this.pictureBoxErrorOvtS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorOvtS.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorOvtS.Name = "pictureBoxErrorOvtS";
             this.pictureBoxErrorOvtS.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorOvtS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3367,7 +3367,7 @@
             // pictureBoxErrorBotS
             // 
             this.pictureBoxErrorBotS.Location = new System.Drawing.Point(129, 59);
-            this.pictureBoxErrorBotS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorBotS.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorBotS.Name = "pictureBoxErrorBotS";
             this.pictureBoxErrorBotS.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorBotS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3377,7 +3377,7 @@
             // pictureBoxDisparoBotS
             // 
             this.pictureBoxDisparoBotS.Location = new System.Drawing.Point(68, 59);
-            this.pictureBoxDisparoBotS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoBotS.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoBotS.Name = "pictureBoxDisparoBotS";
             this.pictureBoxDisparoBotS.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoBotS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3387,7 +3387,7 @@
             // pictureBoxErrorTopS
             // 
             this.pictureBoxErrorTopS.Location = new System.Drawing.Point(129, 38);
-            this.pictureBoxErrorTopS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorTopS.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorTopS.Name = "pictureBoxErrorTopS";
             this.pictureBoxErrorTopS.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorTopS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3397,7 +3397,7 @@
             // pictureBoxDisparoTopS
             // 
             this.pictureBoxDisparoTopS.Location = new System.Drawing.Point(68, 37);
-            this.pictureBoxDisparoTopS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoTopS.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoTopS.Name = "pictureBoxDisparoTopS";
             this.pictureBoxDisparoTopS.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoTopS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3534,7 +3534,7 @@
             // pictureBoxErrorOvtR
             // 
             this.pictureBoxErrorOvtR.Location = new System.Drawing.Point(131, 82);
-            this.pictureBoxErrorOvtR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorOvtR.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorOvtR.Name = "pictureBoxErrorOvtR";
             this.pictureBoxErrorOvtR.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorOvtR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3544,7 +3544,7 @@
             // pictureBoxErrorBotR
             // 
             this.pictureBoxErrorBotR.Location = new System.Drawing.Point(131, 59);
-            this.pictureBoxErrorBotR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorBotR.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorBotR.Name = "pictureBoxErrorBotR";
             this.pictureBoxErrorBotR.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorBotR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3554,7 +3554,7 @@
             // pictureBoxDisparoBotR
             // 
             this.pictureBoxDisparoBotR.Location = new System.Drawing.Point(69, 59);
-            this.pictureBoxDisparoBotR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoBotR.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoBotR.Name = "pictureBoxDisparoBotR";
             this.pictureBoxDisparoBotR.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoBotR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3564,7 +3564,7 @@
             // pictureBoxErrorTopR
             // 
             this.pictureBoxErrorTopR.Location = new System.Drawing.Point(131, 38);
-            this.pictureBoxErrorTopR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxErrorTopR.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxErrorTopR.Name = "pictureBoxErrorTopR";
             this.pictureBoxErrorTopR.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxErrorTopR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3574,7 +3574,7 @@
             // pictureBoxDisparoTopR
             // 
             this.pictureBoxDisparoTopR.Location = new System.Drawing.Point(69, 37);
-            this.pictureBoxDisparoTopR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxDisparoTopR.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDisparoTopR.Name = "pictureBoxDisparoTopR";
             this.pictureBoxDisparoTopR.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxDisparoTopR.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3701,7 +3701,7 @@
             // pictureBoxCanalA0
             // 
             this.pictureBoxCanalA0.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalA0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA0.Name = "pictureBoxCanalA0";
             this.pictureBoxCanalA0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3712,7 +3712,7 @@
             // 
             this.radioButtonADCA0.AutoSize = true;
             this.radioButtonADCA0.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCA0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA0.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA0.Name = "radioButtonADCA0";
             this.radioButtonADCA0.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA0.TabIndex = 1;
@@ -3760,7 +3760,7 @@
             // pictureBoxCanalB0
             // 
             this.pictureBoxCanalB0.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalB0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB0.Name = "pictureBoxCanalB0";
             this.pictureBoxCanalB0.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3771,7 +3771,7 @@
             // 
             this.radioButtonADCB0.AutoSize = true;
             this.radioButtonADCB0.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCB0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB0.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB0.Name = "radioButtonADCB0";
             this.radioButtonADCB0.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB0.TabIndex = 2;
@@ -3819,7 +3819,7 @@
             // pictureBoxCanalB1
             // 
             this.pictureBoxCanalB1.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalB1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB1.Name = "pictureBoxCanalB1";
             this.pictureBoxCanalB1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3830,7 +3830,7 @@
             // 
             this.radioButtonADCB1.AutoSize = true;
             this.radioButtonADCB1.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCB1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB1.Name = "radioButtonADCB1";
             this.radioButtonADCB1.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB1.TabIndex = 4;
@@ -3878,7 +3878,7 @@
             // pictureBoxCanalA1
             // 
             this.pictureBoxCanalA1.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA1.Name = "pictureBoxCanalA1";
             this.pictureBoxCanalA1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3889,7 +3889,7 @@
             // 
             this.radioButtonADCA1.AutoSize = true;
             this.radioButtonADCA1.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCA1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA1.Name = "radioButtonADCA1";
             this.radioButtonADCA1.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA1.TabIndex = 3;
@@ -3938,7 +3938,7 @@
             // pictureBoxCanalB3
             // 
             this.pictureBoxCanalB3.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalB3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB3.Name = "pictureBoxCanalB3";
             this.pictureBoxCanalB3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -3949,7 +3949,7 @@
             // 
             this.radioButtonADCB3.AutoSize = true;
             this.radioButtonADCB3.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCB3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB3.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB3.Name = "radioButtonADCB3";
             this.radioButtonADCB3.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB3.TabIndex = 8;
@@ -3998,7 +3998,7 @@
             // pictureBoxCanalA3
             // 
             this.pictureBoxCanalA3.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA3.Name = "pictureBoxCanalA3";
             this.pictureBoxCanalA3.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4009,7 +4009,7 @@
             // 
             this.radioButtonADCA3.AutoSize = true;
             this.radioButtonADCA3.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCA3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA3.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA3.Name = "radioButtonADCA3";
             this.radioButtonADCA3.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA3.TabIndex = 7;
@@ -4058,7 +4058,7 @@
             // pictureBoxCanalB2
             // 
             this.pictureBoxCanalB2.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalB2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB2.Name = "pictureBoxCanalB2";
             this.pictureBoxCanalB2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4069,7 +4069,7 @@
             // 
             this.radioButtonADCB2.AutoSize = true;
             this.radioButtonADCB2.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCB2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB2.Name = "radioButtonADCB2";
             this.radioButtonADCB2.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB2.TabIndex = 6;
@@ -4118,7 +4118,7 @@
             // pictureBoxCanalA2
             // 
             this.pictureBoxCanalA2.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA2.Name = "pictureBoxCanalA2";
             this.pictureBoxCanalA2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4129,7 +4129,7 @@
             // 
             this.radioButtonADCA2.AutoSize = true;
             this.radioButtonADCA2.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCA2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA2.Name = "radioButtonADCA2";
             this.radioButtonADCA2.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA2.TabIndex = 5;
@@ -4178,7 +4178,7 @@
             // pictureBoxCanalB7
             // 
             this.pictureBoxCanalB7.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalB7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB7.Name = "pictureBoxCanalB7";
             this.pictureBoxCanalB7.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4189,7 +4189,7 @@
             // 
             this.radioButtonADCB7.AutoSize = true;
             this.radioButtonADCB7.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCB7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB7.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB7.Name = "radioButtonADCB7";
             this.radioButtonADCB7.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB7.TabIndex = 16;
@@ -4238,7 +4238,7 @@
             // pictureBoxCanalA7
             // 
             this.pictureBoxCanalA7.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA7.Name = "pictureBoxCanalA7";
             this.pictureBoxCanalA7.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4249,7 +4249,7 @@
             // 
             this.radioButtonADCA7.AutoSize = true;
             this.radioButtonADCA7.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCA7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA7.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA7.Name = "radioButtonADCA7";
             this.radioButtonADCA7.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA7.TabIndex = 15;
@@ -4298,7 +4298,7 @@
             // pictureBoxCanalB6
             // 
             this.pictureBoxCanalB6.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalB6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB6.Name = "pictureBoxCanalB6";
             this.pictureBoxCanalB6.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4309,7 +4309,7 @@
             // 
             this.radioButtonADCB6.AutoSize = true;
             this.radioButtonADCB6.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCB6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB6.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB6.Name = "radioButtonADCB6";
             this.radioButtonADCB6.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB6.TabIndex = 14;
@@ -4358,7 +4358,7 @@
             // pictureBoxCanalA6
             // 
             this.pictureBoxCanalA6.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalA6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA6.Name = "pictureBoxCanalA6";
             this.pictureBoxCanalA6.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4369,7 +4369,7 @@
             // 
             this.radioButtonADCA6.AutoSize = true;
             this.radioButtonADCA6.Location = new System.Drawing.Point(119, 97);
-            this.radioButtonADCA6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA6.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA6.Name = "radioButtonADCA6";
             this.radioButtonADCA6.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA6.TabIndex = 13;
@@ -4418,7 +4418,7 @@
             // pictureBoxCanalB5
             // 
             this.pictureBoxCanalB5.Location = new System.Drawing.Point(5, 96);
-            this.pictureBoxCanalB5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB5.Name = "pictureBoxCanalB5";
             this.pictureBoxCanalB5.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4429,7 +4429,7 @@
             // 
             this.radioButtonADCB5.AutoSize = true;
             this.radioButtonADCB5.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCB5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB5.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB5.Name = "radioButtonADCB5";
             this.radioButtonADCB5.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB5.TabIndex = 12;
@@ -4478,7 +4478,7 @@
             // pictureBoxCanalA5
             // 
             this.pictureBoxCanalA5.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA5.Name = "pictureBoxCanalA5";
             this.pictureBoxCanalA5.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4489,7 +4489,7 @@
             // 
             this.radioButtonADCA5.AutoSize = true;
             this.radioButtonADCA5.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCA5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA5.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA5.Name = "radioButtonADCA5";
             this.radioButtonADCA5.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA5.TabIndex = 11;
@@ -4538,7 +4538,7 @@
             // pictureBoxCanalB4
             // 
             this.pictureBoxCanalB4.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalB4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalB4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalB4.Name = "pictureBoxCanalB4";
             this.pictureBoxCanalB4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalB4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4549,7 +4549,7 @@
             // 
             this.radioButtonADCB4.AutoSize = true;
             this.radioButtonADCB4.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCB4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCB4.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCB4.Name = "radioButtonADCB4";
             this.radioButtonADCB4.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCB4.TabIndex = 10;
@@ -4598,7 +4598,7 @@
             // pictureBoxCanalA4
             // 
             this.pictureBoxCanalA4.Location = new System.Drawing.Point(7, 96);
-            this.pictureBoxCanalA4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCanalA4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCanalA4.Name = "pictureBoxCanalA4";
             this.pictureBoxCanalA4.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCanalA4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4609,7 +4609,7 @@
             // 
             this.radioButtonADCA4.AutoSize = true;
             this.radioButtonADCA4.Location = new System.Drawing.Point(119, 96);
-            this.radioButtonADCA4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonADCA4.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonADCA4.Name = "radioButtonADCA4";
             this.radioButtonADCA4.Size = new System.Drawing.Size(17, 16);
             this.radioButtonADCA4.TabIndex = 9;
@@ -4701,7 +4701,7 @@
             // pictureBoxFRAMDesbloqueo
             // 
             this.pictureBoxFRAMDesbloqueo.Location = new System.Drawing.Point(91, 121);
-            this.pictureBoxFRAMDesbloqueo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxFRAMDesbloqueo.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxFRAMDesbloqueo.Name = "pictureBoxFRAMDesbloqueo";
             this.pictureBoxFRAMDesbloqueo.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxFRAMDesbloqueo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4720,7 +4720,7 @@
             // pictureBoxFRAMBloqueo
             // 
             this.pictureBoxFRAMBloqueo.Location = new System.Drawing.Point(91, 97);
-            this.pictureBoxFRAMBloqueo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxFRAMBloqueo.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxFRAMBloqueo.Name = "pictureBoxFRAMBloqueo";
             this.pictureBoxFRAMBloqueo.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxFRAMBloqueo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4739,7 +4739,7 @@
             // pictureBoxFRAMEscritura2
             // 
             this.pictureBoxFRAMEscritura2.Location = new System.Drawing.Point(91, 73);
-            this.pictureBoxFRAMEscritura2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxFRAMEscritura2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxFRAMEscritura2.Name = "pictureBoxFRAMEscritura2";
             this.pictureBoxFRAMEscritura2.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxFRAMEscritura2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4758,7 +4758,7 @@
             // pictureBoxFRAMEscritura1
             // 
             this.pictureBoxFRAMEscritura1.Location = new System.Drawing.Point(91, 49);
-            this.pictureBoxFRAMEscritura1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxFRAMEscritura1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxFRAMEscritura1.Name = "pictureBoxFRAMEscritura1";
             this.pictureBoxFRAMEscritura1.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxFRAMEscritura1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4792,7 +4792,7 @@
             // pictureBoxSRAM
             // 
             this.pictureBoxSRAM.Location = new System.Drawing.Point(91, 22);
-            this.pictureBoxSRAM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxSRAM.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxSRAM.Name = "pictureBoxSRAM";
             this.pictureBoxSRAM.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxSRAM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4817,9 +4817,9 @@
             this.groupBox28.Controls.Add(this.pictureBoxCAN);
             this.groupBox28.Controls.Add(this.button7);
             this.groupBox28.Location = new System.Drawing.Point(296, 153);
-            this.groupBox28.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox28.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox28.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox28.Size = new System.Drawing.Size(165, 130);
             this.groupBox28.TabIndex = 40;
             this.groupBox28.TabStop = false;
@@ -4842,7 +4842,7 @@
             // 
             this.checkBoxCANBTX.AutoSize = true;
             this.checkBoxCANBTX.Location = new System.Drawing.Point(19, 22);
-            this.checkBoxCANBTX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCANBTX.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxCANBTX.Name = "checkBoxCANBTX";
             this.checkBoxCANBTX.Size = new System.Drawing.Size(48, 21);
             this.checkBoxCANBTX.TabIndex = 112;
@@ -4855,7 +4855,7 @@
             this.checkBoxCANBRX.AutoCheck = false;
             this.checkBoxCANBRX.AutoSize = true;
             this.checkBoxCANBRX.Location = new System.Drawing.Point(19, 48);
-            this.checkBoxCANBRX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCANBRX.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxCANBRX.Name = "checkBoxCANBRX";
             this.checkBoxCANBRX.Size = new System.Drawing.Size(49, 21);
             this.checkBoxCANBRX.TabIndex = 113;
@@ -4879,7 +4879,7 @@
             // 
             this.checkBoxCANATX.AutoSize = true;
             this.checkBoxCANATX.Location = new System.Drawing.Point(19, 22);
-            this.checkBoxCANATX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCANATX.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxCANATX.Name = "checkBoxCANATX";
             this.checkBoxCANATX.Size = new System.Drawing.Size(48, 21);
             this.checkBoxCANATX.TabIndex = 110;
@@ -4892,7 +4892,7 @@
             this.checkBoxCANARX.AutoCheck = false;
             this.checkBoxCANARX.AutoSize = true;
             this.checkBoxCANARX.Location = new System.Drawing.Point(19, 48);
-            this.checkBoxCANARX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCANARX.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxCANARX.Name = "checkBoxCANARX";
             this.checkBoxCANARX.Size = new System.Drawing.Size(49, 21);
             this.checkBoxCANARX.TabIndex = 111;
@@ -4902,7 +4902,7 @@
             // pictureBoxCAN
             // 
             this.pictureBoxCAN.Location = new System.Drawing.Point(108, 26);
-            this.pictureBoxCAN.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxCAN.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxCAN.Name = "pictureBoxCAN";
             this.pictureBoxCAN.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxCAN.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4946,18 +4946,27 @@
             this.groupBox12.Controls.Add(this.textBoxHoraPC);
             this.groupBox12.Controls.Add(this.label91);
             this.groupBox12.Location = new System.Drawing.Point(35, 421);
-            this.groupBox12.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox12.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox12.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox12.Size = new System.Drawing.Size(307, 106);
             this.groupBox12.TabIndex = 41;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "RTC";
             // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(220, 60);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(62, 17);
+            this.label94.TabIndex = 143;
+            this.label94.Text = "En hora:";
+            // 
             // pictureBoxPuestaEnHoraRTC
             // 
             this.pictureBoxPuestaEnHoraRTC.Location = new System.Drawing.Point(185, 49);
-            this.pictureBoxPuestaEnHoraRTC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxPuestaEnHoraRTC.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxPuestaEnHoraRTC.Name = "pictureBoxPuestaEnHoraRTC";
             this.pictureBoxPuestaEnHoraRTC.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxPuestaEnHoraRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4977,7 +4986,7 @@
             // pictureBoxEnHoraRTC
             // 
             this.pictureBoxEnHoraRTC.Location = new System.Drawing.Point(271, 78);
-            this.pictureBoxEnHoraRTC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxEnHoraRTC.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxEnHoraRTC.Name = "pictureBoxEnHoraRTC";
             this.pictureBoxEnHoraRTC.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxEnHoraRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -4987,7 +4996,7 @@
             // buttonPonHora
             // 
             this.buttonPonHora.Location = new System.Drawing.Point(55, 44);
-            this.buttonPonHora.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPonHora.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPonHora.Name = "buttonPonHora";
             this.buttonPonHora.Size = new System.Drawing.Size(123, 28);
             this.buttonPonHora.TabIndex = 4;
@@ -5008,7 +5017,7 @@
             // textBoxHoraDSP
             // 
             this.textBoxHoraDSP.Location = new System.Drawing.Point(55, 74);
-            this.textBoxHoraDSP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxHoraDSP.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxHoraDSP.Name = "textBoxHoraDSP";
             this.textBoxHoraDSP.ReadOnly = true;
             this.textBoxHoraDSP.Size = new System.Drawing.Size(144, 22);
@@ -5017,7 +5026,7 @@
             // textBoxHoraPC
             // 
             this.textBoxHoraPC.Location = new System.Drawing.Point(55, 18);
-            this.textBoxHoraPC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxHoraPC.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxHoraPC.Name = "textBoxHoraPC";
             this.textBoxHoraPC.ReadOnly = true;
             this.textBoxHoraPC.Size = new System.Drawing.Size(144, 22);
@@ -5080,7 +5089,7 @@
             // textBoxToleranciaADC
             // 
             this.textBoxToleranciaADC.Location = new System.Drawing.Point(469, 490);
-            this.textBoxToleranciaADC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxToleranciaADC.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxToleranciaADC.Name = "textBoxToleranciaADC";
             this.textBoxToleranciaADC.Size = new System.Drawing.Size(47, 22);
             this.textBoxToleranciaADC.TabIndex = 83;
@@ -5110,7 +5119,7 @@
             // button11
             // 
             this.button11.Location = new System.Drawing.Point(551, 487);
-            this.button11.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button11.Margin = new System.Windows.Forms.Padding(4);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(53, 28);
             this.button11.TabIndex = 80;
@@ -5121,7 +5130,7 @@
             // textBoxRefInADC
             // 
             this.textBoxRefInADC.Location = new System.Drawing.Point(361, 490);
-            this.textBoxRefInADC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxRefInADC.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxRefInADC.Name = "textBoxRefInADC";
             this.textBoxRefInADC.Size = new System.Drawing.Size(64, 22);
             this.textBoxRefInADC.TabIndex = 78;
@@ -5149,7 +5158,7 @@
             "CON2: CANAL B5 (HAT-1500S)",
             "CON1: CANAL B7 (Libre)"});
             this.comboBoxCanalADCseleccionado.Location = new System.Drawing.Point(28, 487);
-            this.comboBoxCanalADCseleccionado.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxCanalADCseleccionado.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxCanalADCseleccionado.Name = "comboBoxCanalADCseleccionado";
             this.comboBoxCanalADCseleccionado.Size = new System.Drawing.Size(281, 24);
             this.comboBoxCanalADCseleccionado.TabIndex = 77;
@@ -5185,9 +5194,9 @@
             this.groupBox29.Controls.Add(this.label76);
             this.groupBox29.Controls.Add(this.label74);
             this.groupBox29.Location = new System.Drawing.Point(655, 215);
-            this.groupBox29.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox29.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox29.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox29.Size = new System.Drawing.Size(237, 358);
             this.groupBox29.TabIndex = 66;
             this.groupBox29.TabStop = false;
@@ -5196,7 +5205,7 @@
             // pictureBoxResultadoRTC
             // 
             this.pictureBoxResultadoRTC.Location = new System.Drawing.Point(144, 242);
-            this.pictureBoxResultadoRTC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoRTC.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoRTC.Name = "pictureBoxResultadoRTC";
             this.pictureBoxResultadoRTC.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoRTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5216,7 +5225,7 @@
             // buttonInforme
             // 
             this.buttonInforme.Location = new System.Drawing.Point(15, 310);
-            this.buttonInforme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonInforme.Margin = new System.Windows.Forms.Padding(4);
             this.buttonInforme.Name = "buttonInforme";
             this.buttonInforme.Size = new System.Drawing.Size(100, 28);
             this.buttonInforme.TabIndex = 134;
@@ -5249,7 +5258,7 @@
             // pictureBoxResultadoFRAM
             // 
             this.pictureBoxResultadoFRAM.Location = new System.Drawing.Point(144, 123);
-            this.pictureBoxResultadoFRAM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoFRAM.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoFRAM.Name = "pictureBoxResultadoFRAM";
             this.pictureBoxResultadoFRAM.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoFRAM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5269,7 +5278,7 @@
             // pictureBoxResultadoSRAM
             // 
             this.pictureBoxResultadoSRAM.Location = new System.Drawing.Point(144, 103);
-            this.pictureBoxResultadoSRAM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoSRAM.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoSRAM.Name = "pictureBoxResultadoSRAM";
             this.pictureBoxResultadoSRAM.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoSRAM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5289,7 +5298,7 @@
             // pictureBoxResultadoCAN
             // 
             this.pictureBoxResultadoCAN.Location = new System.Drawing.Point(144, 82);
-            this.pictureBoxResultadoCAN.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoCAN.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoCAN.Name = "pictureBoxResultadoCAN";
             this.pictureBoxResultadoCAN.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoCAN.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5309,7 +5318,7 @@
             // pictureBoxLeerVersiones
             // 
             this.pictureBoxLeerVersiones.Location = new System.Drawing.Point(144, 23);
-            this.pictureBoxLeerVersiones.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxLeerVersiones.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLeerVersiones.Name = "pictureBoxLeerVersiones";
             this.pictureBoxLeerVersiones.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxLeerVersiones.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5329,7 +5338,7 @@
             // pictureBoxResultadoADCs
             // 
             this.pictureBoxResultadoADCs.Location = new System.Drawing.Point(144, 223);
-            this.pictureBoxResultadoADCs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoADCs.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoADCs.Name = "pictureBoxResultadoADCs";
             this.pictureBoxResultadoADCs.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoADCs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5339,7 +5348,7 @@
             // pictureBoxResultadoSPVs
             // 
             this.pictureBoxResultadoSPVs.Location = new System.Drawing.Point(144, 43);
-            this.pictureBoxResultadoSPVs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoSPVs.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoSPVs.Name = "pictureBoxResultadoSPVs";
             this.pictureBoxResultadoSPVs.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoSPVs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5349,7 +5358,7 @@
             // pictureBoxResultadoRS422
             // 
             this.pictureBoxResultadoRS422.Location = new System.Drawing.Point(144, 63);
-            this.pictureBoxResultadoRS422.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoRS422.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoRS422.Name = "pictureBoxResultadoRS422";
             this.pictureBoxResultadoRS422.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoRS422.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5359,7 +5368,7 @@
             // pictureBoxResultadoNTCs
             // 
             this.pictureBoxResultadoNTCs.Location = new System.Drawing.Point(144, 143);
-            this.pictureBoxResultadoNTCs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoNTCs.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoNTCs.Name = "pictureBoxResultadoNTCs";
             this.pictureBoxResultadoNTCs.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoNTCs.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5369,7 +5378,7 @@
             // pictureBoxResultadoTXRXOpt
             // 
             this.pictureBoxResultadoTXRXOpt.Location = new System.Drawing.Point(144, 203);
-            this.pictureBoxResultadoTXRXOpt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoTXRXOpt.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoTXRXOpt.Name = "pictureBoxResultadoTXRXOpt";
             this.pictureBoxResultadoTXRXOpt.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoTXRXOpt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5379,7 +5388,7 @@
             // pictureBoxResultadoTurbinas
             // 
             this.pictureBoxResultadoTurbinas.Location = new System.Drawing.Point(144, 162);
-            this.pictureBoxResultadoTurbinas.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoTurbinas.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoTurbinas.Name = "pictureBoxResultadoTurbinas";
             this.pictureBoxResultadoTurbinas.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoTurbinas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5389,7 +5398,7 @@
             // pictureBoxResultadoIO
             // 
             this.pictureBoxResultadoIO.Location = new System.Drawing.Point(144, 183);
-            this.pictureBoxResultadoIO.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxResultadoIO.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxResultadoIO.Name = "pictureBoxResultadoIO";
             this.pictureBoxResultadoIO.Size = new System.Drawing.Size(28, 17);
             this.pictureBoxResultadoIO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -5524,15 +5533,6 @@
             // serialPort2
             // 
             this.serialPort2.BaudRate = 115200;
-            // 
-            // label94
-            // 
-            this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(220, 60);
-            this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(62, 17);
-            this.label94.TabIndex = 143;
-            this.label94.Text = "En hora:";
             // 
             // Form1
             // 

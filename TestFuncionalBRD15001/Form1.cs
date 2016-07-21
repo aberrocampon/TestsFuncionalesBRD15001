@@ -3104,8 +3104,8 @@ namespace TestFuncionalBRD15001
                 {
 
                     timeout_esperarespuesta = 0;
-                    buffer_tx += "ping\r";
-                    contador_comandos++;
+                    buffer_tx = "ping\r";
+                    contador_comandos = 1;
                     try
                     {
                         if(serialPort1.IsOpen) serialPort1.DiscardInBuffer();
@@ -3949,8 +3949,6 @@ namespace TestFuncionalBRD15001
                                     {
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
-                                        buffer_tx += "ping\r";
-                                        contador_comandos++;
                                     }
                                     else
                                     {

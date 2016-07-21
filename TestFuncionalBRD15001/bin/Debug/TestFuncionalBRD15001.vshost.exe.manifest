@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TestFuncionalBRD15001.exe" size="583600">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TestFuncionalBRD15001.exe" size="583088">
       <assemblyIdentity name="TestFuncionalBRD15001" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6tP+ZbGZOqqv1JRc/fta0QoKy7c1zqNiCD5LljNLIvg=</dsig:DigestValue>
+        <dsig:DigestValue>4m+flK8IrX7g9dBo17PIDq4J6Mb7GoBKCS3ygbcprKE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
