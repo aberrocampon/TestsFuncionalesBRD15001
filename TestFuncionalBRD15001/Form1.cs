@@ -3104,14 +3104,22 @@ namespace TestFuncionalBRD15001
                 {
 
                     timeout_esperarespuesta = 0;
-                    buffer_tx = "ping\r";
-                    contador_comandos = 1;
-                    try
+                    if (serialPort1.IsOpen)
                     {
-                        if(serialPort1.IsOpen) serialPort1.DiscardInBuffer();
+                        buffer_tx = "ping\r";
+                        contador_comandos = 1;
+                        try
+                        {
+                            serialPort1.DiscardInBuffer();
+                        }
+                        catch (Exception)
+                        { }
                     }
-                    catch(Exception)
-                    { }
+                    else
+                    {
+                        buffer_tx = "";
+                        contador_comandos = 0;
+                    }
                 }
             }
             else timeout_esperarespuesta = 0;
