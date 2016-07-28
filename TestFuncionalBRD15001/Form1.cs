@@ -1910,7 +1910,7 @@ namespace TestFuncionalBRD15001
                             checkBoxesReles[15].Checked = false;
                             // Aqui mensaje al usuario para que conecte cables entre leds y entradas
                             timer1.Enabled = false;
-                            MessageBox.Show("Conectar cable entre conector CON35 y conectores CON4 y CON45.\n" +
+                            MessageBox.Show("Conectar cable entre conector CON35 y conectores CON54 y CON55.\n" +
                                 "A continuación pulsar Aceptar.", "Prueba de salidas optoacopladas (usando entradas).");
                             timer1.Enabled = true;
 
