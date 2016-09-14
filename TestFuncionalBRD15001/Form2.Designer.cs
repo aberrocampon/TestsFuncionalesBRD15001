@@ -33,21 +33,19 @@
             // 
             // progressBarCargaFirmware
             // 
-            this.progressBarCargaFirmware.Location = new System.Drawing.Point(16, 15);
-            this.progressBarCargaFirmware.Margin = new System.Windows.Forms.Padding(4);
+            this.progressBarCargaFirmware.Location = new System.Drawing.Point(12, 12);
             this.progressBarCargaFirmware.Name = "progressBarCargaFirmware";
-            this.progressBarCargaFirmware.Size = new System.Drawing.Size(347, 27);
+            this.progressBarCargaFirmware.Size = new System.Drawing.Size(260, 22);
             this.progressBarCargaFirmware.TabIndex = 0;
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(379, 59);
+            this.ClientSize = new System.Drawing.Size(284, 53);
             this.ControlBox = false;
             this.Controls.Add(this.progressBarCargaFirmware);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form2";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
