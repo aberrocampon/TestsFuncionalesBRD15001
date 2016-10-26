@@ -1984,31 +1984,59 @@ namespace TestFuncionalBRD15001
                         {
                             pb.Visible = false;
                         }
-                        foreach (PictureBox pb in marcasErroresOpticos)
-                        {
-                            pb.Visible = false;
-                        }
-                        pictureBoxSynchSD.Visible = false;
 
-                        progressBarTestActual.Value = 0;
-
-                        for (int i = 0; i < 6; i++)
-                        {
-                            test_fo_disp_error_ok_fallo[i] = -1;
-                        }
-                        for (int i = 0; i < 3; i++)
-                        {
-                            test_fo_disp_ovt_ok_fallo[i] = -1;
-                        }
-                        test_fo_bot_s_rxsynch_ok_fallo = -1;
-
-                        // Aqui mensaje al usuario para que conecte elaces opticos de disparos a errores de driver
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar enlaces ópticos de disparos a errores de driver:\n* XT1 <-> XR1\n* XT3 <-> XR3\n* XT5 <-> XR6\n* XT7 <-> XR8\n* XT9 <-> XR11\n XT11 <-> XR13\n" +
-                            "A continuación pulsar Aceptar.", "Prueba de transmisores y receptores ópticos.");
+                        FormIniciarTestFO fitfo = new FormIniciarTestFO();
+                        fitfo.ShowDialog();
+                        fitfo.Close();
                         timer1.Enabled = true;
 
-                        disparos = 0;
+                        if (fitfo.comenzarTestFO_parte2 == true)
+                        {
+                            pictureBoxErrorOvtR.Visible = false;
+                            pictureBoxErrorOvtS.Visible = false;
+                            pictureBoxErrorOvtT.Visible = false;
+                            pictureBoxSynchSD.Visible = false;
+
+                            progressBarTestActual.Value = 50;
+
+                            for (int i = 0; i < 3; i++)
+                            {
+                                test_fo_disp_ovt_ok_fallo[i] = -1;
+                            }
+                            test_fo_bot_s_rxsynch_ok_fallo = -1;
+
+                            disparos = 8;
+                        }
+                        else
+                        {
+                            for(int i = 3; i < 9; i++)
+                            {
+                                marcasErroresOpticos[i].Visible = false;
+                            }
+                            //pictureBoxSynchSD.Visible = false;
+
+                            progressBarTestActual.Value = 0;
+
+                            for (int i = 0; i < 6; i++)
+                            {
+                                test_fo_disp_error_ok_fallo[i] = -1;
+                            }
+                            //for (int i = 0; i < 3; i++)
+                            //{
+                                //test_fo_disp_ovt_ok_fallo[i] = -1;
+                            //}
+                            //test_fo_bot_s_rxsynch_ok_fallo = -1;
+
+                            // Aqui mensaje al usuario para que conecte elaces opticos de disparos a errores de driver
+                            //timer1.Enabled = false;
+                            //MessageBox.Show("Conectar enlaces ópticos de disparos a errores de driver:\n* XT1 <-> XR1\n* XT3 <-> XR3\n* XT5 <-> XR6\n* XT7 <-> XR8\n* XT9 <-> XR11\n XT11 <-> XR13\n" +
+                            //    "A continuación pulsar Aceptar.", "Prueba de transmisores y receptores ópticos.");
+                            //timer1.Enabled = true;
+
+                            disparos = 0;
+                        }
+
                         respuesta_disparos_ok = 0;
                         contador_test = 1;
 
@@ -2136,23 +2164,78 @@ namespace TestFuncionalBRD15001
                             // Aqui mensaje al usuario para que conecte enlaces opticos de disparos top a errores temp y de botR
                             // a receptor de sincronismo
                             timer1.Enabled = false;
-                            MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)\n" +
-                                "A continuación pulsar Aceptar.", "Prueba de transmisores y receptores ópticos.");
+                            DialogResult res = MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)\n\n" +
+                                "A continuación pulsar Aceptar.\nO bien cancelar si se desea Cancelar esta segunda parte de la prueba.", "Prueba de transmisores y receptores ópticos.", MessageBoxButtons.OKCancel);
                             timer1.Enabled = true;
+
+                            if (res == DialogResult.OK)
+                            {
+                                pictureBoxErrorOvtR.Visible = false;
+                                pictureBoxErrorOvtS.Visible = false;
+                                pictureBoxErrorOvtT.Visible = false;
+                                pictureBoxSynchSD.Visible = false;
+
+                                progressBarTestActual.Value = 50;
+
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    test_fo_disp_ovt_ok_fallo[i] = -1;
+                                }
+                                test_fo_bot_s_rxsynch_ok_fallo = -1;
+                            }
+                            else disparos = 24;
                         }
 
                         if (disparos == 16)
                         {
-                            timer1.Enabled = false;
-                            test = TipoTest.NO_TEST;
-
                             for (int i = 0; i < 3; i++)
                             {
                                 if (test_fo_disp_ovt_ok_fallo[i] == -1) test_fo_disp_ovt_ok_fallo[i] = 1;
                             }
                             if (test_fo_bot_s_rxsynch_ok_fallo == -1) test_fo_bot_s_rxsynch_ok_fallo = 1;
 
-                            if (leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] == -1) leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 1;
+                            disparos = 24;
+                        }
+
+                        if (disparos == 24)
+                        {
+                            timer1.Enabled = false;
+                            test = TipoTest.NO_TEST;
+
+                            // actualizar leyenda
+                            leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = -1;
+                            int cuentaOKs = 0;
+
+                            for (int i = 0; i<6; i++)
+                            {
+                                if (test_fo_disp_error_ok_fallo[i] == 0)
+                                {
+                                    leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 0;
+                                    break;
+                                }
+                                else if(test_fo_disp_error_ok_fallo[i] == 1)
+                                {
+                                    cuentaOKs++;
+                                }
+                            }
+
+                            for (int i = 0; i < 3; i++)
+                            {
+                                if (test_fo_disp_ovt_ok_fallo[i] == 0)
+                                {
+                                    leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 0;
+                                    break;
+                                }
+                                else if (test_fo_disp_ovt_ok_fallo[i] == 1)
+                                {
+                                    cuentaOKs++;
+                                }
+                            }
+
+                            if (test_fo_bot_s_rxsynch_ok_fallo == 0) leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 0;
+                            else if(test_fo_bot_s_rxsynch_ok_fallo == 1) cuentaOKs++;
+
+                            if (cuentaOKs == 10) leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 1;
                             actualiza_marcas_leyenda_resultados_tests();
                         }
                         else
@@ -2940,97 +3023,113 @@ namespace TestFuncionalBRD15001
                 switch (i)
                 {
                     case 0: // CON23: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A0
-                        medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
+                        medida = (medida-1.5) * (20.0 / 1.8);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 1: // CON18: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B0
-                        medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 2.49);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 2: // CON11: Tension AC compuesta Vrs -- CANAL A1
-                        medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        medida = (medida - 1.502317) / 39.168956;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 3: // CON5: Corriente AC Ir (HAT-1500S, 1350Arms x 1.3) -- CANAL B1
-                        medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 4.42);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 4: // CON24: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A2
-                        medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 1.8);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 5: // CON19: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B2
-                        medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 2.49);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 6: // CON10: Tension AC compuesta Vst ---------------- CANAL A3
-                        medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        medida = (medida - 1.502317) / 39.168956;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 7: // CON3: Corriente AC Is (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B3
-                        medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 4.42);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 8: // CON25: Vdc2 (sensor LV-25) ---------------- CANAL A4
-                        medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
+                        medida = (medida - 1.502317) / 39.168956;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 9: // CON20: Idc2 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B4
-                        medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 6.81);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 10: // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
-                        medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
+                        //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
+                        medida = medida / 120.0;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 11: // CON2: Corriente AC It (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B5
-                        medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 4.42);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 12: // CON26: Vdc1 (sensor DVL-1500) ---------------- CANAL A6
-                        medida = medida * (20.0 / (3.74 * 100.0)) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / (3.74 * 100.0)) * (1.5 / 2047.0);
+                        medida = (medida - 1.501177) / 18.621560;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 13: // CON21: Idc1 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B6
-                        medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 6.81);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         break;
                     case 14: // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
-                        medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
+                        //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
+                        medida = medida / 120.0;
                         medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
                         break;
                     case 15: // CON1: Libre ---------------- CANAL B7
-                        medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
+                        medida = (medida - 1.5) * (20.0 / 2.49);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
@@ -3747,11 +3846,11 @@ namespace TestFuncionalBRD15001
                                         for (int k = 0; k < num_samples; k++)
                                         {
                                             voltaje[j - 9, k] = Convert.ToInt32(buffer_rx.Substring(k * 4, 4), 16);
-                                            media += (voltaje[j - 9, k] - 2047);
+                                            media += (voltaje[j - 9, k]); //- 2047);
                                         }
                                         media = media / num_samples;
-                                        medias_adcs[j - 9] = media;
-                                        buffer_rx = buffer_rx.Substring(20 * 2 + 2);
+                                        medias_adcs[j - 9] = media * 7.285558E-4;// * 7.280847E-4;
+                                        buffer_rx = buffer_rx.Substring(20 * 4 + 2);
                                         contador_comandos--;
                                     }
                                     break;
