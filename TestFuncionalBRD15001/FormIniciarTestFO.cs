@@ -12,25 +12,29 @@ namespace TestFuncionalBRD15001
 {
     public partial class FormIniciarTestFO : Form
     {
-        public bool comenzarTestFO_parte1, comenzarTestFO_parte2;
+        public bool comenzarTestFO_boton1, comenzarTestFO_boton2;
 
-        public FormIniciarTestFO()
+        public FormIniciarTestFO(string textoLabel, string textoOmitir, string textoTitulo)
         {
             InitializeComponent();
 
-            comenzarTestFO_parte1 = false;
-            comenzarTestFO_parte2 = false;
+            label1.Text = textoLabel;
+            button2.Text = textoOmitir;
+            this.Text = textoTitulo;
+
+            comenzarTestFO_boton1 = false;
+            comenzarTestFO_boton2 = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            comenzarTestFO_parte2 = true;
+            comenzarTestFO_boton2 = true;
             Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            comenzarTestFO_parte1 = true;
+            comenzarTestFO_boton1 = true;
             Close();
         }
     }

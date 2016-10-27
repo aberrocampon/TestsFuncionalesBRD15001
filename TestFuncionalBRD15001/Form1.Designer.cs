@@ -2023,6 +2023,7 @@
             this.textNTCref4.Size = new System.Drawing.Size(62, 20);
             this.textNTCref4.TabIndex = 101;
             this.textNTCref4.Tag = "4";
+            this.textNTCref4.Text = "1000";
             this.textNTCref4.TextChanged += new System.EventHandler(this.textNTCref_TextChanged);
             this.textNTCref4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
             // 
@@ -2034,6 +2035,7 @@
             this.textNTCref3.Size = new System.Drawing.Size(62, 20);
             this.textNTCref3.TabIndex = 100;
             this.textNTCref3.Tag = "3";
+            this.textNTCref3.Text = "2000";
             this.textNTCref3.TextChanged += new System.EventHandler(this.textNTCref_TextChanged);
             this.textNTCref3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
             // 
@@ -2045,6 +2047,7 @@
             this.textNTCref2.Size = new System.Drawing.Size(62, 20);
             this.textNTCref2.TabIndex = 99;
             this.textNTCref2.Tag = "2";
+            this.textNTCref2.Text = "4700";
             this.textNTCref2.TextChanged += new System.EventHandler(this.textNTCref_TextChanged);
             this.textNTCref2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
             // 
@@ -2056,6 +2059,7 @@
             this.textNTCref1.Size = new System.Drawing.Size(62, 20);
             this.textNTCref1.TabIndex = 98;
             this.textNTCref1.Tag = "1";
+            this.textNTCref1.Text = "11000";
             this.textNTCref1.TextChanged += new System.EventHandler(this.textNTCref_TextChanged);
             this.textNTCref1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
             // 
@@ -2067,6 +2071,7 @@
             this.textNTCref0.Size = new System.Drawing.Size(62, 20);
             this.textNTCref0.TabIndex = 97;
             this.textNTCref0.Tag = "0";
+            this.textNTCref0.Text = "20000";
             this.textNTCref0.TextChanged += new System.EventHandler(this.textNTCref_TextChanged);
             this.textNTCref0.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
             // 

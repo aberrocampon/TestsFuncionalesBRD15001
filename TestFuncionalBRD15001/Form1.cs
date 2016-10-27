@@ -49,7 +49,7 @@ namespace TestFuncionalBRD15001
         private int contador_test = 0;
         private string buffer_tx_rs422_test = "";
         private string[] resistenciasNTC;
-        private double[] refNTCs = { -1.0, -1.0, -1.0, -1.0, -1.0 };
+        private double[] refNTCs = { 20000.0, 11000.0, 4700.0, 2000.0, 1000.0 };//{ -1.0, -1.0, -1.0, -1.0, -1.0 };
         private int leeNTC;
         private string cadena_USB_UART_VID = "";
         private string cadena_USB_UART_PID = "";
@@ -91,6 +91,8 @@ namespace TestFuncionalBRD15001
         private double[] medias_adcs_vi = new double[16];
         private int canal_adc_seleccionado;
         private RadioButton radioButtonADC_seleccionado;
+        private bool saltaPrimeraParte = false;
+        private bool saltaSegundaParte = false;
 
         // Resultados de tests para generar informes
         // Canales ADC
@@ -1755,38 +1757,95 @@ namespace TestFuncionalBRD15001
                 case TipoTest.TEST_IO:
                     if (contador_test == 0)
                     {
-                        foreach (PictureBox pb in marcasReles)
-                        {
-                            pb.Visible = false;
-                        }
-                        foreach (PictureBox pb in marcasInputs)
-                        {
-                            pb.Visible = false;
-                        }
-                        foreach (PictureBox pb in marcasLEDs)
-                        {
-                            pb.Visible = false;
-                        }
+                        saltaPrimeraParte = false;
+                        saltaSegundaParte = false;
 
-                        progressBarTestActual.Value = 0;
-                        for (int i = 0; i < 16; i++)
-                        {
-                            test_io_reles_entradas_ok_fallo[i] = -1;
-                        }
-                        for (int i = 0; i < 5; i++)
-                        {
-                            test_io_leds_entradas_ok_fallo[i] = -1;
-                        }
-
-
-                        // Aqui mensaje al usuario para que conecte cables entre reles y entradas
                         timer1.Enabled = false;
-                        MessageBox.Show("Conectar cables entre conectores:\n* CON22<->CON4\n* CON32<->CON45\n* CON33<->CON54\n* CON34<->CON55.\n" +
-                            "A continuación pulsar Aceptar.", "Prueba de reles y entradas.");
+                        FormIniciarTestFO fitio = new FormIniciarTestFO("Conectar cables entre conectores:\n\n" +
+                            "* CON22<->CON4\n" +
+                            "* CON32<->CON45\n" +
+                            "* CON33<->CON54\n" +
+                            "* CON34<->CON55.\n\n" +
+                            "A continuación pulse Aceptar\n\n" +
+                            "O bien si desea omitir ahora esta primera parte de la prueba\n" +
+                            "para comenzar la segunda parte, pulsar: 'Segunda Parte'", ">> Segunda Parte",
+                            "Prueba de reles y entradas.");
+                        fitio.ShowDialog();
+                        fitio.Close();
                         timer1.Enabled = true;
 
-                        output = 0;
-                        outputleds = 0;
+                        if (fitio.comenzarTestFO_boton2 == true)
+                        {
+                            saltaPrimeraParte = true;
+                            progressBarTestActual.Value = 78;
+
+                            timer1.Enabled = false;
+                            fitio = new FormIniciarTestFO("Conectar cable entre conector CON35\n" +
+                                "y conectores CON54 y CON55.\n\n" +
+                                "A continuación pulsar Aceptar.\n\n" +
+                                "O bien Omitir si no se desea ejecutar ahora\n" +
+                                "esta segunda parte de la prueba.", ">> Omitir",
+                                "Prueba de salidas optoacopladas.");
+                            fitio.ShowDialog();
+                            fitio.Close();
+                            timer1.Enabled = true;
+
+                            if (fitio.comenzarTestFO_boton2 == true)
+                            {
+                                saltaSegundaParte = true;
+
+                                progressBarTestActual.Value = 100;
+                                output = 0x10000;
+                                outputleds = 0x20;
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    marcasInputs[i].Visible = false;
+                                }
+                                foreach (PictureBox pb in marcasLEDs)
+                                {
+                                    pb.Visible = false;
+                                }
+
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    test_io_leds_entradas_ok_fallo[i] = -1;
+                                }
+
+                                output = 0x10000;
+                                outputleds = 0;
+                            }        
+                        }
+                        else
+                        {
+                            foreach (PictureBox pb in marcasReles)
+                            {
+                                pb.Visible = false;
+                            }
+                            foreach (PictureBox pb in marcasInputs)
+                            {
+                                pb.Visible = false;
+                            }
+
+                            progressBarTestActual.Value = 0;
+
+                            for (int i = 0; i < 16; i++)
+                            {
+                                test_io_reles_entradas_ok_fallo[i] = -1;
+                            }
+
+                            output = 0;
+                            outputleds = 0;
+                        }
+
+                        // Aqui mensaje al usuario para que conecte cables entre reles y entradas
+                        //timer1.Enabled = false;
+                        //MessageBox.Show("Conectar cables entre conectores:\n* CON22<->CON4\n* CON32<->CON45\n* CON33<->CON54\n* CON34<->CON55.\n" +
+                        //    "A continuación pulsar Aceptar.", "Prueba de reles y entradas.");
+                        //timer1.Enabled = true;
+
                         respuesta_output_ok = 0;
                         respuesta_outputleds_ok = 0;
                         contador_test = 1;
@@ -1827,13 +1886,17 @@ namespace TestFuncionalBRD15001
                                 checkBoxesLEDs[i].Checked = true;
                             }
                         }
-                        if ((respuesta_output_ok == 1) && (respuesta_outputleds_ok == 1)) contador_test = 2;
+                        contador_test = 2;
                     }
-                    else if (contador_test <= 6)
+                    else if (contador_test < 10)
                     {
                         contador_test++;
                     }
-                    else if (contador_test == 7)
+                    else if(contador_test == 10)
+                    {
+                        if ((respuesta_output_ok == 1) && (respuesta_outputleds_ok == 1)) contador_test++;
+                    }
+                    else if (contador_test == 11)
                     {
                         int num_entradas;
                         int fallos;
@@ -1842,11 +1905,13 @@ namespace TestFuncionalBRD15001
                         {
                             input_probada = output;
                             num_entradas = 16;
+                            if (saltaPrimeraParte) num_entradas = 0;
                         }
                         else
                         {
                             input_probada = outputleds;
                             num_entradas = 5;
+                            if (saltaSegundaParte) num_entradas = 0;
                         }
 
                         fallos = input ^ input_probada;
@@ -1910,13 +1975,43 @@ namespace TestFuncionalBRD15001
                             checkBoxesReles[15].Checked = false;
                             // Aqui mensaje al usuario para que conecte cables entre leds y entradas
                             timer1.Enabled = false;
-                            MessageBox.Show("Conectar cable entre conector CON35 y conectores CON54 y CON55.\n" +
-                                "A continuación pulsar Aceptar.", "Prueba de salidas optoacopladas (usando entradas).");
+                            //MessageBox.Show("Conectar cable entre conector CON35 y conectores CON54 y CON55.\n" +
+                            //   "A continuación pulsar Aceptar.", "Prueba de salidas optoacopladas (usando entradas).");
+                            FormIniciarTestFO  fitio = new FormIniciarTestFO("Conectar cable entre conector CON35\n" +
+                                "y conectores CON54 y CON55.\n\n" +
+                                "A continuación pulsar Aceptar.\n\n" +
+                                "O bien Omitir si no se desea ejecutar ahora\n" +
+                                "esta segunda parte de la prueba.", ">> Omitir",
+                                "Prueba de salidas optoacopladas (usando entradas).");
+                            fitio.ShowDialog();
+                            fitio.Close();
                             timer1.Enabled = true;
 
-                            for (int i = 0; i < 5; i++)
+                            if (fitio.comenzarTestFO_boton2 == true)
                             {
-                                marcasInputs[i].Visible = false;
+                                saltaSegundaParte = true;
+
+                                output = 0x10000;
+                                outputleds = 0x20;
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    marcasInputs[i].Visible = false;
+                                }
+                                foreach (PictureBox pb in marcasLEDs)
+                                {
+                                    pb.Visible = false;
+                                }
+
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    test_io_leds_entradas_ok_fallo[i] = -1;
+                                }
+
+                                output = 0x10000;
+                                outputleds = 0;
                             }
 
                             respuesta_outputleds_ok = 0;
@@ -1932,18 +2027,53 @@ namespace TestFuncionalBRD15001
                             respuesta_outputleds_ok = 0;
                         }
 
-                        if (outputleds == 0x20)
+                        if ((outputleds&(~0x1f)) != 0)
                         {
                             checkBoxesLEDs[4].Checked = false;
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
-                            if (leyenda_resultados_tests[(int)TipoTest.TEST_IO] == -1) leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 1;
-                            actualiza_marcas_leyenda_resultados_tests();
+
+                            if(saltaSegundaParte == false)
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    if (test_io_leds_entradas_ok_fallo[i] == -1) test_io_leds_entradas_ok_fallo[i] = 1;
+                                }
+                            }
+
+                            // actualizar leyenda
+                            leyenda_resultados_tests[(int)TipoTest.TEST_IO] = -1;
+                            int cuentaOKs = 0;
+
+                            for (int i = 0; i < 16; i++)
+                            {
+                                if (test_io_reles_entradas_ok_fallo[i] == 0)
+                                {
+                                    leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 0;
+                                    break;
+                                }
+                                else if (test_io_reles_entradas_ok_fallo[i] == 1)
+                                {
+                                    cuentaOKs++;
+                                }
+                            }
 
                             for (int i = 0; i < 5; i++)
                             {
-                                if (test_io_leds_entradas_ok_fallo[i] == -1) test_io_leds_entradas_ok_fallo[i] = 1;
+                                if (test_io_leds_entradas_ok_fallo[i] == 0)
+                                {
+                                    leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 0;
+                                    break;
+                                }
+                                else if (test_io_leds_entradas_ok_fallo[i] == 1) 
+                                {
+                                    cuentaOKs++;
+                                }
                             }
+
+                            if (cuentaOKs == 21) leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 1;
+                            actualiza_marcas_leyenda_resultados_tests();
+
                         }
 
                         contador_test = 1;
@@ -1980,33 +2110,35 @@ namespace TestFuncionalBRD15001
                 case TipoTest.TEST_TXRXOPTICOS:
                     if (contador_test == 0)
                     {
+                        saltaPrimeraParte = false;
+                        saltaSegundaParte = false;
+
                         foreach (PictureBox pb in marcasDisparos)
                         {
                             pb.Visible = false;
                         }
 
                         timer1.Enabled = false;
-                        FormIniciarTestFO fitfo = new FormIniciarTestFO();
+                        FormIniciarTestFO fitfo = new FormIniciarTestFO("Conectar enlaces ópticos de disparos a errores de driver:\n\n" +
+                            "* XT1 <-> XR1\n" +
+                            "* XT3 <-> XR3\n" +
+                            "* XT5 <-> XR6\n" +
+                            "* XT7 <-> XR8\n" +
+                            "* XT9 <-> XR11\n" +
+                            "* XT11 <-> XR13\n\n" +
+                            "A continuación pulse Aceptar\n\n" +
+                            "O bien si desea omitir ahora esta primera parte de la prueba\n" +
+                            "para comenzar la segunda parte, pulsar: 'Segunda Parte'", ">> Segunda Parte",
+                            "Prueba de transmisores y receptores ópticos.");
                         fitfo.ShowDialog();
                         fitfo.Close();
                         timer1.Enabled = true;
 
-                        if (fitfo.comenzarTestFO_parte2 == true)
+                        if (fitfo.comenzarTestFO_boton2 == true)
                         {
-                            pictureBoxErrorOvtR.Visible = false;
-                            pictureBoxErrorOvtS.Visible = false;
-                            pictureBoxErrorOvtT.Visible = false;
-                            pictureBoxSynchSD.Visible = false;
 
-                            progressBarTestActual.Value = 50;
-
-                            for (int i = 0; i < 3; i++)
-                            {
-                                test_fo_disp_ovt_ok_fallo[i] = -1;
-                            }
-                            test_fo_bot_s_rxsynch_ok_fallo = -1;
-
-                            disparos = 8;
+                            saltaPrimeraParte = true;
+                            disparos = 7;
                         }
                         else
                         {
@@ -2072,12 +2204,13 @@ namespace TestFuncionalBRD15001
                         int errores_esperados;
                         int num_errores_a_comprobar;
 
-                        if (disparos < 8)
+                        if(disparos < 8)
                         {
                             int masc_top = 8;
                             int masc_bot = 0x0040;
 
-                            num_errores_a_comprobar = 6;
+                            if (saltaPrimeraParte == true) num_errores_a_comprobar = 0;
+                            else num_errores_a_comprobar = 6;
                             errores_esperados = 0x8007;
                             for (int i = 0; i < 3; i++)
                             {
@@ -2156,19 +2289,33 @@ namespace TestFuncionalBRD15001
 
                         if (disparos == 7)
                         {
-                            for (int i = 0; i < 6; i++)
+                            if(saltaPrimeraParte == false)
                             {
-                                if (test_fo_disp_error_ok_fallo[i] == -1) test_fo_disp_error_ok_fallo[i] = 1;
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    if (test_fo_disp_error_ok_fallo[i] == -1) test_fo_disp_error_ok_fallo[i] = 1;
+                                }
                             }
 
                             // Aqui mensaje al usuario para que conecte enlaces opticos de disparos top a errores temp y de botR
                             // a receptor de sincronismo
                             timer1.Enabled = false;
-                            DialogResult res = MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)\n\n" +
-                                "A continuación pulsar Aceptar.\nO bien cancelar si se desea Cancelar esta segunda parte de la prueba.", "Prueba de transmisores y receptores ópticos.", MessageBoxButtons.OKCancel);
+                            //DialogResult res = MessageBox.Show("Conectar enlaces ópticos entre:\n* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n* BOT S (XT7) <-> RX_SYNCH (XR16)\n\n" +
+                            //    "A continuación pulsar Aceptar.\nO bien cancelar si se desea Cancelar esta segunda parte de la prueba.", "Prueba de transmisores y receptores ópticos.", MessageBoxButtons.OKCancel);
+                            FormIniciarTestFO fitfo = new FormIniciarTestFO("Conectar enlaces ópticos entre:\n\n" +
+                            "* TOP R (XT1) <-> ERROR_OVTEMP_R (XR5)\n" +
+                            "* BOT R (XT3) <-> ERROR_OVTEMP_S (XR10)\n" +
+                            "* TOP S (XT5) <-> ERROR_OVTEMP_T (XR15)\n" +
+                            "* BOT S (XT7) <-> RX_SYNCH (XR16)\n\n" +
+                            "A continuación pulsar Aceptar.\n\n" +
+                            "O bien Omitir si no se desea ejecutar ahora\n" +
+                            "esta segunda parte de la prueba.", ">> Omitir",
+                            "Prueba de transmisores y receptores ópticos.");
+                            fitfo.ShowDialog();
+                            fitfo.Close();
                             timer1.Enabled = true;
 
-                            if (res == DialogResult.OK)
+                            if (fitfo.comenzarTestFO_boton1 == true)
                             {
                                 pictureBoxErrorOvtR.Visible = false;
                                 pictureBoxErrorOvtS.Visible = false;
@@ -2183,24 +2330,27 @@ namespace TestFuncionalBRD15001
                                 }
                                 test_fo_bot_s_rxsynch_ok_fallo = -1;
                             }
-                            else disparos = 24;
-                        }
-
-                        if (disparos == 16)
-                        {
-                            for (int i = 0; i < 3; i++)
+                            else
                             {
-                                if (test_fo_disp_ovt_ok_fallo[i] == -1) test_fo_disp_ovt_ok_fallo[i] = 1;
+                                disparos += 16;
+                                saltaSegundaParte = true;
                             }
-                            if (test_fo_bot_s_rxsynch_ok_fallo == -1) test_fo_bot_s_rxsynch_ok_fallo = 1;
-
-                            disparos = 24;
                         }
 
-                        if (disparos == 24)
+                        if ((disparos & 0x10) != 0)
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
+
+                            if(saltaSegundaParte == false)
+                            {
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    if (test_fo_disp_ovt_ok_fallo[i] == -1) test_fo_disp_ovt_ok_fallo[i] = 1;
+                                }
+                                if (test_fo_bot_s_rxsynch_ok_fallo == -1) test_fo_bot_s_rxsynch_ok_fallo = 1;
+                            }
+                            
 
                             // actualizar leyenda
                             leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = -1;
@@ -3162,6 +3312,10 @@ namespace TestFuncionalBRD15001
             int dia = int.Parse(s_dia);
             int mes = int.Parse(s_mes);
             int anual = int.Parse(s_anual);
+
+            if (anual == 0) anual = 1;
+            if (mes == 0) mes = 1;
+            if (dia == 0) dia = 1;
 
             DateTime dt = new DateTime(anual, mes, dia, hora, minuto, segundo);
             return dt;
@@ -4143,7 +4297,7 @@ namespace TestFuncionalBRD15001
                 {
                     MessageBox.Show("Este test compara las medidas de resistencia de la placa con los valores conectados a los conectores CON27 a CON31.\n" + 
                         "Antes de ejecutar el test deben definirse los 5 valores de referencia.\n" + 
-                        "Los valores ohmicos de estos deben estar comprendidos en el rango 500 Ohmios a 100 KOhmios.",
+                        "Los valores ohmicos de estos deben estar comprendidos en el rango 1 KOhmios a 20 KOhmios.",
                         "Test de medidas de resistencias NTCs", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
@@ -4152,9 +4306,9 @@ namespace TestFuncionalBRD15001
             // Comprobar que los valores de referencia se encuentran en rangos admitidos
             for (int i = 0; i < 5; i++)
             {
-                if ((refNTCs[i] < 500.0) || (refNTCs[i] > 100000.0))
+                if ((refNTCs[i] < 1000.0) || (refNTCs[i] > 20000.0))
                 {
-                    MessageBox.Show("Los valores ohmicos de las referecias usadas deben estar comprendidos en el rango 500 Ohmios a 100 KOhmios.", "Test de medidas de resistencias NTCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Los valores ohmicos de las referecias usadas deben estar comprendidos en el rango 1 KOhmios a 20 KOhmios.", "Test de medidas de resistencias NTCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
