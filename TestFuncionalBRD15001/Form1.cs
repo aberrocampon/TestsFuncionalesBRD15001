@@ -42,7 +42,7 @@ namespace TestFuncionalBRD15001
         private int contador_comandos = 0;
         private int timeout_esperarespuesta = 0;
         private int output, outputleds;
-        private int respuesta_output_ok, respuesta_outputleds_ok, respuesta_disparos_ok, respuesta_dutyturbina_ok;
+        private int respuesta_entradas_ok, respuesta_output_ok, respuesta_outputleds_ok, respuesta_disparos_ok, respuesta_dutyturbina_ok;
         private int respuesta_enabletx_rs422_ok, respuesta_enablerx_rs422_ok;
         private int input;
         private TipoTest test = TipoTest.NO_TEST;
@@ -1886,17 +1886,24 @@ namespace TestFuncionalBRD15001
                                 checkBoxesLEDs[i].Checked = true;
                             }
                         }
-                        contador_test = 2;
+                        if ((respuesta_output_ok == 1) && (respuesta_outputleds_ok == 1))
+                        {
+                            contador_test = 2;
+                        }
                     }
-                    else if (contador_test < 10)
+                    else if(contador_test <4)
                     {
                         contador_test++;
+                        respuesta_entradas_ok = 0;
                     }
-                    else if(contador_test == 10)
+                    else if (contador_test == 4)
                     {
-                        if ((respuesta_output_ok == 1) && (respuesta_outputleds_ok == 1)) contador_test++;
+                        if(respuesta_entradas_ok == 1)
+                        {
+                            contador_test = 5;
+                        }
                     }
-                    else if (contador_test == 11)
+                    else if (contador_test == 5)
                     {
                         int num_entradas;
                         int fallos;
@@ -2071,7 +2078,7 @@ namespace TestFuncionalBRD15001
                                 }
                             }
 
-                            if (cuentaOKs == 21) leyenda_resultados_tests[(int)TipoTest.TEST_TXRXOPTICOS] = 1;
+                            if (cuentaOKs == 21) leyenda_resultados_tests[(int)TipoTest.TEST_IO] = 1;
                             actualiza_marcas_leyenda_resultados_tests();
 
                         }
@@ -3812,6 +3819,7 @@ namespace TestFuncionalBRD15001
                                     {
                                         input = Convert.ToInt32(buffer_rx.Substring(8, 4), 16);
                                         buffer_rx = buffer_rx.Substring(14);
+                                        respuesta_entradas_ok = 1;
                                         contador_comandos--;
                                     }
                                     else
