@@ -1085,7 +1085,7 @@ namespace TestFuncionalBRD15001
             // leyenda de resultados
             for (int i = 0; i < leyenda_resultados_tests.Length; i++)
             {
-                if (i != ((int)TipoTest.TEST_LEER_VERSIONES))
+                //if (i != ((int)TipoTest.TEST_LEER_VERSIONES))    // tras correo de Joaquin Silva de Arteixo en el que se extraña de esto, lo pongo a marca '?' tambien. Quizas es mas coherente
                     leyenda_resultados_tests[i] = -1;
             }
             //if(!flag_cambia_versiones) leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
