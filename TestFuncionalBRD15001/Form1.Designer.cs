@@ -425,18 +425,32 @@
             this.button11 = new System.Windows.Forms.Button();
             this.textBoxRefInADC = new System.Windows.Forms.TextBox();
             this.comboBoxCanalADCseleccionado = new System.Windows.Forms.ComboBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.pictureBoxMedVoltRMS = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDecodManchester = new System.Windows.Forms.PictureBox();
+            this.buttonTestSynch = new System.Windows.Forms.Button();
+            this.label76 = new System.Windows.Forms.Label();
+            this.label78 = new System.Windows.Forms.Label();
+            this.textBoxTensionRedRMS_Ref = new System.Windows.Forms.TextBox();
+            this.label75 = new System.Windows.Forms.Label();
+            this.textBoxTensionRedRMS = new System.Windows.Forms.TextBox();
+            this.textBoxEstadoDecodManchester = new System.Windows.Forms.TextBox();
+            this.label74 = new System.Windows.Forms.Label();
+            this.label73 = new System.Windows.Forms.Label();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxCanalSigmaDelta = new System.Windows.Forms.PictureBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.pictureBoxResultadoRTC = new System.Windows.Forms.PictureBox();
-            this.label93 = new System.Windows.Forms.Label();
+            this.labelLeyendaT11 = new System.Windows.Forms.Label();
             this.buttonInforme = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.pictureBoxWorking = new System.Windows.Forms.PictureBox();
             this.pictureBoxResultadoFRAM = new System.Windows.Forms.PictureBox();
-            this.label82 = new System.Windows.Forms.Label();
+            this.labelLeyendaT5 = new System.Windows.Forms.Label();
             this.pictureBoxResultadoSRAM = new System.Windows.Forms.PictureBox();
-            this.label75 = new System.Windows.Forms.Label();
+            this.labelLeyendaT4 = new System.Windows.Forms.Label();
             this.pictureBoxResultadoCAN = new System.Windows.Forms.PictureBox();
-            this.label73 = new System.Windows.Forms.Label();
+            this.labelLeyendaT3 = new System.Windows.Forms.Label();
             this.pictureBoxLeerVersiones = new System.Windows.Forms.PictureBox();
             this.label72 = new System.Windows.Forms.Label();
             this.pictureBoxResultadoADCs = new System.Windows.Forms.PictureBox();
@@ -446,13 +460,13 @@
             this.pictureBoxResultadoTXRXOpt = new System.Windows.Forms.PictureBox();
             this.pictureBoxResultadoTurbinas = new System.Windows.Forms.PictureBox();
             this.pictureBoxResultadoIO = new System.Windows.Forms.PictureBox();
-            this.label81 = new System.Windows.Forms.Label();
-            this.label80 = new System.Windows.Forms.Label();
-            this.label79 = new System.Windows.Forms.Label();
-            this.label78 = new System.Windows.Forms.Label();
-            this.label77 = new System.Windows.Forms.Label();
-            this.label76 = new System.Windows.Forms.Label();
-            this.label74 = new System.Windows.Forms.Label();
+            this.labelLeyendaT1 = new System.Windows.Forms.Label();
+            this.labelLeyendaT10 = new System.Windows.Forms.Label();
+            this.labelLeyendaT2 = new System.Windows.Forms.Label();
+            this.labelLeyendaT7 = new System.Windows.Forms.Label();
+            this.labelLeyendaT6 = new System.Windows.Forms.Label();
+            this.labelLeyendaT9 = new System.Windows.Forms.Label();
+            this.labelLeyendaT8 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labelContadorComandos = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelTimeout = new System.Windows.Forms.ToolStripStatusLabel();
@@ -461,6 +475,9 @@
             this.progressBarTestActual = new System.Windows.Forms.ToolStripProgressBar();
             this.labelVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.radioButtonSeleccionBRD15003 = new System.Windows.Forms.RadioButton();
+            this.radioButtonSeleccionBRD15001 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -597,6 +614,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPuestaEnHoraRTC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodManchester)).BeginInit();
+            this.groupBox14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCanalSigmaDelta)).BeginInit();
             this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoRTC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWorking)).BeginInit();
@@ -612,6 +634,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoTurbinas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoIO)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.groupBox13.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -1757,7 +1780,7 @@
             this.groupBox2.Controls.Add(this.botonConectarDesconectar);
             this.groupBox2.Controls.Add(this.comboBoxCOMs);
             this.groupBox2.Controls.Add(this.groupBox27);
-            this.groupBox2.Location = new System.Drawing.Point(491, 9);
+            this.groupBox2.Location = new System.Drawing.Point(495, 52);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
@@ -4614,7 +4637,8 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(9, 9);
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Location = new System.Drawing.Point(9, 53);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -5109,19 +5133,160 @@
             this.comboBoxCanalADCseleccionado.TabIndex = 77;
             this.comboBoxCanalADCseleccionado.SelectedIndexChanged += new System.EventHandler(this.comboBoxCanalADCseleccionado_SelectedIndexChanged);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.pictureBoxMedVoltRMS);
+            this.tabPage4.Controls.Add(this.pictureBoxDecodManchester);
+            this.tabPage4.Controls.Add(this.buttonTestSynch);
+            this.tabPage4.Controls.Add(this.label76);
+            this.tabPage4.Controls.Add(this.label78);
+            this.tabPage4.Controls.Add(this.textBoxTensionRedRMS_Ref);
+            this.tabPage4.Controls.Add(this.label75);
+            this.tabPage4.Controls.Add(this.textBoxTensionRedRMS);
+            this.tabPage4.Controls.Add(this.textBoxEstadoDecodManchester);
+            this.tabPage4.Controls.Add(this.label74);
+            this.tabPage4.Controls.Add(this.label73);
+            this.tabPage4.Controls.Add(this.groupBox14);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(470, 431);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Recepción de stream codificado en Sigma-Delta";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // pictureBoxMedVoltRMS
+            // 
+            this.pictureBoxMedVoltRMS.Location = new System.Drawing.Point(369, 370);
+            this.pictureBoxMedVoltRMS.Name = "pictureBoxMedVoltRMS";
+            this.pictureBoxMedVoltRMS.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxMedVoltRMS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxMedVoltRMS.TabIndex = 117;
+            this.pictureBoxMedVoltRMS.TabStop = false;
+            // 
+            // pictureBoxDecodManchester
+            // 
+            this.pictureBoxDecodManchester.Location = new System.Drawing.Point(369, 345);
+            this.pictureBoxDecodManchester.Name = "pictureBoxDecodManchester";
+            this.pictureBoxDecodManchester.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxDecodManchester.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxDecodManchester.TabIndex = 116;
+            this.pictureBoxDecodManchester.TabStop = false;
+            // 
+            // buttonTestSynch
+            // 
+            this.buttonTestSynch.Location = new System.Drawing.Point(369, 394);
+            this.buttonTestSynch.Name = "buttonTestSynch";
+            this.buttonTestSynch.Size = new System.Drawing.Size(40, 23);
+            this.buttonTestSynch.TabIndex = 83;
+            this.buttonTestSynch.Text = "Test";
+            this.buttonTestSynch.UseVisualStyleBackColor = true;
+            this.buttonTestSynch.Click += new System.EventHandler(this.buttonTestSynch_Click);
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Location = new System.Drawing.Point(9, 394);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(112, 13);
+            this.label76.TabIndex = 82;
+            this.label76.Text = "Tensión de Red (Ref.)";
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(262, 397);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(30, 13);
+            this.label78.TabIndex = 81;
+            this.label78.Text = "Vrms";
+            // 
+            // textBoxTensionRedRMS_Ref
+            // 
+            this.textBoxTensionRedRMS_Ref.Location = new System.Drawing.Point(155, 391);
+            this.textBoxTensionRedRMS_Ref.Name = "textBoxTensionRedRMS_Ref";
+            this.textBoxTensionRedRMS_Ref.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTensionRedRMS_Ref.TabIndex = 80;
+            this.textBoxTensionRedRMS_Ref.Text = "230.0";
+            this.textBoxTensionRedRMS_Ref.TextChanged += new System.EventHandler(this.textBoxTensionRedRMS_Ref_TextChanged);
+            this.textBoxTensionRedRMS_Ref.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumerico_KeyPress);
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(262, 371);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(96, 13);
+            this.label75.TabIndex = 5;
+            this.label75.Text = "Vrms  (toler. +/-5%)";
+            // 
+            // textBoxTensionRedRMS
+            // 
+            this.textBoxTensionRedRMS.Location = new System.Drawing.Point(155, 365);
+            this.textBoxTensionRedRMS.Name = "textBoxTensionRedRMS";
+            this.textBoxTensionRedRMS.ReadOnly = true;
+            this.textBoxTensionRedRMS.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTensionRedRMS.TabIndex = 4;
+            // 
+            // textBoxEstadoDecodManchester
+            // 
+            this.textBoxEstadoDecodManchester.Location = new System.Drawing.Point(155, 339);
+            this.textBoxEstadoDecodManchester.Name = "textBoxEstadoDecodManchester";
+            this.textBoxEstadoDecodManchester.ReadOnly = true;
+            this.textBoxEstadoDecodManchester.Size = new System.Drawing.Size(84, 20);
+            this.textBoxEstadoDecodManchester.TabIndex = 3;
+            this.textBoxEstadoDecodManchester.Text = "NOT LOCKED";
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(9, 342);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(101, 13);
+            this.label74.TabIndex = 2;
+            this.label74.Text = "Decod. Manchester";
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(9, 368);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(116, 13);
+            this.label73.TabIndex = 1;
+            this.label73.Text = "Tensión de Red (Lect.)";
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.pictureBoxCanalSigmaDelta);
+            this.groupBox14.Location = new System.Drawing.Point(3, 3);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(464, 319);
+            this.groupBox14.TabIndex = 0;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Canal Sigma-Delta";
+            // 
+            // pictureBoxCanalSigmaDelta
+            // 
+            this.pictureBoxCanalSigmaDelta.BackColor = System.Drawing.SystemColors.ControlText;
+            this.pictureBoxCanalSigmaDelta.Location = new System.Drawing.Point(6, 19);
+            this.pictureBoxCanalSigmaDelta.Name = "pictureBoxCanalSigmaDelta";
+            this.pictureBoxCanalSigmaDelta.Size = new System.Drawing.Size(452, 294);
+            this.pictureBoxCanalSigmaDelta.TabIndex = 0;
+            this.pictureBoxCanalSigmaDelta.TabStop = false;
+            this.pictureBoxCanalSigmaDelta.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxSigmaDelta_Paint);
+            // 
             // groupBox29
             // 
             this.groupBox29.Controls.Add(this.pictureBoxResultadoRTC);
-            this.groupBox29.Controls.Add(this.label93);
+            this.groupBox29.Controls.Add(this.labelLeyendaT11);
             this.groupBox29.Controls.Add(this.buttonInforme);
             this.groupBox29.Controls.Add(this.button10);
             this.groupBox29.Controls.Add(this.pictureBoxWorking);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoFRAM);
-            this.groupBox29.Controls.Add(this.label82);
+            this.groupBox29.Controls.Add(this.labelLeyendaT5);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoSRAM);
-            this.groupBox29.Controls.Add(this.label75);
+            this.groupBox29.Controls.Add(this.labelLeyendaT4);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoCAN);
-            this.groupBox29.Controls.Add(this.label73);
+            this.groupBox29.Controls.Add(this.labelLeyendaT3);
             this.groupBox29.Controls.Add(this.pictureBoxLeerVersiones);
             this.groupBox29.Controls.Add(this.label72);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoADCs);
@@ -5131,14 +5296,14 @@
             this.groupBox29.Controls.Add(this.pictureBoxResultadoTXRXOpt);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoTurbinas);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoIO);
-            this.groupBox29.Controls.Add(this.label81);
-            this.groupBox29.Controls.Add(this.label80);
-            this.groupBox29.Controls.Add(this.label79);
-            this.groupBox29.Controls.Add(this.label78);
-            this.groupBox29.Controls.Add(this.label77);
-            this.groupBox29.Controls.Add(this.label76);
-            this.groupBox29.Controls.Add(this.label74);
-            this.groupBox29.Location = new System.Drawing.Point(491, 175);
+            this.groupBox29.Controls.Add(this.labelLeyendaT1);
+            this.groupBox29.Controls.Add(this.labelLeyendaT10);
+            this.groupBox29.Controls.Add(this.labelLeyendaT2);
+            this.groupBox29.Controls.Add(this.labelLeyendaT7);
+            this.groupBox29.Controls.Add(this.labelLeyendaT6);
+            this.groupBox29.Controls.Add(this.labelLeyendaT9);
+            this.groupBox29.Controls.Add(this.labelLeyendaT8);
+            this.groupBox29.Location = new System.Drawing.Point(495, 218);
             this.groupBox29.Name = "groupBox29";
             this.groupBox29.Size = new System.Drawing.Size(178, 291);
             this.groupBox29.TabIndex = 66;
@@ -5154,14 +5319,14 @@
             this.pictureBoxResultadoRTC.TabIndex = 136;
             this.pictureBoxResultadoRTC.TabStop = false;
             // 
-            // label93
+            // labelLeyendaT11
             // 
-            this.label93.AutoSize = true;
-            this.label93.Location = new System.Drawing.Point(8, 197);
-            this.label93.Name = "label93";
-            this.label93.Size = new System.Drawing.Size(29, 13);
-            this.label93.TabIndex = 135;
-            this.label93.Text = "RTC";
+            this.labelLeyendaT11.AutoSize = true;
+            this.labelLeyendaT11.Location = new System.Drawing.Point(8, 197);
+            this.labelLeyendaT11.Name = "labelLeyendaT11";
+            this.labelLeyendaT11.Size = new System.Drawing.Size(29, 13);
+            this.labelLeyendaT11.TabIndex = 135;
+            this.labelLeyendaT11.Text = "RTC";
             // 
             // buttonInforme
             // 
@@ -5204,14 +5369,14 @@
             this.pictureBoxResultadoFRAM.TabIndex = 132;
             this.pictureBoxResultadoFRAM.TabStop = false;
             // 
-            // label82
+            // labelLeyendaT5
             // 
-            this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(8, 100);
-            this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(80, 13);
-            this.label82.TabIndex = 131;
-            this.label82.Text = "Memoria FRAM";
+            this.labelLeyendaT5.AutoSize = true;
+            this.labelLeyendaT5.Location = new System.Drawing.Point(8, 100);
+            this.labelLeyendaT5.Name = "labelLeyendaT5";
+            this.labelLeyendaT5.Size = new System.Drawing.Size(80, 13);
+            this.labelLeyendaT5.TabIndex = 131;
+            this.labelLeyendaT5.Text = "Memoria FRAM";
             // 
             // pictureBoxResultadoSRAM
             // 
@@ -5222,14 +5387,14 @@
             this.pictureBoxResultadoSRAM.TabIndex = 130;
             this.pictureBoxResultadoSRAM.TabStop = false;
             // 
-            // label75
+            // labelLeyendaT4
             // 
-            this.label75.AutoSize = true;
-            this.label75.Location = new System.Drawing.Point(8, 84);
-            this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(81, 13);
-            this.label75.TabIndex = 129;
-            this.label75.Text = "Memoria SRAM";
+            this.labelLeyendaT4.AutoSize = true;
+            this.labelLeyendaT4.Location = new System.Drawing.Point(8, 84);
+            this.labelLeyendaT4.Name = "labelLeyendaT4";
+            this.labelLeyendaT4.Size = new System.Drawing.Size(81, 13);
+            this.labelLeyendaT4.TabIndex = 129;
+            this.labelLeyendaT4.Text = "Memoria SRAM";
             // 
             // pictureBoxResultadoCAN
             // 
@@ -5240,14 +5405,14 @@
             this.pictureBoxResultadoCAN.TabIndex = 128;
             this.pictureBoxResultadoCAN.TabStop = false;
             // 
-            // label73
+            // labelLeyendaT3
             // 
-            this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(6, 67);
-            this.label73.Name = "label73";
-            this.label73.Size = new System.Drawing.Size(56, 13);
-            this.label73.TabIndex = 127;
-            this.label73.Text = "COM CAN";
+            this.labelLeyendaT3.AutoSize = true;
+            this.labelLeyendaT3.Location = new System.Drawing.Point(6, 67);
+            this.labelLeyendaT3.Name = "labelLeyendaT3";
+            this.labelLeyendaT3.Size = new System.Drawing.Size(56, 13);
+            this.labelLeyendaT3.TabIndex = 127;
+            this.labelLeyendaT3.Text = "COM CAN";
             // 
             // pictureBoxLeerVersiones
             // 
@@ -5330,68 +5495,68 @@
             this.pictureBoxResultadoIO.TabIndex = 117;
             this.pictureBoxResultadoIO.TabStop = false;
             // 
-            // label81
+            // labelLeyendaT1
             // 
-            this.label81.AutoSize = true;
-            this.label81.Location = new System.Drawing.Point(6, 35);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(98, 13);
-            this.label81.TabIndex = 6;
-            this.label81.Text = "Supervisores V/I/T";
+            this.labelLeyendaT1.AutoSize = true;
+            this.labelLeyendaT1.Location = new System.Drawing.Point(6, 35);
+            this.labelLeyendaT1.Name = "labelLeyendaT1";
+            this.labelLeyendaT1.Size = new System.Drawing.Size(98, 13);
+            this.labelLeyendaT1.TabIndex = 6;
+            this.labelLeyendaT1.Text = "Supervisores V/I/T";
             // 
-            // label80
+            // labelLeyendaT10
             // 
-            this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(8, 181);
-            this.label80.Name = "label80";
-            this.label80.Size = new System.Drawing.Size(75, 13);
-            this.label80.TabIndex = 5;
-            this.label80.Text = "Canales ADCs";
+            this.labelLeyendaT10.AutoSize = true;
+            this.labelLeyendaT10.Location = new System.Drawing.Point(8, 181);
+            this.labelLeyendaT10.Name = "labelLeyendaT10";
+            this.labelLeyendaT10.Size = new System.Drawing.Size(75, 13);
+            this.labelLeyendaT10.TabIndex = 5;
+            this.labelLeyendaT10.Text = "Canales ADCs";
             // 
-            // label79
+            // labelLeyendaT2
             // 
-            this.label79.AutoSize = true;
-            this.label79.Location = new System.Drawing.Point(6, 51);
-            this.label79.Name = "label79";
-            this.label79.Size = new System.Drawing.Size(67, 13);
-            this.label79.TabIndex = 4;
-            this.label79.Text = "COM RS422";
+            this.labelLeyendaT2.AutoSize = true;
+            this.labelLeyendaT2.Location = new System.Drawing.Point(6, 51);
+            this.labelLeyendaT2.Name = "labelLeyendaT2";
+            this.labelLeyendaT2.Size = new System.Drawing.Size(67, 13);
+            this.labelLeyendaT2.TabIndex = 4;
+            this.labelLeyendaT2.Text = "COM RS422";
             // 
-            // label78
+            // labelLeyendaT7
             // 
-            this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(8, 132);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(95, 13);
-            this.label78.TabIndex = 3;
-            this.label78.Text = "Control de turbinas";
+            this.labelLeyendaT7.AutoSize = true;
+            this.labelLeyendaT7.Location = new System.Drawing.Point(8, 132);
+            this.labelLeyendaT7.Name = "labelLeyendaT7";
+            this.labelLeyendaT7.Size = new System.Drawing.Size(95, 13);
+            this.labelLeyendaT7.TabIndex = 3;
+            this.labelLeyendaT7.Text = "Control de turbinas";
             // 
-            // label77
+            // labelLeyendaT6
             // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(8, 116);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(88, 13);
-            this.label77.TabIndex = 2;
-            this.label77.Text = "Lectura de NTCs";
+            this.labelLeyendaT6.AutoSize = true;
+            this.labelLeyendaT6.Location = new System.Drawing.Point(8, 116);
+            this.labelLeyendaT6.Name = "labelLeyendaT6";
+            this.labelLeyendaT6.Size = new System.Drawing.Size(88, 13);
+            this.labelLeyendaT6.TabIndex = 2;
+            this.labelLeyendaT6.Text = "Lectura de NTCs";
             // 
-            // label76
+            // labelLeyendaT9
             // 
-            this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(8, 165);
-            this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(86, 13);
-            this.label76.TabIndex = 1;
-            this.label76.Text = "TX y RX Opticos";
+            this.labelLeyendaT9.AutoSize = true;
+            this.labelLeyendaT9.Location = new System.Drawing.Point(8, 165);
+            this.labelLeyendaT9.Name = "labelLeyendaT9";
+            this.labelLeyendaT9.Size = new System.Drawing.Size(86, 13);
+            this.labelLeyendaT9.TabIndex = 1;
+            this.labelLeyendaT9.Text = "TX y RX Opticos";
             // 
-            // label74
+            // labelLeyendaT8
             // 
-            this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(8, 149);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(82, 13);
-            this.label74.TabIndex = 0;
-            this.label74.Text = "Ent/sal digitales";
+            this.labelLeyendaT8.AutoSize = true;
+            this.labelLeyendaT8.Location = new System.Drawing.Point(8, 149);
+            this.labelLeyendaT8.Name = "labelLeyendaT8";
+            this.labelLeyendaT8.Size = new System.Drawing.Size(82, 13);
+            this.labelLeyendaT8.TabIndex = 0;
+            this.labelLeyendaT8.Text = "Ent/sal digitales";
             // 
             // statusStrip1
             // 
@@ -5403,7 +5568,7 @@
             this.toolStripStatusLabel1,
             this.progressBarTestActual,
             this.labelVersion});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 466);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 512);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(676, 22);
             this.statusStrip1.SizingGrip = false;
@@ -5451,11 +5616,46 @@
             // 
             this.serialPort2.BaudRate = 115200;
             // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.radioButtonSeleccionBRD15003);
+            this.groupBox13.Controls.Add(this.radioButtonSeleccionBRD15001);
+            this.groupBox13.Location = new System.Drawing.Point(9, 5);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(660, 43);
+            this.groupBox13.TabIndex = 68;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Selección de placa a testar";
+            // 
+            // radioButtonSeleccionBRD15003
+            // 
+            this.radioButtonSeleccionBRD15003.AutoSize = true;
+            this.radioButtonSeleccionBRD15003.Location = new System.Drawing.Point(422, 19);
+            this.radioButtonSeleccionBRD15003.Name = "radioButtonSeleccionBRD15003";
+            this.radioButtonSeleccionBRD15003.Size = new System.Drawing.Size(230, 17);
+            this.radioButtonSeleccionBRD15003.TabIndex = 1;
+            this.radioButtonSeleccionBRD15003.Text = "Placa BRD15003 (Maestro de Sincronismo)";
+            this.radioButtonSeleccionBRD15003.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonSeleccionBRD15001
+            // 
+            this.radioButtonSeleccionBRD15001.AutoSize = true;
+            this.radioButtonSeleccionBRD15001.Checked = true;
+            this.radioButtonSeleccionBRD15001.Location = new System.Drawing.Point(7, 20);
+            this.radioButtonSeleccionBRD15001.Name = "radioButtonSeleccionBRD15001";
+            this.radioButtonSeleccionBRD15001.Size = new System.Drawing.Size(339, 17);
+            this.radioButtonSeleccionBRD15001.TabIndex = 0;
+            this.radioButtonSeleccionBRD15001.TabStop = true;
+            this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Conjunto de Control)";
+            this.radioButtonSeleccionBRD15001.UseVisualStyleBackColor = true;
+            this.radioButtonSeleccionBRD15001.CheckedChanged += new System.EventHandler(this.radioButtonSeleccionBRD15001_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 488);
+            this.ClientSize = new System.Drawing.Size(676, 534);
+            this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox29);
             this.Controls.Add(this.tabControl1);
@@ -5466,7 +5666,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "Tests Funcionales de la placa BRD15001";
+            this.Text = "Tests Funcionales del conjunto de placas BRD15001/BRD10030_2001 y de la placa BRD" +
+    "15003";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).EndInit();
@@ -5634,6 +5835,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodManchester)).EndInit();
+            this.groupBox14.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCanalSigmaDelta)).EndInit();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoRTC)).EndInit();
@@ -5651,6 +5858,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResultadoIO)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5950,17 +6159,17 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.GroupBox groupBox29;
-        private System.Windows.Forms.Label label74;
-        private System.Windows.Forms.Label label79;
-        private System.Windows.Forms.Label label78;
-        private System.Windows.Forms.Label label77;
-        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.Label labelLeyendaT8;
+        private System.Windows.Forms.Label labelLeyendaT2;
+        private System.Windows.Forms.Label labelLeyendaT7;
+        private System.Windows.Forms.Label labelLeyendaT6;
+        private System.Windows.Forms.Label labelLeyendaT9;
         private System.Windows.Forms.PictureBox pictureBoxResultadoNTCs;
         private System.Windows.Forms.PictureBox pictureBoxResultadoTXRXOpt;
         private System.Windows.Forms.PictureBox pictureBoxResultadoTurbinas;
         private System.Windows.Forms.PictureBox pictureBoxResultadoIO;
-        private System.Windows.Forms.Label label81;
-        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.Label labelLeyendaT1;
+        private System.Windows.Forms.Label labelLeyendaT10;
         private System.Windows.Forms.PictureBox pictureBoxResultadoADCs;
         private System.Windows.Forms.PictureBox pictureBoxResultadoSPVs;
         private System.Windows.Forms.PictureBox pictureBoxResultadoRS422;
@@ -5981,17 +6190,17 @@
         private System.Windows.Forms.PictureBox pictureBoxCAN;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.PictureBox pictureBoxResultadoCAN;
-        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.Label labelLeyendaT3;
         private System.Windows.Forms.GroupBox groupBox32;
         private System.Windows.Forms.PictureBox pictureBoxSRAM;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.PictureBox pictureBoxResultadoSRAM;
-        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label labelLeyendaT4;
         private System.Windows.Forms.GroupBox groupBox33;
         private System.Windows.Forms.PictureBox pictureBoxFRAMEscritura1;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.PictureBox pictureBoxResultadoFRAM;
-        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Label labelLeyendaT5;
         private System.Windows.Forms.Label label84;
         private System.Windows.Forms.PictureBox pictureBoxFRAMEscritura2;
         private System.Windows.Forms.Label label83;
@@ -6085,10 +6294,27 @@
         private System.Windows.Forms.PictureBox pictureBoxEnHoraRTC;
         private System.Windows.Forms.Button buttonPonHora;
         private System.Windows.Forms.PictureBox pictureBoxResultadoRTC;
-        private System.Windows.Forms.Label label93;
+        private System.Windows.Forms.Label labelLeyendaT11;
         private System.Windows.Forms.PictureBox pictureBoxPuestaEnHoraRTC;
         private System.Windows.Forms.Label labelEnHoraRTC;
         private System.Windows.Forms.Label label94;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.RadioButton radioButtonSeleccionBRD15003;
+        private System.Windows.Forms.RadioButton radioButtonSeleccionBRD15001;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.PictureBox pictureBoxCanalSigmaDelta;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.TextBox textBoxTensionRedRMS;
+        private System.Windows.Forms.TextBox textBoxEstadoDecodManchester;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.Label label78;
+        private System.Windows.Forms.TextBox textBoxTensionRedRMS_Ref;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.Button buttonTestSynch;
+        private System.Windows.Forms.PictureBox pictureBoxMedVoltRMS;
+        private System.Windows.Forms.PictureBox pictureBoxDecodManchester;
     }
 }
 

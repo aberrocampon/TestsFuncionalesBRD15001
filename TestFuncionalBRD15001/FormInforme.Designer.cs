@@ -32,7 +32,7 @@
             this.textBoxIDTecnico = new System.Windows.Forms.TextBox();
             this.textBoxFuenteTension = new System.Windows.Forms.TextBox();
             this.textBoxFuente4_20mA = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelFuente4_20mA = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxRef10030_2001 = new System.Windows.Forms.TextBox();
@@ -41,7 +41,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxRefBRD15001 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.labelFuenteTension = new System.Windows.Forms.Label();
             this.textBoxInforme = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonGuardar = new System.Windows.Forms.Button();
@@ -59,7 +59,7 @@
             // 
             // textBoxIDTecnico
             // 
-            this.textBoxIDTecnico.Location = new System.Drawing.Point(8, 134);
+            this.textBoxIDTecnico.Location = new System.Drawing.Point(8, 56);
             this.textBoxIDTecnico.Name = "textBoxIDTecnico";
             this.textBoxIDTecnico.Size = new System.Drawing.Size(538, 20);
             this.textBoxIDTecnico.TabIndex = 3;
@@ -78,20 +78,20 @@
             this.textBoxFuente4_20mA.Size = new System.Drawing.Size(538, 20);
             this.textBoxFuente4_20mA.TabIndex = 4;
             // 
-            // label1
+            // labelFuente4_20mA
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 157);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(413, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Fabricante/Modelo o ID de la fuente de referencia  de 4-20mA (test de canales ADC" +
+            this.labelFuente4_20mA.AutoSize = true;
+            this.labelFuente4_20mA.Location = new System.Drawing.Point(5, 157);
+            this.labelFuente4_20mA.Name = "labelFuente4_20mA";
+            this.labelFuente4_20mA.Size = new System.Drawing.Size(413, 13);
+            this.labelFuente4_20mA.TabIndex = 4;
+            this.labelFuente4_20mA.Text = "Fabricante/Modelo o ID de la fuente de referencia  de 4-20mA (test de canales ADC" +
     "): ";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 79);
+            this.label3.Location = new System.Drawing.Point(5, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(281, 13);
             this.label3.TabIndex = 6;
@@ -108,7 +108,7 @@
             // 
             // textBoxRef10030_2001
             // 
-            this.textBoxRef10030_2001.Location = new System.Drawing.Point(8, 56);
+            this.textBoxRef10030_2001.Location = new System.Drawing.Point(8, 95);
             this.textBoxRef10030_2001.Name = "textBoxRef10030_2001";
             this.textBoxRef10030_2001.Size = new System.Drawing.Size(538, 20);
             this.textBoxRef10030_2001.TabIndex = 1;
@@ -116,7 +116,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(5, 118);
+            this.label5.Location = new System.Drawing.Point(5, 40);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(123, 13);
             this.label5.TabIndex = 9;
@@ -140,7 +140,7 @@
             // 
             // textBoxRefBRD15001
             // 
-            this.textBoxRefBRD15001.Location = new System.Drawing.Point(8, 95);
+            this.textBoxRefBRD15001.Location = new System.Drawing.Point(8, 134);
             this.textBoxRefBRD15001.Name = "textBoxRefBRD15001";
             this.textBoxRefBRD15001.Size = new System.Drawing.Size(538, 20);
             this.textBoxRefBRD15001.TabIndex = 2;
@@ -148,20 +148,20 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(5, 40);
+            this.label7.Location = new System.Drawing.Point(5, 79);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(271, 13);
             this.label7.TabIndex = 13;
             this.label7.Text = "Referencia de la placa10030_2001 (Placa DSP/FPGA):";
             // 
-            // label8
+            // labelFuenteTension
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(5, 196);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(405, 13);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "Fabricante/Modelo o ID de la fuente de referencia de tension (test de canales ADC" +
+            this.labelFuenteTension.AutoSize = true;
+            this.labelFuenteTension.Location = new System.Drawing.Point(5, 196);
+            this.labelFuenteTension.Name = "labelFuenteTension";
+            this.labelFuenteTension.Size = new System.Drawing.Size(405, 13);
+            this.labelFuenteTension.TabIndex = 14;
+            this.labelFuenteTension.Text = "Fabricante/Modelo o ID de la fuente de referencia de tension (test de canales ADC" +
     "):";
             // 
             // textBoxInforme
@@ -201,7 +201,7 @@
             // buttonInformeCerrar
             // 
             this.buttonInformeCerrar.Location = new System.Drawing.Point(118, 483);
-            this.buttonInformeCerrar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonInformeCerrar.Margin = new System.Windows.Forms.Padding(2);
             this.buttonInformeCerrar.Name = "buttonInformeCerrar";
             this.buttonInformeCerrar.Size = new System.Drawing.Size(91, 23);
             this.buttonInformeCerrar.TabIndex = 7;
@@ -218,7 +218,7 @@
             this.Controls.Add(this.buttonGuardar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBoxInforme);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.labelFuenteTension);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxRefBRD15001);
             this.Controls.Add(this.label6);
@@ -227,7 +227,7 @@
             this.Controls.Add(this.textBoxRef10030_2001);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelFuente4_20mA);
             this.Controls.Add(this.textBoxFuente4_20mA);
             this.Controls.Add(this.textBoxFuenteTension);
             this.Controls.Add(this.textBoxIDTecnico);
@@ -250,7 +250,7 @@
         private System.Windows.Forms.TextBox textBoxIDTecnico;
         private System.Windows.Forms.TextBox textBoxFuenteTension;
         private System.Windows.Forms.TextBox textBoxFuente4_20mA;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelFuente4_20mA;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxRef10030_2001;
@@ -259,7 +259,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxRefBRD15001;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelFuenteTension;
         private System.Windows.Forms.TextBox textBoxInforme;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonGuardar;
