@@ -62,7 +62,7 @@
             this.textBoxIDTecnico.Location = new System.Drawing.Point(8, 56);
             this.textBoxIDTecnico.Name = "textBoxIDTecnico";
             this.textBoxIDTecnico.Size = new System.Drawing.Size(538, 20);
-            this.textBoxIDTecnico.TabIndex = 3;
+            this.textBoxIDTecnico.TabIndex = 1;
             // 
             // textBoxFuenteTension
             // 
@@ -111,7 +111,7 @@
             this.textBoxRef10030_2001.Location = new System.Drawing.Point(8, 95);
             this.textBoxRef10030_2001.Name = "textBoxRef10030_2001";
             this.textBoxRef10030_2001.Size = new System.Drawing.Size(538, 20);
-            this.textBoxRef10030_2001.TabIndex = 1;
+            this.textBoxRef10030_2001.TabIndex = 2;
             // 
             // label5
             // 
@@ -143,7 +143,7 @@
             this.textBoxRefBRD15001.Location = new System.Drawing.Point(8, 134);
             this.textBoxRefBRD15001.Name = "textBoxRefBRD15001";
             this.textBoxRefBRD15001.Size = new System.Drawing.Size(538, 20);
-            this.textBoxRefBRD15001.TabIndex = 2;
+            this.textBoxRefBRD15001.TabIndex = 3;
             // 
             // label7
             // 

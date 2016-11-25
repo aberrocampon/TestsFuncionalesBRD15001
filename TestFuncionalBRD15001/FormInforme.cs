@@ -47,22 +47,43 @@ namespace TestFuncionalBRD15001
                 return;
             }
 
-            if ((leyenda_resultados_tests.Contains<int>(-1)) || (leyenda_resultados_tests.Contains<int>(0)))
+            bool bNoejecutados = false, bFallos = false;
+
+            if (leyenda_resultados_tests[0] == -1) bNoejecutados = true;
+            if (leyenda_resultados_tests[0] == 0) bFallos = true;
+
+            if (seleccionPlaca == SeleccionPlaca.BRD15001)
+            {
+                for (int i = 1; i <= (int)TipoTest.TEST_RTC; i++)
+                {
+                    if (leyenda_resultados_tests[i] == -1) bNoejecutados = true;
+                    if (leyenda_resultados_tests[i] == 0) bFallos = true;
+                }
+            }
+            else
+            {
+                if (leyenda_resultados_tests[(int)TipoTest.TEST_BRD15003] == -1) bNoejecutados = true;
+                if (leyenda_resultados_tests[(int)TipoTest.TEST_BRD15003] == 0) bFallos = true;
+            }
+
+            if (bNoejecutados || bFallos)
             {
                 string warning = "";
 
-                if ((leyenda_resultados_tests.Contains<int>(-1)) && (leyenda_resultados_tests.Contains<int>(0)))
+                if (bNoejecutados && bFallos)
                     warning = "Existen tests no ejecutados, existen tests con indicacion de fallos\r\n";
-                else if (leyenda_resultados_tests.Contains<int>(-1))
+                else if (bNoejecutados)
                     warning = "Existen tests no ejecutados\r\n";
-                else if (leyenda_resultados_tests.Contains<int>(0))
+                else if (bFallos)
                     warning = "Existen tests con indicacion de fallos\r\n";
 
                 DialogResult res = MessageBox.Show(warning + "¿Desea guardar el informe de todos modos?", "Guardar Informe", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (res == DialogResult.Cancel) return;
             }
 
-            if((textBoxLocalizacion.Text.Length == 0) || (textBoxFuenteTension.Text.Length == 0) || (textBoxFuente4_20mA.Text.Length == 0) ||
+            if (seleccionPlaca == SeleccionPlaca.BRD15003) textBoxFuenteTension.Text = "NO USADO";
+
+            if ((textBoxLocalizacion.Text.Length == 0) || (textBoxFuenteTension.Text.Length == 0) || (textBoxFuente4_20mA.Text.Length == 0) ||
                 (textBoxIDTecnico.Text.Length == 0) || (textBoxRefBRD15001.Text.Length == 0) || (textBoxRef10030_2001.Text.Length == 0))
             {
                 DialogResult res = MessageBox.Show("Campos vacios en el formulario\r\n¿Desea guardar el informe de todos modos?", "Guardar Informe", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
