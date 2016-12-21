@@ -203,7 +203,7 @@ namespace TestFuncionalBRD15001
         // tablas de asignacion de canales ADC en el ComboBox
         int[] canalesADCcombo = { 12, 8, 4, 0, 13, 9, 5, 1, 2, 6, 10, 14, 3, 7, 11, 15 };
         // dimensiones fisicas de las medidas de cada canal ADC
-        string[] dimension_ref_adc = {"V", "V", "mA", "V", "V", "V", "mA", "V",
+        string[] dimension_ref_adc = {"mA", "mA", "mA", "mA", "mA", "mA", "V", "V",
                                           "mA", "V", "mA", "V", "mA", "V", "mA", "V"};
 
         // bandera para llamar a reset informes desde el timer2 a peticion de la isr de recepcion de puerto serie
@@ -211,6 +211,15 @@ namespace TestFuncionalBRD15001
 
         private const string VER_SOFTWARE = "1.1.0.ND";
         private string sLabelVersionSoftware = "V" + VER_SOFTWARE;
+
+        // En la versión de lista de material V3_1.3.0 cambia la definición de las etapas analógicas
+        // de acuerdo a esos cambios debe cambiar la medida de tensiones y corrientes y sus tests
+        private bool ver_v3_1_3_0 = true;
+        // -> Ante cambio de version:
+        // -> * si se llama a inicializa_ref_adc_por_defecto(canal) => cambia la dimension de los canales para que se pueda generar el informe correctamente
+        // -> * ademas hay que cambiar el combobox
+        // -> * claramente hay que cambiar el ver_... true / false
+
 
         public Form1()
         {
@@ -1449,6 +1458,49 @@ namespace TestFuncionalBRD15001
 
             double[] tol_adc_por_defecto = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                              1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0};
+
+            if(ver_v3_1_3_0 == true)
+            {
+                ref_adc_por_defecto[3] = 20.0;
+                ref_adc_por_defecto[6] = 4.0;
+                ref_adc_por_defecto[0] = 20.0;
+                ref_adc_por_defecto[1] = 20.0;
+                ref_adc_por_defecto[4] = 20.0;
+                ref_adc_por_defecto[5] = 20.0;
+
+                tol_adc_por_defecto[0] = 0.5;
+                tol_adc_por_defecto[1] = 0.5;
+                tol_adc_por_defecto[4] = 0.5;
+                tol_adc_por_defecto[5] = 0.5;
+
+                dimension_ref_adc[0] = "mA";
+                dimension_ref_adc[1] = "mA";
+                dimension_ref_adc[4] = "mA";
+                dimension_ref_adc[5] = "mA";
+                dimension_ref_adc[3] = "mA";
+                dimension_ref_adc[6] = "V";
+            }
+            else
+            {
+                ref_adc_por_defecto[3] = 4.0;
+                ref_adc_por_defecto[6] = 20.0;
+                ref_adc_por_defecto[0] = 4.0;
+                ref_adc_por_defecto[1] = 4.0;
+                ref_adc_por_defecto[4] = 4.0;
+                ref_adc_por_defecto[5] = 4.0;
+
+                tol_adc_por_defecto[0] = 1.0;
+                tol_adc_por_defecto[1] = 1.0;
+                tol_adc_por_defecto[4] = 1.0;
+                tol_adc_por_defecto[5] = 1.0;
+
+                dimension_ref_adc[0] = "V";
+                dimension_ref_adc[1] = "V";
+                dimension_ref_adc[4] = "V";
+                dimension_ref_adc[5] = "V";
+                dimension_ref_adc[3] = "V";
+                dimension_ref_adc[6] = "mA";
+            }
 
             textBoxRefInADC.Text = ref_adc_por_defecto[canal].ToString(System.Globalization.CultureInfo.InvariantCulture);
             labelDimRefADC.Text = dimension_ref_adc[canal];
@@ -3504,17 +3556,37 @@ namespace TestFuncionalBRD15001
                 {
                     case 0: // CON23: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A0
                         //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
-                        medida = (medida-1.5) * (20.0 / 1.8);
-                        medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.5) * (20.0 / 1.8);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
                         break;
                     case 1: // CON18: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B0
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 2.49);
-                        medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCB0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.5) * (20.0 / 2.49);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB0.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
                         break;
                     case 2: // CON11: Tension AC compuesta Vrs -- CANAL A1
                         //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
@@ -3525,31 +3597,71 @@ namespace TestFuncionalBRD15001
                         break;
                     case 3: // CON5: Corriente AC Ir (HAT-1500S, 1350Arms x 1.3) -- CANAL B1
                         //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 4.42);
-                        medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCB1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = (medida - 1.502317) / 39.168956;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.5) * (20.0 / 4.42);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB1.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
                         break;
                     case 4: // CON24: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A2
                         //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 1.8);
-                        medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.5) * (20.0 / 1.8);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
                         break;
                     case 5: // CON19: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B2
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 2.49);
-                        medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.5) * (20.0 / 2.49);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
                         break;
                     case 6: // CON10: Tension AC compuesta Vst ---------------- CANAL A3
                         //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
-                        medida = (medida - 1.502317) / 39.168956;
-                        medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        if (ver_v3_1_3_0 == true)
+                        {
+                            medida = (medida - 1.5) * (20.0 / 4.42);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+                        }
+                        else
+                        {
+                            medida = (medida - 1.502317) / 39.168956;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
                         break;
                     case 7: // CON3: Corriente AC Is (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B3
                         //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
