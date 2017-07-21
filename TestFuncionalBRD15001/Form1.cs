@@ -3679,7 +3679,7 @@ namespace TestFuncionalBRD15001
                         break;
                     case 9: // CON20: Idc2 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B4
                         //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 6.81);
+                        medida = (medida - 1.5) * (20.0 / 5.36);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
@@ -3707,7 +3707,7 @@ namespace TestFuncionalBRD15001
                         break;
                     case 13: // CON21: Idc1 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B6
                         //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 6.81);
+                        medida = (medida - 1.5) * (20.0 / 5.36);
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";

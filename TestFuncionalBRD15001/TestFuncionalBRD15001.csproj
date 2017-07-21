@@ -29,7 +29,7 @@
     <PublisherName>Tests Funcionales WD3</PublisherName>
     <SuiteName>BRD15001</SuiteName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>29</ApplicationRevision>
+    <ApplicationRevision>30</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -56,10 +56,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>05CC987FB7FD05211A3305A6A75DD1E1F5B46E80</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>954974C3A95B4F5B9ACD2427371ABBD8FDD333AF</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>TestFuncionalBRD15001_ClaveTemporal.pfx</ManifestKeyFile>
+    <ManifestKeyFile>TestFuncionalBRD15001_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -156,6 +156,7 @@
     </Compile>
     <Content Include="Pruebas_funcionales_brd15001.a00" />
     <None Include="TestFuncionalBRD15001_ClaveTemporal.pfx" />
+    <None Include="TestFuncionalBRD15001_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
