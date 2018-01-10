@@ -171,6 +171,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxSPV_ALARMS = new System.Windows.Forms.PictureBox();
+            this.textBoxSPV_ALARMS = new System.Windows.Forms.TextBox();
+            this.label77 = new System.Windows.Forms.Label();
             this.textBoxRefTemp2 = new System.Windows.Forms.TextBox();
             this.label89 = new System.Windows.Forms.Label();
             this.textBoxToleranciaVbat = new System.Windows.Forms.TextBox();
@@ -525,6 +528,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC0)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSPV_ALARMS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVbat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxV3_3V)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVreles)).BeginInit();
@@ -1890,7 +1894,7 @@
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.textNTC0);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(2, 266);
+            this.groupBox3.Location = new System.Drawing.Point(0, 292);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
@@ -2251,6 +2255,9 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.pictureBoxSPV_ALARMS);
+            this.groupBox4.Controls.Add(this.textBoxSPV_ALARMS);
+            this.groupBox4.Controls.Add(this.label77);
             this.groupBox4.Controls.Add(this.textBoxRefTemp2);
             this.groupBox4.Controls.Add(this.label89);
             this.groupBox4.Controls.Add(this.textBoxToleranciaVbat);
@@ -2312,10 +2319,38 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox4.Size = new System.Drawing.Size(202, 264);
+            this.groupBox4.Size = new System.Drawing.Size(202, 287);
             this.groupBox4.TabIndex = 37;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Supervisores de temperaturas, tensiones y corrientes";
+            // 
+            // pictureBoxSPV_ALARMS
+            // 
+            this.pictureBoxSPV_ALARMS.Location = new System.Drawing.Point(174, 262);
+            this.pictureBoxSPV_ALARMS.Name = "pictureBoxSPV_ALARMS";
+            this.pictureBoxSPV_ALARMS.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxSPV_ALARMS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxSPV_ALARMS.TabIndex = 134;
+            this.pictureBoxSPV_ALARMS.TabStop = false;
+            // 
+            // textBoxSPV_ALARMS
+            // 
+            this.textBoxSPV_ALARMS.Location = new System.Drawing.Point(53, 259);
+            this.textBoxSPV_ALARMS.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxSPV_ALARMS.Name = "textBoxSPV_ALARMS";
+            this.textBoxSPV_ALARMS.ReadOnly = true;
+            this.textBoxSPV_ALARMS.Size = new System.Drawing.Size(67, 19);
+            this.textBoxSPV_ALARMS.TabIndex = 133;
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(7, 262);
+            this.label77.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(44, 13);
+            this.label77.TabIndex = 132;
+            this.label77.Text = "Alarmas";
             // 
             // textBoxRefTemp2
             // 
@@ -4642,7 +4677,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 457);
+            this.tabControl1.Size = new System.Drawing.Size(478, 485);
             this.tabControl1.TabIndex = 63;
             // 
             // tabPage2
@@ -4657,7 +4692,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 431);
+            this.tabPage2.Size = new System.Drawing.Size(470, 459);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Lect. NTCs, Cont Vel turbinas, COMs,...";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -4914,7 +4949,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(470, 431);
+            this.tabPage1.Size = new System.Drawing.Size(470, 459);
             this.tabPage1.TabIndex = 1;
             this.tabPage1.Text = "Ent/Sal dig, TX/RX Opt, ...";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -5047,7 +5082,7 @@
             this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage3.Size = new System.Drawing.Size(470, 431);
+            this.tabPage3.Size = new System.Drawing.Size(470, 459);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Canales ADC";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -5149,7 +5184,7 @@
             this.tabPage4.Controls.Add(this.groupBox14);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(470, 431);
+            this.tabPage4.Size = new System.Drawing.Size(470, 459);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Recepción de stream codificado en Sigma-Delta";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -5305,7 +5340,7 @@
             this.groupBox29.Controls.Add(this.labelLeyendaT8);
             this.groupBox29.Location = new System.Drawing.Point(495, 218);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(178, 291);
+            this.groupBox29.Size = new System.Drawing.Size(178, 319);
             this.groupBox29.TabIndex = 66;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "Resultados de tests";
@@ -5568,7 +5603,7 @@
             this.toolStripStatusLabel1,
             this.progressBarTestActual,
             this.labelVersion});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 512);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(676, 22);
             this.statusStrip1.SizingGrip = false;
@@ -5654,7 +5689,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 534);
+            this.ClientSize = new System.Drawing.Size(676, 562);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox29);
@@ -5719,6 +5754,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC0)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSPV_ALARMS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVbat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxV3_3V)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVreles)).EndInit();
@@ -6315,6 +6351,9 @@
         private System.Windows.Forms.Button buttonTestSynch;
         private System.Windows.Forms.PictureBox pictureBoxMedVoltRMS;
         private System.Windows.Forms.PictureBox pictureBoxDecodManchester;
+        private System.Windows.Forms.PictureBox pictureBoxSPV_ALARMS;
+        private System.Windows.Forms.TextBox textBoxSPV_ALARMS;
+        private System.Windows.Forms.Label label77;
     }
 }
 

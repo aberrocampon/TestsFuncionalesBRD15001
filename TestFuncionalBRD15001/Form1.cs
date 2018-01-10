@@ -55,6 +55,7 @@ namespace TestFuncionalBRD15001
         private int respuesta_entradas_ok, respuesta_output_ok, respuesta_outputleds_ok, respuesta_disparos_ok, respuesta_dutyturbina_ok;
         private int respuesta_enabletx_rs422_ok, respuesta_enablerx_rs422_ok;
         private int input;
+        private int valor_SPV_ALARMS;
         private TipoTest test = TipoTest.NO_TEST;
         private int contador_test = 0;
         private string buffer_tx_rs422_test = "";
@@ -133,6 +134,7 @@ namespace TestFuncionalBRD15001
         private double test_spv_vbat_med, test_spv_vbat_ref, test_spv_vbat_tol;
         private int test_spv_ok_fallo_temp1, test_spv_ok_fallo_temp2, test_spv_ok_fallo_vin, test_spv_ok_fallo_iin;
         private int test_spv_ok_fallo_vdsp, test_spv_ok_fallo_vfo, test_spv_ok_fallo_vreles, test_spv_ok_fallo_v3_3v, test_spv_ok_fallo_vbat;
+        private int test_spv_ok_fallo_SPV_ALARMS;
         // Medida de resistencias NTC
         private double[] test_ntcs_referencias = new double[5];
         private double[] test_ntcs_tolerancias = new double[5];
@@ -260,7 +262,7 @@ namespace TestFuncionalBRD15001
                                     pictureBoxCanalA6, pictureBoxCanalB6, pictureBoxCanalA7, pictureBoxCanalB7};
             marcasSupervisores = new PictureBox[]{pictureBoxTemp1, pictureBoxTemp2, pictureBoxVin, pictureBoxIin,
                                                pictureBoxVdsp, pictureBoxVfibopt, pictureBoxVreles,
-                                               pictureBoxV3_3V, pictureBoxVbat };
+                                               pictureBoxV3_3V, pictureBoxVbat, pictureBoxSPV_ALARMS};
             marcasNTCs = new PictureBox[]{pictureBoxNTC0, pictureBoxNTC1, pictureBoxNTC2, pictureBoxNTC3,
                                        pictureBoxNTC4 };
             marcasReles = new PictureBox[]{ pictureBoxRele0, pictureBoxRele1, pictureBoxRele2, pictureBoxRele3,
@@ -806,6 +808,15 @@ namespace TestFuncionalBRD15001
                     informe += "* Tolerancia = " + test_spv_vbat_tol.ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
                 }
 
+
+                informe += "**** Alarmas de spervisores: ****\r\n";
+                informe += "* RESULTADO: ";
+                if (test_spv_ok_fallo_SPV_ALARMS == 1) informe += "OK\r\n";
+                else if (test_spv_ok_fallo_SPV_ALARMS == 0) informe += "FALLO\r\n";
+                else if (test_spv_ok_fallo_SPV_ALARMS == -1) informe += "TEST NO EJECUTADO\r\n";
+                informe += "* Valor del registro de alarmas = 0x" + valor_SPV_ALARMS.ToString("X") + "V\r\n";
+                informe += "NOTA: No se ha ejecutado un verdadero test funcional de las señales de alarma, solo comprobación de estado deshabilitado.\r\n";
+
                 informe += "\r\n";
 
                 informe += "********** Tests de puerto de comunicacion RS-422 (CON12): **********\r\n";
@@ -1282,6 +1293,7 @@ namespace TestFuncionalBRD15001
                 test_spv_ok_fallo_vreles = -1;
                 test_spv_ok_fallo_v3_3v = -1;
                 test_spv_ok_fallo_vbat = -1;
+                test_spv_ok_fallo_SPV_ALARMS = -1;
                 // RS-422
                 test_rs422_loop_rxdis_txdis_ok_fallo = -1;
                 test_rs422_loop_rxdis_txena_ok_fallo = -1;
@@ -2030,6 +2042,18 @@ namespace TestFuncionalBRD15001
                 test_spv_ok_fallo_vbat = 1;
             }
 
+            // Comprueba que ninguna alarma esta activada (no comprueba realmente funcionalmente dichas alarmas)
+            if (valor_SPV_ALARMS != 0)
+            {
+                pictureBoxSPV_ALARMS.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
+                test_spv_ok_fallo_SPV_ALARMS = 0;
+            }
+            else
+            {
+                pictureBoxSPV_ALARMS.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                test_spv_ok_fallo_SPV_ALARMS = 1;
+            }
+
             foreach (PictureBox pb in marcasSupervisores)
             {
                 pb.Visible = true;
@@ -2077,6 +2101,7 @@ namespace TestFuncionalBRD15001
             test_spv_ok_fallo_vreles = -1;
             test_spv_ok_fallo_v3_3v = -1;
             test_spv_ok_fallo_vbat = -1;
+            test_spv_ok_fallo_SPV_ALARMS = -1;
 
             leyenda_resultados_tests[(int)TipoTest.TEST_SPVS] = -1;
             actualiza_marcas_leyenda_resultados_tests();
@@ -2085,7 +2110,8 @@ namespace TestFuncionalBRD15001
 
             if ((test_spv_ok_fallo_temp1 == 1) && (test_spv_ok_fallo_temp2 == 1) && (test_spv_ok_fallo_vin == 1)
                 && (test_spv_ok_fallo_iin == 1) && (test_spv_ok_fallo_vdsp == 1) && (test_spv_ok_fallo_vreles == 1)
-                && (test_spv_ok_fallo_vfo == 1) && (test_spv_ok_fallo_v3_3v == 1) && (test_spv_ok_fallo_vbat == 1))
+                && (test_spv_ok_fallo_vfo == 1) && (test_spv_ok_fallo_v3_3v == 1) && (test_spv_ok_fallo_vbat == 1)
+                && (test_spv_ok_fallo_SPV_ALARMS == 1))
                 leyenda_resultados_tests[(int)TipoTest.TEST_SPVS] = 1;
             else leyenda_resultados_tests[(int)TipoTest.TEST_SPVS] = 0;
 
@@ -3920,10 +3946,13 @@ namespace TestFuncionalBRD15001
                             buffer_tx += "leertc\r";
                             break;
                         case 20:
+                            buffer_tx += "lee_SPV_ALARMS\r";
+                            break;
+                        case 21:
                             buffer_tx += "leeadc 16\r";
                             pictureBoxCanalSigmaDelta.Refresh();
                             break;
-                        case 21:
+                        case 22:
                             buffer_tx += "leepll\r";
                             break;
                     }
@@ -3932,13 +3961,13 @@ namespace TestFuncionalBRD15001
                     if (seleccionPlaca == SeleccionPlaca.BRD15001)
                     {
                         if ((comando_actual == 10) && (tabControl1.SelectedIndex != 2)) comando_actual++;
-                        if (comando_actual > 19) comando_actual = 0;
+                        if (comando_actual > 20) comando_actual = 0;
                         if ((tabControl1.SelectedIndex == 2) && (test == TipoTest.NO_TEST)) comando_actual = 10;
                     }
                     else
                     {
-                        if ((test == TipoTest.NO_TEST) && ((comando_actual < 20) || (comando_actual > 21)))
-                            comando_actual = 20;
+                        if ((test == TipoTest.NO_TEST) && ((comando_actual < 21) || (comando_actual > 22)))
+                            comando_actual = 21;
                     }
 
                     contador_comandos++;
@@ -4037,6 +4066,7 @@ namespace TestFuncionalBRD15001
             textBoxVbat.Text = vbat.ToString();
             textBoxV3_3V.Text = v3_3v.ToString();
             textBoxIin.Text = iin.ToString();
+            textBoxSPV_ALARMS.Text = "0x" + valor_SPV_ALARMS.ToString("X2");
 
             // Medidas de velocidad de turbina, en RPMs
             textBoxTurbina1.Text = rpm1.ToString();
@@ -4234,7 +4264,8 @@ namespace TestFuncionalBRD15001
                 "canal15=", "outputreles:ok", "dutyturbina:ok", "disparos:ok", "outputleds:ok",
                 "enabletx_rs422:ok", "enablerx_rs422:ok", "canatx:ok", "canarx=", "canbtx:ok", "canbrx=",
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
-                "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:", "canal16=", "estadopll="};
+                "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:", "canal16=", "estadopll=",
+                "SPV_ALARMS="};
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -4708,6 +4739,18 @@ namespace TestFuncionalBRD15001
                                         contador_comandos--;
                                     }
                                     else return;
+                                    break;
+                                case 47:
+                                    if (buffer_rx.Length >= 19)
+                                    {
+                                        valor_SPV_ALARMS = Convert.ToInt32(buffer_rx.Substring(13, 4), 16);
+                                        buffer_rx = buffer_rx.Substring(19);
+                                        contador_comandos--;
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
                                     break;
                             }
                         }
