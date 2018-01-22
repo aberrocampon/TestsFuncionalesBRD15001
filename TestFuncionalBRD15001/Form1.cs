@@ -121,6 +121,7 @@ namespace TestFuncionalBRD15001
         private double[] test_adcs_referencias = new double[16];
         private double[] test_adcs_tolerancias = new double[16];
         private double[] test_adcs_medias = new double[16];
+        private double[] test_adcs_calibraciones = new double[16];
         private int[] test_adcs_ok_fallo = new int[16]; // -1 => no test superado, 0 => fallo, 1 => ok
         // Supervisores de Tension/corriente/temperatura
         private double test_spv_temp1_med, test_spv_temp1_ref;
@@ -189,6 +190,7 @@ namespace TestFuncionalBRD15001
         private double ref_TensionRedRMS_BRD15003 = 230.0;
         private double test_med_volt_brd15003_rms;
         private double test_ref_TensionRedRMS_BRD15003;
+        private double calibracion = 0.005;
 
 
         // Marcas de ok fallo de tests
@@ -591,6 +593,39 @@ namespace TestFuncionalBRD15001
             else
             {
                 ref_TensionRedRMS_BRD15003 = double.Parse(tb.Text, System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+
+        private void textNumericoNegativo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-'))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).SelectionStart  > 0))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxCalibracion_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+
+            if (tb.Text.Length == 0)
+            {
+                calibracion = 0.0;
+            }
+            else
+            {
+                calibracion = double.Parse(tb.Text, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
@@ -1106,6 +1141,7 @@ namespace TestFuncionalBRD15001
                         informe += "* Medida = " + test_adcs_medias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
                         informe += "* Referencia = " + test_adcs_referencias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
                         informe += "* Tolerancia = " + test_adcs_tolerancias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
+                        informe += "* Calibración = " + test_adcs_calibraciones[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
                     }
                 }
 
@@ -1572,6 +1608,7 @@ namespace TestFuncionalBRD15001
             test_adcs_referencias[canal_adc_seleccionado] = referencia;
             test_adcs_tolerancias[canal_adc_seleccionado] = tolerancia;
             test_adcs_medias[canal_adc_seleccionado] = media;
+            test_adcs_calibraciones[canal_adc_seleccionado] = calibracion;
 
             if ((media >= (referencia * (1 - tolerancia / 100.0))) && (media <= (referencia * (1 + tolerancia / 100.0))))
             {
@@ -4499,7 +4536,7 @@ namespace TestFuncionalBRD15001
                                             media += (voltaje[j - 9, k]); //- 2047);
                                         }
                                         media = media / num_samples;
-                                        medias_adcs[j - 9] = media * 7.285558E-4;// * 7.280847E-4;
+                                        medias_adcs[j - 9] = media * 7.285558E-4     + calibracion;// * 7.280847E-4;
                                         buffer_rx = buffer_rx.Substring(20 * 4 + 2);
                                         contador_comandos--;
                                     }

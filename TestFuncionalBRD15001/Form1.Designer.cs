@@ -481,6 +481,9 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.radioButtonSeleccionBRD15003 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15001 = new System.Windows.Forms.RadioButton();
+            this.label79 = new System.Windows.Forms.Label();
+            this.label80 = new System.Windows.Forms.Label();
+            this.textBoxCalibracion = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -5055,6 +5058,9 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.textBoxCalibracion);
+            this.tabPage3.Controls.Add(this.label79);
+            this.tabPage3.Controls.Add(this.label80);
             this.tabPage3.Controls.Add(this.label88);
             this.tabPage3.Controls.Add(this.textBoxToleranciaADC);
             this.tabPage3.Controls.Add(this.labelDimRefADC);
@@ -5684,6 +5690,34 @@
             this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Conjunto de Control)";
             this.radioButtonSeleccionBRD15001.UseVisualStyleBackColor = true;
             this.radioButtonSeleccionBRD15001.CheckedChanged += new System.EventHandler(this.radioButtonSeleccionBRD15001_CheckedChanged);
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(197, 427);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(59, 13);
+            this.label79.TabIndex = 87;
+            this.label79.Text = "Calibracion";
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(325, 427);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(14, 13);
+            this.label80.TabIndex = 86;
+            this.label80.Text = "V";
+            // 
+            // textBoxCalibracion
+            // 
+            this.textBoxCalibracion.Location = new System.Drawing.Point(262, 424);
+            this.textBoxCalibracion.Name = "textBoxCalibracion";
+            this.textBoxCalibracion.Size = new System.Drawing.Size(58, 20);
+            this.textBoxCalibracion.TabIndex = 88;
+            this.textBoxCalibracion.Text = "0.005";
+            this.textBoxCalibracion.TextChanged += new System.EventHandler(this.textBoxCalibracion_TextChanged);
+            this.textBoxCalibracion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumericoNegativo_KeyPress);
             // 
             // Form1
             // 
@@ -6354,6 +6388,9 @@
         private System.Windows.Forms.PictureBox pictureBoxSPV_ALARMS;
         private System.Windows.Forms.TextBox textBoxSPV_ALARMS;
         private System.Windows.Forms.Label label77;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.TextBox textBoxCalibracion;
     }
 }
 
