@@ -33,7 +33,8 @@ namespace TestFuncionalBRD15001
         TEST_ADCS = 10,
         TEST_RTC = 11,
         TEST_BRD15003 = 12,
-        TEST_NUMERO_TOTAL = 13,
+        CALIBRACION_OFFTRIM_ADC = 13,
+        TEST_NUMERO_TOTAL = 14,
     }
 
     public enum SeleccionPlaca
@@ -72,6 +73,8 @@ namespace TestFuncionalBRD15001
         private string cadena_dsp_partid = "";
         private string cadena_dsp_classid = "";
         private string cadena_dsp_revid = "";
+        private int valor_OTP_ADCREFSEL = 0;
+        private int valor_OTP_ADCOFFTRIM = 0;
         private string buffer_rx = "";
         private string buffer_tx = "";
         private string buffer_tx_rs422 = "";
@@ -105,6 +108,7 @@ namespace TestFuncionalBRD15001
         private int periodo_peticion_ping;
         private double[] medias_adcs = new double[16];
         private double[] medias_adcs_vi = new double[16];
+        private double[] error_offtrim_adcs = new double[16]; // calcular el error de offset de los canales ante entradas conocidas
         private int canal_adc_seleccionado;
         private RadioButton radioButtonADC_seleccionado;
         private bool saltaPrimeraParte = false;
@@ -190,7 +194,8 @@ namespace TestFuncionalBRD15001
         private double ref_TensionRedRMS_BRD15003 = 230.0;
         private double test_med_volt_brd15003_rms;
         private double test_ref_TensionRedRMS_BRD15003;
-        private double calibracion = 0.005;
+        private int calibracion = 0;
+        private int calibracion_corregida = 0;
 
 
         // Marcas de ok fallo de tests
@@ -615,18 +620,71 @@ namespace TestFuncionalBRD15001
             }
         }
 
+        private void textNumericoNegativoEntero_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-'))
+            {
+                e.Handled = true;
+            }
+
+            if ((e.KeyChar == '-') && ((sender as TextBox).SelectionStart > 0))
+            {
+                e.Handled = true;
+            }
+
+            // Don't allow one decimal point
+            if (e.KeyChar == '.')
+            {
+                e.Handled = true;
+            }
+        }
+
         private void textBoxCalibracion_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
 
             if (tb.Text.Length == 0)
             {
-                calibracion = 0.0;
+                calibracion = 0;
             }
             else
             {
-                calibracion = double.Parse(tb.Text, System.Globalization.CultureInfo.InvariantCulture);
+                try
+                {
+                    calibracion = int.Parse(tb.Text, System.Globalization.CultureInfo.InvariantCulture);
+
+                    if (calibracion > 255)
+                    {
+                        calibracion = 255;
+                        tb.Text = "255";
+                    }
+                    else if (calibracion < -256)
+                    {
+                        calibracion = -256;
+                        tb.Text = "-256";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+                
             }
+        }
+
+        private void buttonCalibrarOFFTRIM_Click(object sender, EventArgs e)
+        {
+            if ((test == TipoTest.NO_TEST) && serialPort1.IsOpen)
+            {
+                test = TipoTest.CALIBRACION_OFFTRIM_ADC;
+                contador_test = 0;
+                timer1.Enabled = true;
+            }
+        }
+
+        private void labelLeyendaT10_DoubleClick(object sender, EventArgs e)
+        {
+            labelSugerenciaADCOFFTRIM.Visible = !labelSugerenciaADCOFFTRIM.Visible;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -689,6 +747,10 @@ namespace TestFuncionalBRD15001
             informe += "* DSP PARTID = " + ((cadena_dsp_partid.Length != 0) ? cadena_dsp_partid : "NO CONOCIDO") + "\r\n";
             informe += "* DSP CLASSID = " + ((cadena_dsp_classid.Length != 0) ? cadena_dsp_classid : "NO CONOCIDO") + "\r\n";
             informe += "* DSP REVID = " + ((cadena_dsp_revid.Length != 0) ? cadena_dsp_revid : "NO CONOCIDO") + "\r\n\r\n";
+
+            informe += "********************* CALIBRACION DEL ADC EN OTP DEL DSP *********************\r\n\r\n";
+            informe += "* Valor en OTP del registro ADCOFFTRIM: " + valor_OTP_ADCOFFTRIM + "\r\n";
+            informe += "* Valor en OTP del registro ADCREFSEL: 0x" + valor_OTP_ADCREFSEL.ToString("X2") + "\r\n\r\n";
 
             informe += "******************* RESULTADOS *******************\r\n\r\n";
 
@@ -1141,7 +1203,7 @@ namespace TestFuncionalBRD15001
                         informe += "* Medida = " + test_adcs_medias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
                         informe += "* Referencia = " + test_adcs_referencias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + dimension_ref_adc[j] + "\r\n";
                         informe += "* Tolerancia = " + test_adcs_tolerancias[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "%\r\n";
-                        informe += "* Calibración = " + test_adcs_calibraciones[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "V\r\n";
+                        informe += "* Registro ADCOFFTRIM = " + test_adcs_calibraciones[j].ToString(System.Globalization.CultureInfo.InvariantCulture) + "\r\n";
                     }
                 }
 
@@ -1469,7 +1531,7 @@ namespace TestFuncionalBRD15001
                 cadena_dsp_revid = "";
             }
             //if(!flag_cambia_versiones) leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
-            flag_cambia_versiones = false;
+            //flag_cambia_versiones = false;
 
             actualiza_marcas_leyenda_resultados_tests();
         }
@@ -1614,6 +1676,17 @@ namespace TestFuncionalBRD15001
             {
                 test_adcs_ok_fallo[canal_adc_seleccionado] = 1;
                 marcasADCs[canal_adc_seleccionado].Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+
+                for (int i = 0; i < 16; i++)
+                {
+                    if (i == canal_adc_seleccionado) continue;
+
+                    if(test_adcs_calibraciones[i] != calibracion)
+                    {
+                        test_adcs_ok_fallo[i] = -1;
+                        marcasADCs[i].Visible = false;
+                    }
+                }
             }
             else
             {
@@ -3600,6 +3673,43 @@ namespace TestFuncionalBRD15001
                         }
                     }
                     break;
+
+                case TipoTest.CALIBRACION_OFFTRIM_ADC:
+                    if (contador_test == 0)
+                    {
+                        progressBarTestActual.Value = 0;
+
+                        // Aqui mensaje al usuario para informar sobre el proceso de calibracion de ADCOFFTRIM
+                        timer1.Enabled = false;
+                        MessageBox.Show("Para calibrar la corrección de error de offset, los conectores de\n" +
+                            "entradas analogicas (CON1, CON2, CON3, CON5, CON6, CON9,\n" +
+                            "CON10, CON11, CON18, CON19, CON20, CON21, CON23, CON24,\n" +
+                            "CON25 y CON26) deben permanecer desconectados.\n\n" +
+                            "Desconectelos y a continuación pulse Aceptar.", "Correccion de error de offset de ADCs.");
+                        timer1.Enabled = true;
+
+                        contador_test = 1;
+
+                        timeout_secuencia_test = 0;
+                    }
+                    else if (contador_test == 1)
+                    {
+                        timeout_secuencia_test++;
+                        progressBarTestActual.Value = timeout_secuencia_test * 100 / (10 * 5);
+
+                        if (timeout_secuencia_test == 10 * 5) // 5 segundos
+                        {
+                            timer1.Enabled = false;
+                            test = TipoTest.NO_TEST;
+
+                            //calibracion = calibracion_corregida;
+                            textBoxCalibracion.Text = calibracion_corregida.ToString();
+                        }
+                        
+                    }
+
+                    break;
+
                 case TipoTest.NO_TEST:
 
                     break;
@@ -3717,6 +3827,8 @@ namespace TestFuncionalBRD15001
                             medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                             medida /= 10000.0;
                             labelMediaADCA3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                            error_offtrim_adcs[i] = (1.5 - medida) * (4.42 / 20.0) * 4095.0 / 3.0;
                         }
                         else
                         {
@@ -3732,6 +3844,8 @@ namespace TestFuncionalBRD15001
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB3.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                        error_offtrim_adcs[i] = (1.5 - medida) * (4.42 / 20.0) * 4095.0 / 3.0;
                         break;
                     case 8: // CON25: Vdc2 (sensor LV-25) ---------------- CANAL A4
                         //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
@@ -3746,6 +3860,8 @@ namespace TestFuncionalBRD15001
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                        error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
                     case 10: // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
@@ -3760,6 +3876,8 @@ namespace TestFuncionalBRD15001
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                        error_offtrim_adcs[i] = (1.5 - medida) * (4.42 / 20.0) * 4095.0 / 3.0;
                         break;
                     case 12: // CON26: Vdc1 (sensor DVL-1500) ---------------- CANAL A6
                         //medida = medida * (20.0 / (3.74 * 100.0)) * (1.5 / 2047.0);
@@ -3774,6 +3892,8 @@ namespace TestFuncionalBRD15001
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                        error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
                     case 14: // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
@@ -3788,6 +3908,8 @@ namespace TestFuncionalBRD15001
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
+
+                        error_offtrim_adcs[i] = (1.5 - medida) * (2.49 / 20.0) * 4095.0 / 3.0;
                         break;
                     default:
                         break;
@@ -3795,6 +3917,30 @@ namespace TestFuncionalBRD15001
 
                 medias_adcs_vi[i] = medida;
             }
+
+            //double max_error_offtrim_adcs = -256.0;
+            //double min_error_offtrim_adcs = 255.0;
+
+            //if (error_offtrim_adcs[6] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[6];
+            //if (error_offtrim_adcs[7] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[7];
+            //if (error_offtrim_adcs[9] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[9];
+            //if (error_offtrim_adcs[11] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[11];
+            //if (error_offtrim_adcs[13] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[13];
+            //if (error_offtrim_adcs[15] > max_error_offtrim_adcs) max_error_offtrim_adcs = error_offtrim_adcs[15];
+
+            //if (error_offtrim_adcs[6] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[6];
+            //if (error_offtrim_adcs[7] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[7];
+            //if (error_offtrim_adcs[9] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[9];
+            //if (error_offtrim_adcs[11] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[11];
+            //if (error_offtrim_adcs[13] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[13];
+            //if (error_offtrim_adcs[15] < min_error_offtrim_adcs) min_error_offtrim_adcs = error_offtrim_adcs[15];
+
+            calibracion_corregida = calibracion + Convert.ToInt32(Math.Ceiling((error_offtrim_adcs[6] + error_offtrim_adcs[7] + error_offtrim_adcs[9] +
+                error_offtrim_adcs[11] + error_offtrim_adcs[13] + error_offtrim_adcs[15]) / 6.0));
+            //calibracion_corregida = calibracion + Convert.ToInt32(Math.Round((max_error_offtrim_adcs + min_error_offtrim_adcs) / 2.0));
+            if (calibracion_corregida > 255) calibracion_corregida = 255;
+            else if (calibracion_corregida < -256) calibracion_corregida = -256;
+            labelSugerenciaADCOFFTRIM.Text = "Calib. OFFTRIM:" + calibracion_corregida;
         }
 
         private DateTime hora_fecha_dsp_a_datetime(string hora_fecha)
@@ -3935,7 +4081,7 @@ namespace TestFuncionalBRD15001
                             else contador_comandos--;
                             break;
                         case 10:
-                            buffer_tx += "leeadc " + canaladc + "\r";
+                            buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " " + canaladc + "\r";
                             canaladc++;
                             if (canaladc >= 16) canaladc = 0;
                             panelCanal0.Refresh();
@@ -4084,7 +4230,14 @@ namespace TestFuncionalBRD15001
 
             checkBoxRXSigmaDelta.Checked = ((errores & 0x8000) != 0);
 
-            if (flag_cambia_versiones) reset_informes_tests(false);
+            if (flag_cambia_versiones)
+            {
+                reset_informes_tests(false);
+                textBoxOTPADCOFFTRIM.Text = valor_OTP_ADCOFFTRIM.ToString();
+                textBoxOTPADCREFSEL.Text = "0x" + valor_OTP_ADCREFSEL.ToString("X2");
+                textBoxCalibracion.Text = textBoxOTPADCOFFTRIM.Text;
+                flag_cambia_versiones = false;
+            }
 
             string cadena_USB_UART = "";
             if ((cadena_USB_UART_VID != "") || (cadena_USB_UART_PID != "") || (cadena_USB_UART_SN != ""))
@@ -4356,6 +4509,8 @@ namespace TestFuncionalBRD15001
                                     if (buffer_rx.Contains("\r\n"))
                                     {
                                         string anterior_cadena_versiones = cadena_versiones;
+                                        int anterior_valor_OTP_ADCREFSEL = valor_OTP_ADCREFSEL;
+                                        int anterior_valor_OTP_ADCOFFTRIM = valor_OTP_ADCOFFTRIM;
 
                                         bool respuesta_ok = true;
 
@@ -4407,6 +4562,24 @@ namespace TestFuncionalBRD15001
                                         }
                                         else respuesta_ok = false;
 
+                                        if (buffer_rx.Contains("OTP_ADCREFSEL:0x") && buffer_rx.Contains("-"))
+                                        {
+                                            string cadena_otp_adcrefsel = buffer_rx.Substring(buffer_rx.IndexOf("OTP_ADCREFSEL:0x"));
+                                            cadena_otp_adcrefsel = cadena_otp_adcrefsel.Substring(cadena_otp_adcrefsel.IndexOf("0x") + 2);
+                                            cadena_otp_adcrefsel = cadena_otp_adcrefsel.Substring(0, cadena_otp_adcrefsel.IndexOf("-"));
+                                            valor_OTP_ADCREFSEL = Convert.ToInt32(cadena_otp_adcrefsel, 16);
+                                        }
+                                        else respuesta_ok = false;
+
+                                        if (buffer_rx.Contains("OTP_ADCOFFTRIM:0x") && buffer_rx.Contains("-"))
+                                        {
+                                            string cadena_otp_adcofftrim = buffer_rx.Substring(buffer_rx.IndexOf("OTP_ADCOFFTRIM:0x"));
+                                            cadena_otp_adcofftrim = cadena_otp_adcofftrim.Substring(cadena_otp_adcofftrim.IndexOf("0x") + 2);
+                                            cadena_otp_adcofftrim = cadena_otp_adcofftrim.Substring(0, cadena_otp_adcofftrim.IndexOf("-"));
+                                            valor_OTP_ADCOFFTRIM = ((Convert.ToInt32(cadena_otp_adcofftrim, 16) & 0x1ff) << 23)>>23;
+                                        }
+                                        else respuesta_ok = false;
+
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
 
@@ -4418,7 +4591,13 @@ namespace TestFuncionalBRD15001
                                                                "DSP_PARTID:0x" + cadena_dsp_partid + "\r\n" +
                                                                "DSP_CLASSID:0x" + cadena_dsp_classid + "\r\n" +
                                                                "DSP_REVID:0x" + cadena_dsp_revid;
-                                            if (anterior_cadena_versiones != cadena_versiones) flag_cambia_versiones = true;
+                                            if ((anterior_cadena_versiones != cadena_versiones) ||
+                                                (anterior_valor_OTP_ADCREFSEL != valor_OTP_ADCREFSEL) ||
+                                                (anterior_valor_OTP_ADCOFFTRIM != valor_OTP_ADCOFFTRIM))
+                                            {
+                                                flag_cambia_versiones = true;
+                                            }
+                                            
                                             leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = 1;
                                         }
                                         else
@@ -4536,7 +4715,7 @@ namespace TestFuncionalBRD15001
                                             media += (voltaje[j - 9, k]); //- 2047);
                                         }
                                         media = media / num_samples;
-                                        medias_adcs[j - 9] = media * 7.285558E-4     + calibracion;// * 7.280847E-4;
+                                        medias_adcs[j - 9] = media * (3.0 / 4095.0); // * 7.285558E-4 ;// * 7.280847E-4;
                                         buffer_rx = buffer_rx.Substring(20 * 4 + 2);
                                         contador_comandos--;
                                     }

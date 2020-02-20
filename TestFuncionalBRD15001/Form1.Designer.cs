@@ -421,6 +421,16 @@
             this.textBoxHoraPC = new System.Windows.Forms.TextBox();
             this.label91 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.label81 = new System.Windows.Forms.Label();
+            this.textBoxOTPADCREFSEL = new System.Windows.Forms.TextBox();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.label82 = new System.Windows.Forms.Label();
+            this.buttonCalibrarOFFTRIM = new System.Windows.Forms.Button();
+            this.textBoxOTPADCOFFTRIM = new System.Windows.Forms.TextBox();
+            this.textBoxCalibracion = new System.Windows.Forms.TextBox();
+            this.label96 = new System.Windows.Forms.Label();
+            this.label79 = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
             this.textBoxToleranciaADC = new System.Windows.Forms.TextBox();
             this.labelDimRefADC = new System.Windows.Forms.Label();
@@ -443,6 +453,7 @@
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.pictureBoxCanalSigmaDelta = new System.Windows.Forms.PictureBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.labelSugerenciaADCOFFTRIM = new System.Windows.Forms.Label();
             this.pictureBoxResultadoRTC = new System.Windows.Forms.PictureBox();
             this.labelLeyendaT11 = new System.Windows.Forms.Label();
             this.buttonInforme = new System.Windows.Forms.Button();
@@ -481,9 +492,6 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.radioButtonSeleccionBRD15003 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15001 = new System.Windows.Forms.RadioButton();
-            this.label79 = new System.Windows.Forms.Label();
-            this.label80 = new System.Windows.Forms.Label();
-            this.textBoxCalibracion = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -621,6 +629,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPuestaEnHoraRTC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).BeginInit();
             this.tabPage3.SuspendLayout();
+            this.groupBox16.SuspendLayout();
+            this.groupBox15.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodManchester)).BeginInit();
@@ -5058,9 +5068,8 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.textBoxCalibracion);
-            this.tabPage3.Controls.Add(this.label79);
-            this.tabPage3.Controls.Add(this.label80);
+            this.tabPage3.Controls.Add(this.groupBox16);
+            this.tabPage3.Controls.Add(this.groupBox15);
             this.tabPage3.Controls.Add(this.label88);
             this.tabPage3.Controls.Add(this.textBoxToleranciaADC);
             this.tabPage3.Controls.Add(this.labelDimRefADC);
@@ -5093,10 +5102,110 @@
             this.tabPage3.Text = "Canales ADC";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.label81);
+            this.groupBox16.Controls.Add(this.textBoxOTPADCREFSEL);
+            this.groupBox16.Location = new System.Drawing.Point(328, 390);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(124, 41);
+            this.groupBox16.TabIndex = 86;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Reg. ADCREFSEL";
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Location = new System.Drawing.Point(8, 18);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(29, 13);
+            this.label81.TabIndex = 0;
+            this.label81.Text = "OTP";
+            // 
+            // textBoxOTPADCREFSEL
+            // 
+            this.textBoxOTPADCREFSEL.Location = new System.Drawing.Point(44, 15);
+            this.textBoxOTPADCREFSEL.Name = "textBoxOTPADCREFSEL";
+            this.textBoxOTPADCREFSEL.ReadOnly = true;
+            this.textBoxOTPADCREFSEL.Size = new System.Drawing.Size(56, 20);
+            this.textBoxOTPADCREFSEL.TabIndex = 1;
+            this.textBoxOTPADCREFSEL.Text = "FFFF";
+            // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.label82);
+            this.groupBox15.Controls.Add(this.buttonCalibrarOFFTRIM);
+            this.groupBox15.Controls.Add(this.textBoxOTPADCOFFTRIM);
+            this.groupBox15.Controls.Add(this.textBoxCalibracion);
+            this.groupBox15.Controls.Add(this.label96);
+            this.groupBox15.Controls.Add(this.label79);
+            this.groupBox15.Location = new System.Drawing.Point(21, 390);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(301, 41);
+            this.groupBox15.TabIndex = 85;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Reg. ADCOFFTRIM";
+            // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(255, 10);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(40, 26);
+            this.label82.TabIndex = 93;
+            this.label82.Text = "(-256 a\r\n 255)";
+            // 
+            // buttonCalibrarOFFTRIM
+            // 
+            this.buttonCalibrarOFFTRIM.Location = new System.Drawing.Point(82, 13);
+            this.buttonCalibrarOFFTRIM.Name = "buttonCalibrarOFFTRIM";
+            this.buttonCalibrarOFFTRIM.Size = new System.Drawing.Size(52, 23);
+            this.buttonCalibrarOFFTRIM.TabIndex = 92;
+            this.buttonCalibrarOFFTRIM.Text = "Calibrar";
+            this.buttonCalibrarOFFTRIM.UseVisualStyleBackColor = true;
+            this.buttonCalibrarOFFTRIM.Click += new System.EventHandler(this.buttonCalibrarOFFTRIM_Click);
+            // 
+            // textBoxOTPADCOFFTRIM
+            // 
+            this.textBoxOTPADCOFFTRIM.Location = new System.Drawing.Point(37, 15);
+            this.textBoxOTPADCOFFTRIM.Name = "textBoxOTPADCOFFTRIM";
+            this.textBoxOTPADCOFFTRIM.ReadOnly = true;
+            this.textBoxOTPADCOFFTRIM.Size = new System.Drawing.Size(39, 20);
+            this.textBoxOTPADCOFFTRIM.TabIndex = 91;
+            this.textBoxOTPADCOFFTRIM.Text = "000";
+            // 
+            // textBoxCalibracion
+            // 
+            this.textBoxCalibracion.Location = new System.Drawing.Point(209, 15);
+            this.textBoxCalibracion.Name = "textBoxCalibracion";
+            this.textBoxCalibracion.Size = new System.Drawing.Size(40, 20);
+            this.textBoxCalibracion.TabIndex = 88;
+            this.textBoxCalibracion.Text = "000";
+            this.textBoxCalibracion.TextChanged += new System.EventHandler(this.textBoxCalibracion_TextChanged);
+            this.textBoxCalibracion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumericoNegativoEntero_KeyPress);
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Location = new System.Drawing.Point(140, 18);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(63, 13);
+            this.label96.TabIndex = 90;
+            this.label96.Text = "Valor actual";
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(6, 18);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(29, 13);
+            this.label79.TabIndex = 87;
+            this.label79.Text = "OTP";
+            // 
             // label88
             // 
             this.label88.AutoSize = true;
-            this.label88.Location = new System.Drawing.Point(242, 401);
+            this.label88.Location = new System.Drawing.Point(242, 438);
             this.label88.Name = "label88";
             this.label88.Size = new System.Drawing.Size(24, 13);
             this.label88.TabIndex = 84;
@@ -5104,7 +5213,7 @@
             // 
             // textBoxToleranciaADC
             // 
-            this.textBoxToleranciaADC.Location = new System.Drawing.Point(352, 398);
+            this.textBoxToleranciaADC.Location = new System.Drawing.Point(352, 435);
             this.textBoxToleranciaADC.Name = "textBoxToleranciaADC";
             this.textBoxToleranciaADC.Size = new System.Drawing.Size(36, 20);
             this.textBoxToleranciaADC.TabIndex = 83;
@@ -5114,7 +5223,7 @@
             // labelDimRefADC
             // 
             this.labelDimRefADC.AutoSize = true;
-            this.labelDimRefADC.Location = new System.Drawing.Point(325, 401);
+            this.labelDimRefADC.Location = new System.Drawing.Point(325, 438);
             this.labelDimRefADC.Name = "labelDimRefADC";
             this.labelDimRefADC.Size = new System.Drawing.Size(22, 13);
             this.labelDimRefADC.TabIndex = 82;
@@ -5123,7 +5232,7 @@
             // label87
             // 
             this.label87.AutoSize = true;
-            this.label87.Location = new System.Drawing.Point(392, 401);
+            this.label87.Location = new System.Drawing.Point(392, 438);
             this.label87.Name = "label87";
             this.label87.Size = new System.Drawing.Size(15, 13);
             this.label87.TabIndex = 81;
@@ -5131,7 +5240,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(413, 396);
+            this.button11.Location = new System.Drawing.Point(413, 433);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(40, 23);
             this.button11.TabIndex = 80;
@@ -5141,7 +5250,7 @@
             // 
             // textBoxRefInADC
             // 
-            this.textBoxRefInADC.Location = new System.Drawing.Point(271, 398);
+            this.textBoxRefInADC.Location = new System.Drawing.Point(271, 435);
             this.textBoxRefInADC.Name = "textBoxRefInADC";
             this.textBoxRefInADC.Size = new System.Drawing.Size(49, 20);
             this.textBoxRefInADC.TabIndex = 78;
@@ -5168,7 +5277,7 @@
             "CON3: CANAL B3 (HAT-1500S)",
             "CON2: CANAL B5 (HAT-1500S)",
             "CON1: CANAL B7 (Libre)"});
-            this.comboBoxCanalADCseleccionado.Location = new System.Drawing.Point(21, 396);
+            this.comboBoxCanalADCseleccionado.Location = new System.Drawing.Point(21, 433);
             this.comboBoxCanalADCseleccionado.Name = "comboBoxCanalADCseleccionado";
             this.comboBoxCanalADCseleccionado.Size = new System.Drawing.Size(212, 21);
             this.comboBoxCanalADCseleccionado.TabIndex = 77;
@@ -5317,6 +5426,7 @@
             // 
             // groupBox29
             // 
+            this.groupBox29.Controls.Add(this.labelSugerenciaADCOFFTRIM);
             this.groupBox29.Controls.Add(this.pictureBoxResultadoRTC);
             this.groupBox29.Controls.Add(this.labelLeyendaT11);
             this.groupBox29.Controls.Add(this.buttonInforme);
@@ -5350,6 +5460,16 @@
             this.groupBox29.TabIndex = 66;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "Resultados de tests";
+            // 
+            // labelSugerenciaADCOFFTRIM
+            // 
+            this.labelSugerenciaADCOFFTRIM.AutoSize = true;
+            this.labelSugerenciaADCOFFTRIM.Location = new System.Drawing.Point(8, 290);
+            this.labelSugerenciaADCOFFTRIM.Name = "labelSugerenciaADCOFFTRIM";
+            this.labelSugerenciaADCOFFTRIM.Size = new System.Drawing.Size(41, 13);
+            this.labelSugerenciaADCOFFTRIM.TabIndex = 137;
+            this.labelSugerenciaADCOFFTRIM.Text = "label80";
+            this.labelSugerenciaADCOFFTRIM.Visible = false;
             // 
             // pictureBoxResultadoRTC
             // 
@@ -5553,6 +5673,7 @@
             this.labelLeyendaT10.Size = new System.Drawing.Size(75, 13);
             this.labelLeyendaT10.TabIndex = 5;
             this.labelLeyendaT10.Text = "Canales ADCs";
+            this.labelLeyendaT10.DoubleClick += new System.EventHandler(this.labelLeyendaT10_DoubleClick);
             // 
             // labelLeyendaT2
             // 
@@ -5625,7 +5746,7 @@
             // labelTimeout
             // 
             this.labelTimeout.Name = "labelTimeout";
-            this.labelTimeout.Size = new System.Drawing.Size(67, 17);
+            this.labelTimeout.Size = new System.Drawing.Size(66, 17);
             this.labelTimeout.Text = "Time out: 0";
             // 
             // labelComandoActual
@@ -5637,7 +5758,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(284, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(285, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "Progreso test actual";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -5690,34 +5811,6 @@
             this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Conjunto de Control)";
             this.radioButtonSeleccionBRD15001.UseVisualStyleBackColor = true;
             this.radioButtonSeleccionBRD15001.CheckedChanged += new System.EventHandler(this.radioButtonSeleccionBRD15001_CheckedChanged);
-            // 
-            // label79
-            // 
-            this.label79.AutoSize = true;
-            this.label79.Location = new System.Drawing.Point(197, 427);
-            this.label79.Name = "label79";
-            this.label79.Size = new System.Drawing.Size(59, 13);
-            this.label79.TabIndex = 87;
-            this.label79.Text = "Calibracion";
-            // 
-            // label80
-            // 
-            this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(325, 427);
-            this.label80.Name = "label80";
-            this.label80.Size = new System.Drawing.Size(14, 13);
-            this.label80.TabIndex = 86;
-            this.label80.Text = "V";
-            // 
-            // textBoxCalibracion
-            // 
-            this.textBoxCalibracion.Location = new System.Drawing.Point(262, 424);
-            this.textBoxCalibracion.Name = "textBoxCalibracion";
-            this.textBoxCalibracion.Size = new System.Drawing.Size(58, 20);
-            this.textBoxCalibracion.TabIndex = 88;
-            this.textBoxCalibracion.Text = "0.005";
-            this.textBoxCalibracion.TextChanged += new System.EventHandler(this.textBoxCalibracion_TextChanged);
-            this.textBoxCalibracion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textNumericoNegativo_KeyPress);
             // 
             // Form1
             // 
@@ -5905,6 +5998,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnHoraRTC)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).EndInit();
@@ -6389,8 +6486,16 @@
         private System.Windows.Forms.TextBox textBoxSPV_ALARMS;
         private System.Windows.Forms.Label label77;
         private System.Windows.Forms.Label label79;
-        private System.Windows.Forms.Label label80;
         private System.Windows.Forms.TextBox textBoxCalibracion;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.TextBox textBoxOTPADCREFSEL;
+        private System.Windows.Forms.TextBox textBoxOTPADCOFFTRIM;
+        private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.Label labelSugerenciaADCOFFTRIM;
+        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Button buttonCalibrarOFFTRIM;
     }
 }
 
