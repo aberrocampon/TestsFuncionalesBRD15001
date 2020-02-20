@@ -2,9 +2,9 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>..\deploy\|..\deploy_installation\|..\..\deploy_testBRD15001\|..\deploy_1_0_0_4\|deploy\</PublishUrlHistory>
-    <InstallUrlHistory>https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_installation/|https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy/|https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy_1_0_0_4/</InstallUrlHistory>
+    <InstallUrlHistory>https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_installation/|https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy_1_0_0_4/</InstallUrlHistory>
     <SupportUrlHistory />
-    <UpdateUrlHistory>https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/|https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_1_0_0_4/</UpdateUrlHistory>
+    <UpdateUrlHistory>https://github.com/aberrocampon/TestsFuncionalesBRD15001/raw/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy/|https://raw.githubusercontent.com/aberrocampon/TestsFuncionalesBRD15001/master/deploy_1_0_0_4/</UpdateUrlHistory>
     <BootstrapperUrlHistory />
     <ErrorReportUrlHistory />
     <FallbackCulture>en-US</FallbackCulture>
