@@ -4132,7 +4132,8 @@ namespace TestFuncionalBRD15001
                             buffer_tx += "lee_SPV_ALARMS\r";
                             break;
                         case 21:
-                            buffer_tx += "leeadc 16\r";
+                            buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " 16\r";
+                            //buffer_tx += "leeadc 16\r";
                             pictureBoxCanalSigmaDelta.Refresh();
                             break;
                         case 22:
