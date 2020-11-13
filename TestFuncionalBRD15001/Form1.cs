@@ -229,6 +229,9 @@ namespace TestFuncionalBRD15001
         // -> * ademas hay que cambiar el combobox
         // -> * claramente hay que cambiar el ver_... true / false
 
+        // En la versión de lista de material V11_1.3.3 cambian las entradas CON6 y CON9 a entradas para sensores DVL
+        private bool ver_v11_1_3_3 = false;
+
 
         public Form1()
         {
@@ -366,7 +369,7 @@ namespace TestFuncionalBRD15001
             }
         }
 
-        private void ponLeyendasBRD15001()
+        private void ponLeyendasBRD15001_no_V11()
         {
             PictureBox[] marcasLeyendaResultadosTests = {pictureBoxLeerVersiones,
                 pictureBoxResultadoSPVs, pictureBoxResultadoRS422, pictureBoxResultadoCAN,
@@ -412,6 +415,64 @@ namespace TestFuncionalBRD15001
 
                 seleccionPlaca = SeleccionPlaca.BRD15001;
             }
+
+            ver_v3_1_3_0 = true;
+            ver_v11_1_3_3 = false;
+            comboBoxCanalADCseleccionado.Items[10] = "CON9: CANAL A5 (4 - 20mA)";
+            comboBoxCanalADCseleccionado.Items[11] = "CON6: CANAL A7 (4-20mA)";
+        }
+
+        private void ponLeyendasBRD15001_V11()
+        {
+            PictureBox[] marcasLeyendaResultadosTests = {pictureBoxLeerVersiones,
+                pictureBoxResultadoSPVs, pictureBoxResultadoRS422, pictureBoxResultadoCAN,
+                pictureBoxResultadoSRAM, pictureBoxResultadoFRAM, pictureBoxResultadoNTCs, pictureBoxResultadoTurbinas,
+                pictureBoxResultadoIO, pictureBoxResultadoTXRXOpt, pictureBoxResultadoADCs, pictureBoxResultadoRTC
+                };
+
+            if (seleccionPlaca != SeleccionPlaca.BRD15001)
+            {
+
+                labelLeyendaT1.Visible = true;
+                labelLeyendaT1.Text = "Supervisores V/I/T";
+                labelLeyendaT2.Visible = true;
+                labelLeyendaT2.Text = "COM RS422";
+                labelLeyendaT3.Visible = true;
+                labelLeyendaT3.Text = "COM CAN";
+                labelLeyendaT4.Visible = true;
+                labelLeyendaT4.Text = "Memoria SRAM";
+                labelLeyendaT5.Visible = true;
+                labelLeyendaT5.Text = "Memoria FRAM";
+                labelLeyendaT6.Visible = true;
+                labelLeyendaT6.Text = "Lectura de NTCs";
+                labelLeyendaT7.Visible = true;
+                labelLeyendaT7.Text = "Control de turbinas";
+                labelLeyendaT8.Visible = true;
+                labelLeyendaT8.Text = "Ent/sal digitales";
+                labelLeyendaT9.Visible = true;
+                labelLeyendaT9.Text = "TX y RX Opticos";
+                labelLeyendaT10.Visible = true;
+                labelLeyendaT10.Text = "Canales ADCs";
+                labelLeyendaT11.Visible = true;
+                labelLeyendaT11.Text = "RTC";
+
+                for (int i = 0; i < marcasLeyendaResultadosTests.Length; i++)
+                {
+                    marcasLeyendaResultadosTests[i].Visible = true;
+                }
+
+                tabControl1.TabPages.Remove(tpSincronismo);
+                tabControl1.TabPages.Add(tpCOMsNTCsSupervisoresMemoriasVents);
+                tabControl1.TabPages.Add(tpRelesFibOptRTC);
+                tabControl1.TabPages.Add(tpADC);
+
+                seleccionPlaca = SeleccionPlaca.BRD15001;
+            }
+
+            ver_v3_1_3_0 = false;
+            ver_v11_1_3_3 = true;
+            comboBoxCanalADCseleccionado.Items[10] = "CON9: CANAL A5 (sensor DVL-1500)";
+            comboBoxCanalADCseleccionado.Items[11] = "CON6: CANAL A7 (sensor DVL-1500)";
         }
 
         private void panelCanalADC_Click(object sender, EventArgs e)
@@ -489,11 +550,7 @@ namespace TestFuncionalBRD15001
             RadioButton rb = (RadioButton)sender;
             if(rb.Checked == true)
             {
-                ponLeyendasBRD15001();
-            }
-            else
-            {
-                ponLeyendasBRD15003();
+                ponLeyendasBRD15001_no_V11();
             }
         }
 
@@ -685,6 +742,24 @@ namespace TestFuncionalBRD15001
         private void labelLeyendaT10_DoubleClick(object sender, EventArgs e)
         {
             labelSugerenciaADCOFFTRIM.Visible = !labelSugerenciaADCOFFTRIM.Visible;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked == true)
+            {
+                ponLeyendasBRD15001_V11();
+            }
+        }
+
+        private void radioButtonSeleccionBRD15003_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked == true)
+            {
+                ponLeyendasBRD15003();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -1589,6 +1664,31 @@ namespace TestFuncionalBRD15001
                 dimension_ref_adc[5] = "mA";
                 dimension_ref_adc[3] = "mA";
                 dimension_ref_adc[6] = "V";
+                
+            }
+            else if(ver_v11_1_3_3 == true)
+            {
+                ref_adc_por_defecto[3] = 20.0;
+                ref_adc_por_defecto[6] = 4.0;
+                ref_adc_por_defecto[0] = 20.0;
+                ref_adc_por_defecto[1] = 20.0;
+                ref_adc_por_defecto[4] = 20.0;
+                ref_adc_por_defecto[5] = 20.0;
+
+                tol_adc_por_defecto[0] = 0.5;
+                tol_adc_por_defecto[1] = 0.5;
+                tol_adc_por_defecto[4] = 0.5;
+                tol_adc_por_defecto[5] = 0.5;
+                tol_adc_por_defecto[10] = 1.0;
+                tol_adc_por_defecto[14] = 1.0;
+
+                dimension_ref_adc[0] = "mA";
+                dimension_ref_adc[1] = "mA";
+                dimension_ref_adc[4] = "mA";
+                dimension_ref_adc[5] = "mA";
+                dimension_ref_adc[3] = "mA";
+                dimension_ref_adc[6] = "V";
+                
             }
             else
             {
@@ -1610,6 +1710,7 @@ namespace TestFuncionalBRD15001
                 dimension_ref_adc[5] = "V";
                 dimension_ref_adc[3] = "V";
                 dimension_ref_adc[6] = "mA";
+                
             }
 
             textBoxRefInADC.Text = ref_adc_por_defecto[canal].ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -3863,12 +3964,24 @@ namespace TestFuncionalBRD15001
 
                         error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
-                    case 10: // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
+                    case 10: 
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
-                        medida = medida / 120.0;
-                        medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        if(ver_v11_1_3_3 == true)
+                        {
+                            // CON9: (sensor DVL-1500) ---------------- CANAL A5
+                            medida = (medida - 1.501177) / 18.621560;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
                         break;
                     case 11: // CON2: Corriente AC It (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B5
                         //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
@@ -3895,12 +4008,24 @@ namespace TestFuncionalBRD15001
 
                         error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
-                    case 14: // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
+                    case 14:
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
-                        medida = medida / 120.0;
-                        medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        if (ver_v11_1_3_3 == true)
+                        {
+                            // CON6: (sensor DVL-1500) ---------------- CANAL A7
+                            medida = (medida - 1.501177) / 18.621560;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
                         break;
                     case 15: // CON1: Libre ---------------- CANAL B7
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);

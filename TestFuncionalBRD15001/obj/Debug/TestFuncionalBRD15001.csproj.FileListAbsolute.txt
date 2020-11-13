@@ -56,3 +56,6 @@ D:\GIT\proyectos_VS2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug
 D:\GIT\proyectos_VS2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.exe.manifest
 D:\GIT\proyectos_VS2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.application
 D:\GIT\proyectos_VS2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.FormIniciarTestFO.resources
+E:\proyectos\visual studio 2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\bin\Debug\Pruebas_funcionales_brd15001.a00
+E:\proyectos\visual studio 2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.FormIniciarTestFO.resources
+E:\proyectos\visual studio 2015\TestsFuncionalesBRD15001\TestFuncionalBRD15001\obj\Debug\TestFuncionalBRD15001.TrustInfo.xml
