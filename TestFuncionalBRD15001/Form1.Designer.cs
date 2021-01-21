@@ -490,9 +490,10 @@
             this.labelVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15003 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15001 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -5781,6 +5782,7 @@
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.radioButton2);
             this.groupBox13.Controls.Add(this.radioButton1);
             this.groupBox13.Controls.Add(this.radioButtonSeleccionBRD15003);
             this.groupBox13.Controls.Add(this.radioButtonSeleccionBRD15001);
@@ -5791,10 +5793,21 @@
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Selección de placa a testar";
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(8, 40);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(344, 17);
+            this.radioButton1.TabIndex = 2;
+            this.radioButton1.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material V11)";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
             // radioButtonSeleccionBRD15003
             // 
             this.radioButtonSeleccionBRD15003.AutoSize = true;
-            this.radioButtonSeleccionBRD15003.Location = new System.Drawing.Point(422, 19);
+            this.radioButtonSeleccionBRD15003.Location = new System.Drawing.Point(422, 16);
             this.radioButtonSeleccionBRD15003.Name = "radioButtonSeleccionBRD15003";
             this.radioButtonSeleccionBRD15003.Size = new System.Drawing.Size(230, 17);
             this.radioButtonSeleccionBRD15003.TabIndex = 1;
@@ -5806,24 +5819,25 @@
             // 
             this.radioButtonSeleccionBRD15001.AutoSize = true;
             this.radioButtonSeleccionBRD15001.Checked = true;
-            this.radioButtonSeleccionBRD15001.Location = new System.Drawing.Point(7, 20);
+            this.radioButtonSeleccionBRD15001.Location = new System.Drawing.Point(7, 17);
             this.radioButtonSeleccionBRD15001.Name = "radioButtonSeleccionBRD15001";
-            this.radioButtonSeleccionBRD15001.Size = new System.Drawing.Size(359, 17);
+            this.radioButtonSeleccionBRD15001.Size = new System.Drawing.Size(369, 17);
             this.radioButtonSeleccionBRD15001.TabIndex = 0;
-            this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material no V11)";
+            this.radioButtonSeleccionBRD15001.TabStop = true;
+            this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material V4 a V10)";
             this.radioButtonSeleccionBRD15001.UseVisualStyleBackColor = true;
             this.radioButtonSeleccionBRD15001.CheckedChanged += new System.EventHandler(this.radioButtonSeleccionBRD15001_CheckedChanged);
             // 
-            // radioButton1
+            // radioButton2
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(8, 43);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(344, 17);
-            this.radioButton1.TabIndex = 2;
-            this.radioButton1.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material V11)";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(8, 63);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(344, 17);
+            this.radioButton2.TabIndex = 3;
+            this.radioButton2.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material V12)";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // Form1
             // 
@@ -6510,6 +6524,7 @@
         private System.Windows.Forms.Label label82;
         private System.Windows.Forms.Button buttonCalibrarOFFTRIM;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
     }
 }
 
