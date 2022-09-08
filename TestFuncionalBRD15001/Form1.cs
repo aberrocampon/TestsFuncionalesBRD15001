@@ -61,6 +61,7 @@ namespace TestFuncionalBRD15001
         private int contador_test = 0;
         private string buffer_tx_rs422_test = "";
         private string[] resistenciasNTC;
+        private double correccionNTC = 1.0;
         private double[] refNTCs = { 20000.0, 11000.0, 4700.0, 2000.0, 1000.0 };//{ -1.0, -1.0, -1.0, -1.0, -1.0 };
         private int leeNTC;
         private string cadena_USB_UART_VID = "";
@@ -490,10 +491,7 @@ namespace TestFuncionalBRD15001
             if(rb.Checked == true)
             {
                 ponLeyendasBRD15001();
-            }
-            else
-            {
-                ponLeyendasBRD15003();
+                correccionNTC = 1.0;
             }
         }
 
@@ -685,6 +683,25 @@ namespace TestFuncionalBRD15001
         private void labelLeyendaT10_DoubleClick(object sender, EventArgs e)
         {
             labelSugerenciaADCOFFTRIM.Visible = !labelSugerenciaADCOFFTRIM.Visible;
+        }
+
+        private void radioButtonSeleccionBRD15001_AMC1305M25_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked == true)
+            {
+                ponLeyendasBRD15001();
+                correccionNTC = 89.06/90.0;
+            }
+        }
+
+        private void radioButtonSeleccionBRD15003_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked == true)
+            {
+                ponLeyendasBRD15003();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -4481,6 +4498,20 @@ namespace TestFuncionalBRD15001
                                             resistenciasNTC[ntc] = buffer_rx.Substring(7, buffer_rx.IndexOf("\r\n") - 7);
                                             buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                             contador_comandos--;
+                                            // Correccion a la medida de las NTC, a causa del cambio del componente AD7403BRIZ a AMC1305M25-Q1
+                                            if (correccionNTC != 1.0)
+                                            {
+                                                double aux;
+                                                double vref = 1.5;
+                                                double k1 = 5.955194e-5;
+                                                double k2 = 2.412552e-8;
+
+                                                aux = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
+                                                aux = vref / (k1 + aux * k2);
+                                                aux *= correccionNTC;
+                                                aux = (vref - k1 * aux) / (k2 * aux);
+                                                resistenciasNTC[ntc] = aux.ToString();
+                                            }
                                         }
                                         else
                                         {
