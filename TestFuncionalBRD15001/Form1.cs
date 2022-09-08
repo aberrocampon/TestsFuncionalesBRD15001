@@ -230,6 +230,14 @@ namespace TestFuncionalBRD15001
         // -> * ademas hay que cambiar el combobox
         // -> * claramente hay que cambiar el ver_... true / false
 
+        // En la versión de lista de material V11_1.3.3 cambian las entradas CON6 y CON9 a entradas para sensores DVL
+        private bool ver_v11_1_3_3 = false;
+
+        // La version V12_1.3.3 es como la V11_1.3.3 pero CON19 y CON24 dejan de ser entradas 4-20mA. Son entradas para leer o bien un sensor DVL (necesita shunt externa) o HAX
+        private bool ver_v12_1_3_3 = false;
+
+        // NOTA: uno de los 3 ver_v3_1_3_0, ver_v11_1_3_3 o ver_v12_1_3_3 es true en cualquier monento. Además ver_v3_1_3_0 == true es valido para versiones v4 a v10, no v3 a pesar del nombre de la variable
+
 
         public Form1()
         {
@@ -415,6 +423,46 @@ namespace TestFuncionalBRD15001
             }
         }
 
+        private void ponLeyendasBRD15001_no_V11()
+        {
+            ponLeyendasBRD15001();
+
+            ver_v3_1_3_0 = true;
+            ver_v11_1_3_3 = false;
+            ver_v12_1_3_3 = false;
+            comboBoxCanalADCseleccionado.Items[10] = "CON9: CANAL A5 (4-20mA)";
+            comboBoxCanalADCseleccionado.Items[11] = "CON6: CANAL A7 (4-20mA)";
+            comboBoxCanalADCseleccionado.Items[6] = "CON19: CANAL B2 (4-20mA)";
+            comboBoxCanalADCseleccionado.Items[2] = "CON24: CANAL A2 (4-20mA)";
+        }
+
+        private void ponLeyendasBRD15001_V11()
+        {
+            ponLeyendasBRD15001();
+
+            ver_v3_1_3_0 = false;
+            ver_v11_1_3_3 = true;
+            ver_v12_1_3_3 = false;
+            comboBoxCanalADCseleccionado.Items[10] = "CON9: CANAL A5 (sensor DVL-1500)";
+            comboBoxCanalADCseleccionado.Items[11] = "CON6: CANAL A7 (sensor DVL-1500)";
+            comboBoxCanalADCseleccionado.Items[6] = "CON19: CANAL B2 (4-20mA)";
+            comboBoxCanalADCseleccionado.Items[2] = "CON24: CANAL A2 (4-20mA)";
+        }
+
+        private void ponLeyendasBRD15001_V12()
+        {
+
+            ponLeyendasBRD15001();
+
+            ver_v3_1_3_0 = false;
+            ver_v11_1_3_3 = false;
+            ver_v12_1_3_3 = true;
+            comboBoxCanalADCseleccionado.Items[10] = "CON9: CANAL A5 (sensor DVL-1500)";
+            comboBoxCanalADCseleccionado.Items[11] = "CON6: CANAL A7 (sensor DVL-1500)";
+            comboBoxCanalADCseleccionado.Items[6] = "CON19: CANAL B2 (DVL-1500/HAX-2000)";
+            comboBoxCanalADCseleccionado.Items[2] = "CON24: CANAL A2 (DVL-1500/HAX-2000)";
+        }
+
         private void panelCanalADC_Click(object sender, EventArgs e)
         {
             Panel pn = sender as Panel;
@@ -490,8 +538,7 @@ namespace TestFuncionalBRD15001
             RadioButton rb = (RadioButton)sender;
             if(rb.Checked == true)
             {
-                ponLeyendasBRD15001();
-                correccionNTC = 1.0;
+                ponLeyendasBRD15001_no_V11();
             }
         }
 
@@ -685,13 +732,12 @@ namespace TestFuncionalBRD15001
             labelSugerenciaADCOFFTRIM.Visible = !labelSugerenciaADCOFFTRIM.Visible;
         }
 
-        private void radioButtonSeleccionBRD15001_AMC1305M25_CheckedChanged(object sender, EventArgs e)
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
             if (rb.Checked == true)
             {
-                ponLeyendasBRD15001();
-                correccionNTC = 89.06/90.0;
+                ponLeyendasBRD15001_V11();
             }
         }
 
@@ -703,6 +749,29 @@ namespace TestFuncionalBRD15001
                 ponLeyendasBRD15003();
             }
         }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Checked == true)
+            {
+                ponLeyendasBRD15001_V12();
+            }
+        }
+
+        private void check_AMC1305M25_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if(cb.Checked == true)
+            {
+                correccionNTC = 89.06 / 90.0;
+            }
+            else
+            {
+                correccionNTC = 1.0;
+            }
+    }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -1606,6 +1675,51 @@ namespace TestFuncionalBRD15001
                 dimension_ref_adc[5] = "mA";
                 dimension_ref_adc[3] = "mA";
                 dimension_ref_adc[6] = "V";
+
+            }
+            else if(ver_v11_1_3_3 == true)
+            {
+                ref_adc_por_defecto[3] = 20.0;
+                ref_adc_por_defecto[6] = 4.0;
+                ref_adc_por_defecto[0] = 20.0;
+                ref_adc_por_defecto[1] = 20.0;
+                ref_adc_por_defecto[4] = 20.0;
+                ref_adc_por_defecto[5] = 20.0;
+
+                tol_adc_por_defecto[0] = 0.5;
+                tol_adc_por_defecto[1] = 0.5;
+                tol_adc_por_defecto[4] = 0.5;
+                tol_adc_por_defecto[5] = 0.5;
+                tol_adc_por_defecto[10] = 1.0;
+                tol_adc_por_defecto[14] = 1.0;
+
+                dimension_ref_adc[0] = "mA";
+                dimension_ref_adc[1] = "mA";
+                dimension_ref_adc[4] = "mA";
+                dimension_ref_adc[5] = "mA";
+                dimension_ref_adc[3] = "mA";
+                dimension_ref_adc[6] = "V";
+
+            }
+            else if (ver_v12_1_3_3 == true)
+            {
+                ref_adc_por_defecto[3] = 20.0;
+                ref_adc_por_defecto[6] = 4.0;
+                ref_adc_por_defecto[0] = 20.0;
+                ref_adc_por_defecto[1] = 20.0;
+
+                tol_adc_por_defecto[0] = 0.5;
+                tol_adc_por_defecto[1] = 0.5;
+                tol_adc_por_defecto[10] = 1.0;
+                tol_adc_por_defecto[14] = 1.0;
+
+                dimension_ref_adc[0] = "mA";
+                dimension_ref_adc[1] = "mA";
+                dimension_ref_adc[4] = "V";
+                dimension_ref_adc[5] = "V";
+                dimension_ref_adc[3] = "mA";
+                dimension_ref_adc[6] = "V";
+
             }
             else
             {
@@ -1627,6 +1741,7 @@ namespace TestFuncionalBRD15001
                 dimension_ref_adc[5] = "V";
                 dimension_ref_adc[3] = "V";
                 dimension_ref_adc[6] = "mA";
+
             }
 
             textBoxRefInADC.Text = ref_adc_por_defecto[canal].ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -3746,7 +3861,7 @@ namespace TestFuncionalBRD15001
                 {
                     case 0: // CON23: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A0
                         //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
                         {
                             medida = medida / 120.0;
                             medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
@@ -3763,7 +3878,7 @@ namespace TestFuncionalBRD15001
                         break;
                     case 1: // CON18: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B0
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
                         {
                             medida = medida / 120.0;
                             medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
@@ -3787,7 +3902,7 @@ namespace TestFuncionalBRD15001
                         break;
                     case 3: // CON5: Corriente AC Ir (HAT-1500S, 1350Arms x 1.3) -- CANAL B1
                         //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
                         {
                             medida = (medida - 1.502317) / 39.168956;
                             medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
@@ -3804,12 +3919,19 @@ namespace TestFuncionalBRD15001
                         break;
                     case 4: // CON24: Temperatura ambiente (placa 09015_2020_02_03, - 55ºC a 100ºC) -- CANAL A2
                         //medida = medida * (20.0 / 1.8) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true))
                         {
                             medida = medida / 120.0;
                             medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                             medida /= 10000.0;
                             labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else if (ver_v12_1_3_3 == true)
+                        {
+                            medida = (medida - 1.5) * (20.0 / 3.74);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         }
                         else
                         {
@@ -3821,12 +3943,19 @@ namespace TestFuncionalBRD15001
                         break;
                     case 5: // CON19: Humedad relativa ambiente (placa 09015_2023_02_01) -- CANAL B2
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true))
                         {
                             medida = medida / 120.0;
                             medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
                             medida /= 10000.0;
                             labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else if(ver_v12_1_3_3 == true)
+                        {
+                            medida = (medida - 1.5) * (20.0 / 3.74);
+                            medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCB2.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
                         }
                         else
                         {
@@ -3838,7 +3967,7 @@ namespace TestFuncionalBRD15001
                         break;
                     case 6: // CON10: Tension AC compuesta Vst ---------------- CANAL A3
                         //medida = medida * (20.0 / (5.36 * 147.0)) * (1.5 / 2047.0);
-                        if (ver_v3_1_3_0 == true)
+                        if ((ver_v3_1_3_0 == true) || (ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
                         {
                             medida = (medida - 1.5) * (20.0 / 4.42);
                             medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
@@ -3873,19 +4002,31 @@ namespace TestFuncionalBRD15001
                         break;
                     case 9: // CON20: Idc2 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B4
                         //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 5.36);
+                        medida = (medida - 1.5) * (20.0 / 5.36); // en realidad la v3 tiene ganancia 6.81/20. pero el gui distingue v11 de las anteriores, es decir en caso de anteriores solo es valido desde v4 hasta v10
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB4.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
 
                         error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
-                    case 10: // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
+                    case 10: 
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
-                        medida = medida / 120.0;
-                        medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        if ((ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
+                        {
+                            // CON9: (sensor DVL-1500) ---------------- CANAL A5
+                            medida = (medida - 1.501177) / 18.621560;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            // CON9: Presión ambiente (4-20mA) ---------------- CANAL A5
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA5.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
                         break;
                     case 11: // CON2: Corriente AC It (HAT-1500S, 1350Arms x 1.3) ---------------- CANAL B5
                         //medida = medida * (20.0 / 4.42) * (1.5 / 2047.0);
@@ -3905,19 +4046,31 @@ namespace TestFuncionalBRD15001
                         break;
                     case 13: // CON21: Idc1 (HAX-2000). Imax=2080A (1600A x 1.3) ---------------- CANAL B6
                         //medida = medida * (20.0 / 6.81) * (1.5 / 2047.0);
-                        medida = (medida - 1.5) * (20.0 / 5.36);
+                        medida = (medida - 1.5) * (20.0 / 5.36); // en realidad la v3 tiene ganancia 6.81/20. pero el gui distingue v11 de las anteriores, es decir en caso de anteriores solo es valido desde v4 hasta v10
                         medida = Math.Round(medida * 10000.0, MidpointRounding.AwayFromZero);
                         medida /= 10000.0;
                         labelMediaADCB6.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "V";
 
                         error_offtrim_adcs[i] = (1.5 - medida) * (5.36 / 20.0) * 4095.0 / 3.0;
                         break;
-                    case 14: // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
+                    case 14:
                         //medida = (medida + 2047.0) * (1.0 / 120.0) * (3.0 / 4095.0);
-                        medida = medida / 120.0;
-                        medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
-                        medida /= 10000.0;
-                        labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        if ((ver_v11_1_3_3 == true) || (ver_v12_1_3_3 == true))
+                        {
+                            // CON6: (sensor DVL-1500) ---------------- CANAL A7
+                            medida = (medida - 1.501177) / 18.621560;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
+                        else
+                        {
+                            // CON6: Presión ambiente (4-20mA) ---------------- CANAL A7
+                            medida = medida / 120.0;
+                            medida = Math.Round(medida * 10000000.0, MidpointRounding.AwayFromZero);
+                            medida /= 10000.0;
+                            labelMediaADCA7.Text = medida.ToString(System.Globalization.CultureInfo.InvariantCulture) + "mA";
+                        }
                         break;
                     case 15: // CON1: Libre ---------------- CANAL B7
                         //medida = medida * (20.0 / 2.49) * (1.5 / 2047.0);
