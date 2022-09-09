@@ -4646,7 +4646,7 @@ namespace TestFuncionalBRD15001
                                     if (buffer_rx.Contains("\r\n"))
                                     {
                                         int ntc = buffer_rx[5] - '0';
-                                        if ((ntc >= 0) && (ntc <= 5))
+                                        if ((ntc >= 0) && (ntc <= 4))
                                         {
                                             resistenciasNTC[ntc] = buffer_rx.Substring(7, buffer_rx.IndexOf("\r\n") - 7);
                                             buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
@@ -4659,11 +4659,18 @@ namespace TestFuncionalBRD15001
                                                 double k1 = 5.955194e-5;
                                                 double k2 = 2.412552e-8;
 
-                                                aux = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
-                                                aux = vref / (k1 + aux * k2);
-                                                aux *= correccionNTC;
-                                                aux = (vref - k1 * aux) / (k2 * aux);
-                                                resistenciasNTC[ntc] = aux.ToString();
+                                                try
+                                                {
+                                                    aux = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
+                                                    aux = vref / (k1 + aux * k2);
+                                                    aux *= correccionNTC;
+                                                    aux = (vref - k1 * aux) / (k2 * aux);
+                                                    resistenciasNTC[ntc] = aux.ToString();
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    
+                                                }
                                             }
                                         }
                                         else
