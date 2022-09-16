@@ -4654,24 +4654,17 @@ namespace TestFuncionalBRD15001
                                             // Correccion a la medida de las NTC, a causa del cambio del componente AD7403BRIZ a AMC1305M25-Q1
                                             if (correccionNTC != 1.0)
                                             {
-                                                double sample, resistencia_pol;
-                                                double vref = 1.5;
-                                                double k1 = 5.955194e-5;
-                                                double k2 = 2.412552e-8;
-                                                double[] p_ntc = { -7.272746450978061e-21,
-                                                    2.068522411574365e-15, -2.510526638825719e-10, 1.686158775779955e-05,
-                                                    -6.770795372515301e-01, 1.626003730559950e+04, -2.162896045217183e+08,
-                                                    1.229641966865403e+12 }; // coeficientes de polinomio order 7 para componente AMC1305
+                                                double resistencia, resistencia_pol;
+                                                double[] p_ntc = { 1.581670881003494e-17, -6.693966620127738e-13, 1.260079971527962e-08, -4.900910304952987e-05,
+                                                    1.366624047655343e+00, 1.920060073430139e+02}; // coeficientes de polinomio order 7 para componente AMC1305
 
                                                 try
                                                 {
-                                                    sample = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
-                                                    sample = vref / (k1 + sample * k2) + 32767.0;
+                                                    resistencia = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
 
-                                                    resistencia_pol = p_ntc[0] * Math.Pow(sample, 7.0) + p_ntc[1] * Math.Pow(sample, 6.0) +
-                                                                      p_ntc[2] * Math.Pow(sample, 5.0) + p_ntc[3] * Math.Pow(sample, 4.0) +
-                                                                      p_ntc[4] * Math.Pow(sample, 3.0) + p_ntc[5] * Math.Pow(sample, 2.0) +
-                                                                      p_ntc[6] * sample + p_ntc[7];
+                                                    resistencia_pol = p_ntc[0] * Math.Pow(resistencia, 5.0) + p_ntc[1] * Math.Pow(resistencia, 4.0) +
+                                                                      p_ntc[2] * Math.Pow(resistencia, 3.0) + p_ntc[3] * Math.Pow(resistencia, 2.0) +
+                                                                      p_ntc[4] * resistencia + p_ntc[5];
                                                     resistenciasNTC[ntc] = resistencia_pol.ToString();
                                                 }
                                                 catch (Exception ex)
