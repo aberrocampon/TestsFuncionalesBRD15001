@@ -4666,7 +4666,7 @@ namespace TestFuncionalBRD15001
                                                                       p_ntc[2] * Math.Pow(resistencia, 5.0) + p_ntc[3] * Math.Pow(resistencia, 4.0) +
                                                                       p_ntc[4] * Math.Pow(resistencia, 3.0) + p_ntc[5] * Math.Pow(resistencia, 2.0) +
                                                                       p_ntc[6] * resistencia + p_ntc[7];
-                                                    resistenciasNTC[ntc] = resistencia_pol.ToString();
+                                                    resistenciasNTC[ntc] = resistencia_pol.ToString(System.Globalization.CultureInfo.InvariantCulture);
                                                 }
                                                 catch (Exception ex)
                                                 {
