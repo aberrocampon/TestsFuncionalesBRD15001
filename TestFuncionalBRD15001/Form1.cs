@@ -34,7 +34,8 @@ namespace TestFuncionalBRD15001
         TEST_RTC = 11,
         TEST_BRD15003 = 12,
         CALIBRACION_OFFTRIM_ADC = 13,
-        TEST_NUMERO_TOTAL = 14,
+        PROGRAMACION_FLASH = 14,
+        TEST_NUMERO_TOTAL = 15,
     }
 
     public enum SeleccionPlaca
@@ -51,7 +52,18 @@ namespace TestFuncionalBRD15001
         private int[] leyenda_resultados_tests = new int[(int)TipoTest.TEST_NUMERO_TOTAL];
         private int comando_actual = 0;
         private int contador_comandos = 0;
+        private volatile bool espera_eraseok = false;
+        private volatile bool espera_writepageack = false;
+        private volatile bool espera_writepageok = false;
+        private volatile bool espera_writepageerrchk = false;
+        private volatile bool espera_readpage = false;
+        private volatile byte[] pag_flash = new byte[256];
+        private byte[] prog_buffer = new byte[0xD0000]; // Maxima capacidad para un bitstream de LX25, 13 bloques de 64Kbytes (8 bloques si LX16)
+        private volatile int tiempo_prog_flash = 0;
+        private Form2 form_progreso = null;
+        private BackgroundWorker backWkr = new BackgroundWorker();
         private int timeout_esperarespuesta = 0;
+        private int contador_timeouts = 0;
         private int output, outputleds;
         private int respuesta_entradas_ok, respuesta_output_ok, respuesta_outputleds_ok, respuesta_disparos_ok, respuesta_dutyturbina_ok;
         private int respuesta_enabletx_rs422_ok, respuesta_enablerx_rs422_ok;
@@ -74,6 +86,7 @@ namespace TestFuncionalBRD15001
         private string cadena_dsp_partid = "";
         private string cadena_dsp_classid = "";
         private string cadena_dsp_revid = "";
+        private string cadena_FLASH_JEDEC_ID = "";
         private int valor_OTP_ADCREFSEL = 0;
         private int valor_OTP_ADCOFFTRIM = 0;
         private string buffer_rx = "";
@@ -197,6 +210,7 @@ namespace TestFuncionalBRD15001
         private double test_ref_TensionRedRMS_BRD15003;
         private int calibracion = 0;
         private int calibracion_corregida = 0;
+        private int[] contador_correcciones_calOFFTRIM = new int[16];
 
 
         // Marcas de ok fallo de tests
@@ -300,6 +314,7 @@ namespace TestFuncionalBRD15001
 
             leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
             reset_informes_tests(true);
+            pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
 
             try
             {
@@ -331,7 +346,46 @@ namespace TestFuncionalBRD15001
                 tabControl1.TabPages.Remove(tpADC);
             }
 
-    }
+            backWkr.WorkerReportsProgress = true;
+            backWkr.ProgressChanged += backWkr_ProgressChanged;
+            backWkr.DoWork += backWkr_DoWork;
+
+        }
+
+        private void util_Desconectar()
+        {
+            if (test != TipoTest.NO_TEST)
+            {
+                timer1.Enabled = false;
+                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Desconexión USB-Serie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (res == DialogResult.No)
+                {
+                    timer1.Enabled = true;
+                    return;
+                }
+                else test = TipoTest.NO_TEST;
+            }
+
+            try
+            {
+                serialPort1.Close();
+                serialPort2.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error cierre USB-Serie");
+                return;
+            }
+            botonConectarDesconectar.Text = "Conectar";
+            botonProgramarFlash.Enabled = false;
+
+            contador_comandos = 0;
+            timeout_esperarespuesta = 0;
+            contador_timeouts = 0;
+            comando_actual = 0;
+
+            progressBarTestActual.Value = 0;
+        }
 
         private void ponLeyendasBRD15003()
         {
@@ -691,6 +745,7 @@ namespace TestFuncionalBRD15001
             if (tb.Text.Length == 0)
             {
                 calibracion = 0;
+                pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
             }
             else
             {
@@ -708,6 +763,7 @@ namespace TestFuncionalBRD15001
                         calibracion = -256;
                         tb.Text = "-256";
                     }
+                    pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
                 }
                 catch (Exception ex)
                 {
@@ -771,7 +827,7 @@ namespace TestFuncionalBRD15001
             {
                 correccionNTC = 1.0;
             }
-    }
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -801,6 +857,7 @@ namespace TestFuncionalBRD15001
                     return;
                 }
                 botonConectarDesconectar.Text = "Conectar";
+                botonProgramarFlash.Enabled = false;
 
                 lee_pid_vid_serial_usb_uart(nombreCOM);
             }
@@ -832,7 +889,9 @@ namespace TestFuncionalBRD15001
             informe += "* ID unico de la FPGA (DNA): " + ((cadena_id_dna.Length != 0) ? cadena_id_dna : "NO CONOCIDO") + "\r\n";
             informe += "* DSP PARTID = " + ((cadena_dsp_partid.Length != 0) ? cadena_dsp_partid : "NO CONOCIDO") + "\r\n";
             informe += "* DSP CLASSID = " + ((cadena_dsp_classid.Length != 0) ? cadena_dsp_classid : "NO CONOCIDO") + "\r\n";
-            informe += "* DSP REVID = " + ((cadena_dsp_revid.Length != 0) ? cadena_dsp_revid : "NO CONOCIDO") + "\r\n\r\n";
+            informe += "* DSP REVID = " + ((cadena_dsp_revid.Length != 0) ? cadena_dsp_revid : "NO CONOCIDO") + "\r\n";
+            informe += "* FLASH JEDEC ID = " + ((cadena_FLASH_JEDEC_ID.Length != 0) ? cadena_FLASH_JEDEC_ID : "NO CONOCIDO") + "\r\n\r\n";
+
 
             informe += "********************* CALIBRACION DEL ADC EN OTP DEL DSP *********************\r\n\r\n";
             informe += "* Valor en OTP del registro ADCOFFTRIM: " + valor_OTP_ADCOFFTRIM + "\r\n";
@@ -1615,11 +1674,18 @@ namespace TestFuncionalBRD15001
                 cadena_dsp_partid = "";
                 cadena_dsp_classid = "";
                 cadena_dsp_revid = "";
+                cadena_FLASH_JEDEC_ID = "";
             }
             //if(!flag_cambia_versiones) leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
             //flag_cambia_versiones = false;
 
             actualiza_marcas_leyenda_resultados_tests();
+
+            if (cadena_FLASH_JEDEC_ID == "EF7018")
+            {
+                botonProgramarFlash.Enabled = true;
+            }
+            else botonProgramarFlash.Enabled = false;
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -1887,57 +1953,66 @@ namespace TestFuncionalBRD15001
             // Create new instance of the FTDI device class
             FTDI myFtdiDevice = new FTDI();
 
-            // Determine the number of FTDI devices connected to the machine
-            ftStatus = myFtdiDevice.GetNumberOfDevices(ref ftdiDeviceCount);
-            // Check status
-            if (ftStatus == FTDI.FT_STATUS.FT_OK)
+            int repite_lectura = 100; // Reintenta N veces
+
+            while (repite_lectura > 0)
             {
-                //Console.WriteLine("Number of FTDI devices: " + ftdiDeviceCount.ToString());
-                //Console.WriteLine("");
-            }
-            else
-            {
-                // Wait for a key press
-                //Console.WriteLine("Failed to get number of devices (error " + ftStatus.ToString() + ")");
-                //Console.ReadKey();
-                return;
-            }
-
-            if (ftdiDeviceCount == 0)
-            {
-                // Wait for a key press
-                //Console.WriteLine("Failed to get number of devices (error " + ftStatus.ToString() + ")");
-                //Console.ReadKey();
-                return;
-            }
-
-            // Allocate storage for device info list
-            //FTDI.FT_DEVICE_INFO_NODE[] ftdiDeviceList = new FTDI.FT_DEVICE_INFO_NODE[ftdiDeviceCount];
-            // Populate our device list
-            //ftStatus = myFtdiDevice.GetDeviceList(ftdiDeviceList);
-
-            for (uint i = 0; i < ftdiDeviceCount; i++)
-            {
-                myFtdiDevice.OpenByIndex(i);
-                myFtdiDevice.GetCOMPort(out s);
-                uint id = 0;
-
-
-                if (s == nombreCOM)
+                // Determine the number of FTDI devices connected to the machine
+                ftStatus = myFtdiDevice.GetNumberOfDevices(ref ftdiDeviceCount);
+                // Check status
+                if (ftStatus == FTDI.FT_STATUS.FT_OK)
                 {
-                    myFtdiDevice.GetDeviceID(ref id);
-                    cadena_USB_UART_VID = string.Format("{0:x04}", (id>>16));//ftdiDeviceList[i].ID);
-                    cadena_USB_UART_PID = string.Format("{0:x04}", (id & 0xffff));
-                    //cadena_USB_UART_SN = ftdiDeviceList[i].SerialNumber.ToString();
-                    myFtdiDevice.GetSerialNumber(out cadena_USB_UART_SN);
-
-                    //myFtdiDevice.ResetDevice();
-                    myFtdiDevice.Close();
-                    
-                    break;
+                    //Console.WriteLine("Number of FTDI devices: " + ftdiDeviceCount.ToString());
+                    //Console.WriteLine("");
+                }
+                else
+                {
+                    // Wait for a key press
+                    //Console.WriteLine("Failed to get number of devices (error " + ftStatus.ToString() + ")");
+                    //Console.ReadKey();
+                    return;
                 }
 
-                myFtdiDevice.Close();
+                if (ftdiDeviceCount == 0)
+                {
+                    // Wait for a key press
+                    //Console.WriteLine("Failed to get number of devices (error " + ftStatus.ToString() + ")");
+                    //Console.ReadKey();
+                    return;
+                }
+
+                // Allocate storage for device info list
+                //FTDI.FT_DEVICE_INFO_NODE[] ftdiDeviceList = new FTDI.FT_DEVICE_INFO_NODE[ftdiDeviceCount];
+                // Populate our device list
+                //ftStatus = myFtdiDevice.GetDeviceList(ftdiDeviceList);
+
+                for (uint i = 0; i < ftdiDeviceCount; i++)
+                {
+                    myFtdiDevice.OpenByIndex(i);
+                    myFtdiDevice.GetCOMPort(out s);
+                    uint id = 0;
+
+
+                    if (s == nombreCOM)
+                    {
+                        myFtdiDevice.GetDeviceID(ref id);
+                        cadena_USB_UART_VID = string.Format("{0:x04}", (id >> 16));//ftdiDeviceList[i].ID);
+                        cadena_USB_UART_PID = string.Format("{0:x04}", (id & 0xffff));
+                        //cadena_USB_UART_SN = ftdiDeviceList[i].SerialNumber.ToString();
+                        myFtdiDevice.GetSerialNumber(out cadena_USB_UART_SN);
+
+                        //myFtdiDevice.ResetDevice();
+                        myFtdiDevice.Close();
+
+                        break;
+                    }
+
+                    myFtdiDevice.Close();
+                }
+
+                if ((cadena_USB_UART_PID != "") || (cadena_USB_UART_VID != "") || (cadena_USB_UART_SN != "")) break;
+                repite_lectura--;
+                System.Threading.Thread.Sleep(50);
             }
 
             if ((cadena_USB_UART_PID_anterior != cadena_USB_UART_PID) || (cadena_USB_UART_SN_anterior != cadena_USB_UART_SN) || 
@@ -1969,36 +2044,14 @@ namespace TestFuncionalBRD15001
                     return;
                 }
                 botonConectarDesconectar.Text = "Desconectar";
+                if (cadena_FLASH_JEDEC_ID == "EF7018")
+                {
+                    botonProgramarFlash.Enabled = true;
+                }
             }
             else
             {
-                if (test != TipoTest.NO_TEST)
-                {
-                    timer1.Enabled = false;
-                    DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Desconexión USB-Serie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (res == DialogResult.No)
-                    {
-                        timer1.Enabled = true;
-                        return;
-                    }
-                    else test = TipoTest.NO_TEST;
-                }
-
-                try
-                {
-                    serialPort1.Close();
-                    serialPort2.Close();
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error cierre USB-Serie");
-                    return;
-                }
-                botonConectarDesconectar.Text = "Conectar";
-
-                contador_comandos = 0;
-                timeout_esperarespuesta = 0;
-                comando_actual = 0;
+                util_Desconectar();
             }
         }
 
@@ -3810,6 +3863,7 @@ namespace TestFuncionalBRD15001
                     if (contador_test == 0)
                     {
                         progressBarTestActual.Value = 0;
+                        pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
 
                         // Aqui mensaje al usuario para informar sobre el proceso de calibracion de ADCOFFTRIM
                         timer1.Enabled = false;
@@ -3821,21 +3875,36 @@ namespace TestFuncionalBRD15001
                         timer1.Enabled = true;
 
                         contador_test = 1;
-
                         timeout_secuencia_test = 0;
+                        for (int i = 0; i < 16; i++)
+                        {
+                            contador_correcciones_calOFFTRIM[i] = 0;
+                        }
                     }
                     else if (contador_test == 1)
                     {
                         timeout_secuencia_test++;
-                        progressBarTestActual.Value = timeout_secuencia_test * 100 / (10 * 5);
+                        progressBarTestActual.Value = timeout_secuencia_test * 100 / (10 * 10);
 
-                        if (timeout_secuencia_test == 10 * 5) // 5 segundos
+                        if (timeout_secuencia_test == 10 * 10) // 10 segundos
                         {
                             timer1.Enabled = false;
                             test = TipoTest.NO_TEST;
 
                             //calibracion = calibracion_corregida;
                             textBoxCalibracion.Text = calibracion_corregida.ToString();
+
+                            // Calibración segura si se ha llevado a cabo recibiendo suficientes muestras desde el DSP
+                            int min_contador_correcion = 35;
+                            if((contador_correcciones_calOFFTRIM[6] > min_contador_correcion) &&
+                                (contador_correcciones_calOFFTRIM[7] > min_contador_correcion) &&
+                                (contador_correcciones_calOFFTRIM[9] > min_contador_correcion) && 
+                                (contador_correcciones_calOFFTRIM[11] > min_contador_correcion) &&
+                                (contador_correcciones_calOFFTRIM[13] > min_contador_correcion) && 
+                                (contador_correcciones_calOFFTRIM[15] > min_contador_correcion))
+                            {
+                                pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                            }
                         }
                         
                     }
@@ -4110,7 +4179,7 @@ namespace TestFuncionalBRD15001
             //calibracion_corregida = calibracion + Convert.ToInt32(Math.Round((max_error_offtrim_adcs + min_error_offtrim_adcs) / 2.0));
             if (calibracion_corregida > 255) calibracion_corregida = 255;
             else if (calibracion_corregida < -256) calibracion_corregida = -256;
-            labelSugerenciaADCOFFTRIM.Text = "Calib. OFFTRIM:" + calibracion_corregida;
+            labelSugerenciaADCOFFTRIM.Text = contador_correcciones_calOFFTRIM[0].ToString(); //"Calib. OFFTRIM:" + calibracion_corregida;
         }
 
         private DateTime hora_fecha_dsp_a_datetime(string hora_fecha)
@@ -4171,182 +4240,197 @@ namespace TestFuncionalBRD15001
             labelTimeout.Text = "Time out: " + timeout_esperarespuesta;
             labelComandoActual.Text = "Comando actual: " + comando_actual;
 
-            if (contador_comandos > 0)
+            if (test != TipoTest.PROGRAMACION_FLASH)
             {
-                timeout_esperarespuesta++;
-                if (timeout_esperarespuesta > 25)
+                if (contador_comandos > 0)
                 {
-
-                    timeout_esperarespuesta = 0;
-                    if (serialPort1.IsOpen)
+                    timeout_esperarespuesta++;
+                    if (timeout_esperarespuesta > 25)
                     {
-                        buffer_tx = "ping\r";
-                        contador_comandos = 1;
-                        try
+                        timeout_esperarespuesta = 0;
+                        
+                        if (serialPort1.IsOpen)
                         {
-                            serialPort1.DiscardInBuffer();
-                        }
-                        catch (Exception)
-                        { }
-                    }
-                    else
-                    {
-                        buffer_tx = "";
-                        contador_comandos = 0;
-                    }
-                }
-            }
-            else timeout_esperarespuesta = 0;
-
-            if ((contador_comandos == 0) && serialPort1.IsOpen)
-            {
-                if (buffer_tx.Length < 100)
-                {
-                    switch (comando_actual)
-                    {
-                        case 0:
-                            buffer_tx += "input\r";
-                            break;
-                        case 1:
-                            buffer_tx += "outputreles " + (output & 0xffff) + " " + ((output ^ (output>>8)) & 0xff) + "\r";
-                            break;
-                        case 2:
-                            buffer_tx += "leeNTC " + leeNTC + "\r";
-                            leeNTC++;
-                            if (leeNTC > 4) leeNTC = 0;
-                            break;
-                        case 3:
-                            buffer_tx += "supervisores\r";
-                            break;
-                        case 4:
-                            buffer_tx += "rpmturbinas\r";
-                            break;
-                        case 5:
-                            buffer_tx += "dutyturbina 1 " + dutyturbina1 + "\r";
-                            break;
-                        case 6:
-                            buffer_tx += "dutyturbina 2 " + dutyturbina2 + "\r";
-                            break;
-                        case 7:
-                            buffer_tx += "dutyturbina 3 " + dutyturbina3 + "\r";
-                            break;
-                        case 8:
-                            buffer_tx += "errores\r";
-                            break;
-                        case 9:
-                            if (buffer_tx_rs422.Length > 0)
+                            contador_timeouts++;
+                            if (contador_timeouts >= 20)
                             {
-                                if (buffer_tx_rs422.Length < 16)
-                                {
-                                    buffer_tx += "rs422" + buffer_tx_rs422 + "\r";
-                                    buffer_tx_rs422 = "";
-                                }
-                                else
-                                {
-                                    buffer_tx += "rs422" + buffer_tx_rs422.Substring(0, 16) + "\r";
-                                    buffer_tx_rs422 = buffer_tx_rs422.Substring(16);
-                                }
-
+                                util_Desconectar();
+                                MessageBox.Show("Timeout de comunicación", "Desconexión automática");
                             }
-                            else contador_comandos--;
-                            break;
-                        case 10:
-                            buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " " + canaladc + "\r";
-                            canaladc++;
-                            if (canaladc >= 16) canaladc = 0;
-                            panelCanal0.Refresh();
-                            panelCanal1.Refresh();
-                            panelCanal2.Refresh();
-                            panelCanal3.Refresh();
-                            panelCanal4.Refresh();
-                            panelCanal5.Refresh();
-                            panelCanal6.Refresh();
-                            panelCanal7.Refresh();
-                            panelCanal8.Refresh();
-                            panelCanal9.Refresh();
-                            panelCanal10.Refresh();
-                            panelCanal11.Refresh();
-                            panelCanal12.Refresh();
-                            panelCanal13.Refresh();
-                            panelCanal14.Refresh();
-                            panelCanal15.Refresh();
-                            break;
-                        case 11:
-                            buffer_tx += "disparos " + (disparos & 7) + "\r";
-                            break;
-                        case 12:
-                            buffer_tx += "outputleds " + (outputleds & 0x1f) + "\r";
-                            break;
-                        case 13:
-                            buffer_tx += "enabletx_rs422 " + enabletx_rs422 + "\r";
-                            break;
-                        case 14:
-                            buffer_tx += "enablerx_rs422 " + enablerx_rs422 + "\r";
-                            break;
-                        case 15:
-                            buffer_tx += "canatx " + (canatx & 1) + "\r";
-                            break;
-                        case 16:
-                            buffer_tx += "canarx\r";
-                            break;
-                        case 17:
-                            buffer_tx += "canbtx " + (canbtx & 1) + "\r";
-                            break;
-                        case 18:
-                            buffer_tx += "canbrx\r";
-                            break;
-                        case 19:
-                            buffer_tx += "leertc\r";
-                            break;
-                        case 20:
-                            buffer_tx += "lee_SPV_ALARMS\r";
-                            break;
-                        case 21:
-                            buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " 16\r";
-                            //buffer_tx += "leeadc 16\r";
-                            pictureBoxCanalSigmaDelta.Refresh();
-                            break;
-                        case 22:
-                            buffer_tx += "leepll\r";
-                            break;
-                    }
-                    comando_actual++;
-
-                    if (seleccionPlaca == SeleccionPlaca.BRD15001)
-                    {
-                        if ((comando_actual == 10) && (tabControl1.SelectedIndex != 2)) comando_actual++;
-                        if (comando_actual > 20) comando_actual = 0;
-                        if ((tabControl1.SelectedIndex == 2) && (test == TipoTest.NO_TEST)) comando_actual = 10;
-                    }
-                    else
-                    {
-                        if ((test == TipoTest.NO_TEST) && ((comando_actual < 21) || (comando_actual > 22)))
-                            comando_actual = 21;
-                    }
-
-                    contador_comandos++;
-
-                    if(leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] != 1)
-                    {
-                        buffer_tx += "ping\r";
-                        contador_comandos++;
+                            else
+                            {
+                                buffer_tx = "ping\r";
+                                contador_comandos = 1;
+                                try
+                                {
+                                    serialPort1.DiscardInBuffer();
+                                }
+                                catch (Exception)
+                                { }
+                            }
+                        }
+                        else
+                        {
+                            buffer_tx = "";
+                            contador_comandos = 0;
+                        }
                     }
                 }
-            }
+                else timeout_esperarespuesta = 0;
 
-            periodo_peticion_ping++;
-            if (periodo_peticion_ping >= 1000) // perido de peticion de ping 1 segundo
-            {
-                periodo_peticion_ping = 0;
-                buffer_tx += "ping\r";
-                contador_comandos++;
+                if ((contador_comandos == 0) && serialPort1.IsOpen)
+                {
+                    if (buffer_tx.Length < 100)
+                    {
+                        switch (comando_actual)
+                        {
+                            case 0:
+                                buffer_tx += "input\r";
+                                break;
+                            case 1:
+                                buffer_tx += "outputreles " + (output & 0xffff) + " " + ((output ^ (output >> 8)) & 0xff) + "\r";
+                                break;
+                            case 2:
+                                buffer_tx += "leeNTC " + leeNTC + "\r";
+                                leeNTC++;
+                                if (leeNTC > 4) leeNTC = 0;
+                                break;
+                            case 3:
+                                buffer_tx += "supervisores\r";
+                                break;
+                            case 4:
+                                buffer_tx += "rpmturbinas\r";
+                                break;
+                            case 5:
+                                buffer_tx += "dutyturbina 1 " + dutyturbina1 + "\r";
+                                break;
+                            case 6:
+                                buffer_tx += "dutyturbina 2 " + dutyturbina2 + "\r";
+                                break;
+                            case 7:
+                                buffer_tx += "dutyturbina 3 " + dutyturbina3 + "\r";
+                                break;
+                            case 8:
+                                buffer_tx += "errores\r";
+                                break;
+                            case 9:
+                                if (buffer_tx_rs422.Length > 0)
+                                {
+                                    if (buffer_tx_rs422.Length < 16)
+                                    {
+                                        buffer_tx += "rs422" + buffer_tx_rs422 + "\r";
+                                        buffer_tx_rs422 = "";
+                                    }
+                                    else
+                                    {
+                                        buffer_tx += "rs422" + buffer_tx_rs422.Substring(0, 16) + "\r";
+                                        buffer_tx_rs422 = buffer_tx_rs422.Substring(16);
+                                    }
+
+                                }
+                                else contador_comandos--;
+                                break;
+                            case 10:
+                                buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " " + canaladc + "\r";
+                                canaladc++;
+                                if (canaladc >= 16) canaladc = 0;
+                                if (test != TipoTest.CALIBRACION_OFFTRIM_ADC)
+                                {
+                                    panelCanal0.Refresh();
+                                    panelCanal1.Refresh();
+                                    panelCanal2.Refresh();
+                                    panelCanal3.Refresh();
+                                    panelCanal4.Refresh();
+                                    panelCanal5.Refresh();
+                                    panelCanal6.Refresh();
+                                    panelCanal7.Refresh();
+                                    panelCanal8.Refresh();
+                                    panelCanal9.Refresh();
+                                    panelCanal10.Refresh();
+                                    panelCanal11.Refresh();
+                                    panelCanal12.Refresh();
+                                    panelCanal13.Refresh();
+                                    panelCanal14.Refresh();
+                                    panelCanal15.Refresh();
+                                }
+                                break;
+                            case 11:
+                                buffer_tx += "disparos " + (disparos & 7) + "\r";
+                                break;
+                            case 12:
+                                buffer_tx += "outputleds " + (outputleds & 0x1f) + "\r";
+                                break;
+                            case 13:
+                                buffer_tx += "enabletx_rs422 " + enabletx_rs422 + "\r";
+                                break;
+                            case 14:
+                                buffer_tx += "enablerx_rs422 " + enablerx_rs422 + "\r";
+                                break;
+                            case 15:
+                                buffer_tx += "canatx " + (canatx & 1) + "\r";
+                                break;
+                            case 16:
+                                buffer_tx += "canarx\r";
+                                break;
+                            case 17:
+                                buffer_tx += "canbtx " + (canbtx & 1) + "\r";
+                                break;
+                            case 18:
+                                buffer_tx += "canbrx\r";
+                                break;
+                            case 19:
+                                buffer_tx += "leertc\r";
+                                break;
+                            case 20:
+                                buffer_tx += "lee_SPV_ALARMS\r";
+                                break;
+                            case 21:
+                                buffer_tx += "leeadc " + "0x" + (calibracion & 0x1FF).ToString("X2") + " 16\r";
+                                //buffer_tx += "leeadc 16\r";
+                                pictureBoxCanalSigmaDelta.Refresh();
+                                break;
+                            case 22:
+                                buffer_tx += "leepll\r";
+                                break;
+                        }
+                        comando_actual++;
+
+                        if (seleccionPlaca == SeleccionPlaca.BRD15001)
+                        {
+                            if ((comando_actual == 10) && (tabControl1.SelectedIndex != 2)) comando_actual++;
+                            if (comando_actual > 20) comando_actual = 0;
+                            if (((tabControl1.SelectedIndex == 2) && (test == TipoTest.NO_TEST)) || (test == TipoTest.CALIBRACION_OFFTRIM_ADC)) comando_actual = 10;
+                        }
+                        else
+                        {
+                            if ((test == TipoTest.NO_TEST) && ((comando_actual < 21) || (comando_actual > 22)))
+                                comando_actual = 21;
+                        }
+
+                        contador_comandos++;
+
+                        if (leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] != 1)
+                        {
+                            buffer_tx += "ping\r";
+                            contador_comandos++;
+                        }
+                    }
+                }
+
+                periodo_peticion_ping++;
+                if (periodo_peticion_ping >= 1000) // perido de peticion de ping 1 segundo
+                {
+                    periodo_peticion_ping = 0;
+                    buffer_tx += "ping\r";
+                    contador_comandos++;
+                }
             }
 
             try
             {
                 if (serialPort1.IsOpen)
                 {
-                    if (serialPort1.BytesToWrite == 0)
+                    if ((serialPort1.BytesToWrite == 0) && (test != TipoTest.PROGRAMACION_FLASH))
                     {
                         if (buffer_tx.Length >= 16)
                         {
@@ -4368,13 +4452,41 @@ namespace TestFuncionalBRD15001
                         //serialPort1.WriteLine("dutyturbina 3 " + numericUpDownTurbina3.Value + "\r");
                     }
                 }
-                else if(!serialPort2.IsOpen)
+                else if((!serialPort2.IsOpen) && (botonConectarDesconectar.Text == "Desconectar"))
+                {
                     botonConectarDesconectar.Text = "Conectar";
+                    botonProgramarFlash.Enabled = false;
+                    if (test != TipoTest.NO_TEST)
+                    {
+                        timer1.Enabled = false;
+                        test = TipoTest.NO_TEST;
+                        MessageBox.Show("Abortando TEST actual", "Desconexión automática");
+                    }
+                    progressBarTestActual.Value = 0;
+                }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error USB-Serie");
+                try
+                {
+                    serialPort1.Close();
+                    serialPort2.Close();
+                }
+                catch(Exception)
+                {
+                }
+                botonConectarDesconectar.Text = "Conectar";
+                botonProgramarFlash.Enabled = false;
+                string str_aux = ex.Message;
+                if(test != TipoTest.NO_TEST)
+                {
+                    timer1.Enabled = false;
+                    test = TipoTest.NO_TEST;
+                    str_aux += "\n- Abortando TEST actual -";
+                }      
+
+                MessageBox.Show(str_aux, "Error USB-Serie");
             }
 
             for (int i = 0; i < 5; i++)
@@ -4541,6 +4653,9 @@ namespace TestFuncionalBRD15001
             if ((estado_pll & 1) == 0) textBoxEstadoDecodManchester.Text = "NOT LOCKED";
             else textBoxEstadoDecodManchester.Text = "LOCKED";
 
+            // timer para detectar timeout cuando se programa la SPI FLASH
+            tiempo_prog_flash++;
+
         }
 
         private void textBoxRefSupv_TextChanged(object sender, EventArgs e)
@@ -4626,7 +4741,8 @@ namespace TestFuncionalBRD15001
                 "enabletx_rs422:ok", "enablerx_rs422:ok", "canatx:ok", "canarx=", "canbtx:ok", "canbrx=",
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
                 "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:", "canal16=", "estadopll=",
-                "SPV_ALARMS="};
+                "SPV_ALARMS=", "W25Q128_erase_block:ok", "W25Q128_write_page:ACK", "W25Q128_write_page:errchk", "W25Q128_write_page:ok",
+                "W25Q128_PAGE=0x"};
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -4773,6 +4889,14 @@ namespace TestFuncionalBRD15001
                                         }
                                         else respuesta_ok = false;
 
+                                        if (buffer_rx.Contains("FLASH_JEDEC_ID:0x") && buffer_rx.Contains("-"))
+                                        {
+                                            cadena_FLASH_JEDEC_ID = buffer_rx.Substring(buffer_rx.IndexOf("FLASH_JEDEC_ID:0x"));
+                                            cadena_FLASH_JEDEC_ID = cadena_FLASH_JEDEC_ID.Substring(cadena_FLASH_JEDEC_ID.IndexOf("0x") + 2);
+                                            cadena_FLASH_JEDEC_ID = cadena_FLASH_JEDEC_ID.Substring(0, cadena_FLASH_JEDEC_ID.IndexOf("-"));
+                                        }
+                                        else respuesta_ok = false;
+
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
 
@@ -4783,7 +4907,8 @@ namespace TestFuncionalBRD15001
                                                                "FPGA_ID_DNA:0x" + cadena_id_dna + "\r\n" +
                                                                "DSP_PARTID:0x" + cadena_dsp_partid + "\r\n" +
                                                                "DSP_CLASSID:0x" + cadena_dsp_classid + "\r\n" +
-                                                               "DSP_REVID:0x" + cadena_dsp_revid;
+                                                               "DSP_REVID:0x" + cadena_dsp_revid + "\r\n" +
+                                                               "FLASH_JEDEC_ID:0x" + cadena_FLASH_JEDEC_ID + "\r\n";
                                             if ((anterior_cadena_versiones != cadena_versiones) ||
                                                 (anterior_valor_OTP_ADCREFSEL != valor_OTP_ADCREFSEL) ||
                                                 (anterior_valor_OTP_ADCOFFTRIM != valor_OTP_ADCOFFTRIM))
@@ -4904,11 +5029,18 @@ namespace TestFuncionalBRD15001
                                         buffer_rx = buffer_rx.Substring(cad_parser[j].Length);
                                         for (int k = 0; k < num_samples; k++)
                                         {
-                                            voltaje[j - 9, k] = Convert.ToInt32(buffer_rx.Substring(k * 4, 4), 16);
+                                            try
+                                            {
+                                                voltaje[j - 9, k] = Convert.ToInt32(buffer_rx.Substring(k * 4, 4), 16);
+                                            }
+                                            catch(Exception)
+                                            {
+                                            }
                                             media += (voltaje[j - 9, k]); //- 2047);
                                         }
                                         media = media / num_samples;
                                         medias_adcs[j - 9] = media * (3.0 / 4095.0); // * 7.285558E-4 ;// * 7.280847E-4;
+                                        contador_correcciones_calOFFTRIM[j - 9]++;
                                         buffer_rx = buffer_rx.Substring(20 * 4 + 2);
                                         contador_comandos--;
                                     }
@@ -5161,6 +5293,50 @@ namespace TestFuncionalBRD15001
                                         return;
                                     }
                                     break;
+                                case 48:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        //contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_eraseok = false;
+                                    }
+                                    break;
+                                case 49:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        //contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_writepageack = false;
+                                    }
+                                    break;
+                                case 50:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        //contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_writepageerrchk = false;
+                                    }
+                                    break;
+                                case 51:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        //contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_writepageok = false;
+                                    }
+                                    break;
+                                case 52:
+                                    if (buffer_rx.Length >= (15 + 256*2 + 2))
+                                    {
+                                        for (int l = 0; l < 256; l++)
+                                        {
+                                            pag_flash[l] = byte.Parse(buffer_rx.Substring(15 + l * 2, 2), System.Globalization.NumberStyles.HexNumber);
+                                        }
+                                        buffer_rx = buffer_rx.Substring(15 + 256 * 2 + 2);
+                                        // contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_readpage = false;
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -5333,7 +5509,7 @@ namespace TestFuncionalBRD15001
                 {
 
                     serialPort2.Write(byte_buffer, 0, 1);
-                    timeout2 = 1000000;
+                    timeout2 = 100000;
                     while ((serialPort2.BytesToRead == 0) && (timeout2 > 0)) timeout2--;
                     if (serialPort2.BytesToRead == 0) timeout1 = 0;
                     else
@@ -5405,6 +5581,7 @@ namespace TestFuncionalBRD15001
                     cuentaBytes++;
                     if (cuentaBytes == 1024)
                     {
+                        cuentaBytes = 0;
                         try
                         {
                             serialPort2.Write(byte_buffer, 0, 1024);
@@ -5450,6 +5627,11 @@ namespace TestFuncionalBRD15001
 
                 buffer_tx = "ping\r";
                 contador_comandos = 1;
+
+                if (cadena_FLASH_JEDEC_ID == "EF7018")
+                {
+                    botonProgramarFlash.Enabled = true;
+                }
             }
             catch (Exception ex)
             {
@@ -5461,7 +5643,296 @@ namespace TestFuncionalBRD15001
 
         }
 
+        private void botonProgramarFlash_Click(object sender, EventArgs e)
+        {
+            long dirFlash;
+            string fileContent = string.Empty;
+            string filePath = string.Empty;
 
+            if (test != TipoTest.NO_TEST)
+            {
+                timer1.Enabled = false;
+                DialogResult res = MessageBox.Show("¿Desea cancelar el test actual?", "Programación de SPI FLASH", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (res == DialogResult.No)
+                {
+                    timer1.Enabled = true;
+                    return;
+                }
+            }
+            test = TipoTest.PROGRAMACION_FLASH;
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "ficheros W25 (*.w25)|*.w25|Todos los ficheros (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    filePath = openFileDialog.FileName;
+
+                    //Read the contents of the file into a stream
+                    Stream fileStream = openFileDialog.OpenFile();
+
+
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        for (dirFlash = 0; dirFlash < 0xD0000; dirFlash++)
+                        {
+                            prog_buffer[dirFlash] = 0xff;
+                        }
+
+
+                        long tamFic = reader.BaseStream.Length;
+                        byte tipoLinMCS;
+                        int offsetLin;
+                        dirFlash = 0;
+
+                        //reconocimiento de un formato de fichero derivado de un MCS standard, salvo por:
+                        // extension de fichero W25
+                        // Primera linea W25Q128
+                        // Segunda y tercera linea comentarios para aclarar su uso solo en el modelo de placa
+                        // al que se aplica correctamente es decir, placas de version PCB 06 con memoria SPI FLASH W25Q128
+                        bool bFormatoW25_OK = true;
+                        string linea = reader.ReadLine();
+                        if (linea != "W25Q128") bFormatoW25_OK = false;
+                        else
+                        {
+                            linea = reader.ReadLine();
+                            if(linea.Substring(0,1) != "#") bFormatoW25_OK = false;
+                            else
+                            {
+                                linea = reader.ReadLine();
+                                if (linea.Substring(0, 1) != "#") bFormatoW25_OK = false;
+                            }
+                        }
+
+                        if(!bFormatoW25_OK)
+                        {
+                            MessageBox.Show("Formato de fichero .W25 incorrecto");
+                            test = TipoTest.NO_TEST;
+                            return;
+                        }
+
+                        while (!reader.EndOfStream)
+                        {
+                            linea = reader.ReadLine();
+
+                            int bytesLinMCS = Convert.ToInt32(linea.Substring(1, 2), 16);
+                            dirFlash = (dirFlash & 0xff0000) | Convert.ToInt64(linea.Substring(3, 4), 16);
+
+                            tipoLinMCS = Convert.ToByte(linea.Substring(7, 2), 16);
+                            if (tipoLinMCS == 4) // extended linear address record
+                            {
+                                dirFlash = (dirFlash & 0xffff) | ((Convert.ToInt64(linea.Substring(9, 4), 16)) << 16);
+                            }
+
+                            if (dirFlash >= 0xD0000)
+                            {
+                                MessageBox.Show("Direccion en .W25 superior a 0x0CFFFF");
+                                return;
+                            }
+
+                            if (tipoLinMCS == 4) continue;
+                            if (tipoLinMCS == 1) break;
+                            if (tipoLinMCS != 0) continue;
+                            // a partir de aqui es data record
+
+                            offsetLin = 0;
+                            while (bytesLinMCS > 0)
+                            {
+                                prog_buffer[dirFlash] = Convert.ToByte(linea.Substring(9 + offsetLin, 2), 16);
+
+                                offsetLin += 2;
+                                dirFlash++;
+                                bytesLinMCS--;
+                            }
+
+                        }
+                    }
+                    backWkr.RunWorkerAsync();
+                }
+                else test = TipoTest.NO_TEST;
+            }
+        }
+
+        void backWkr_DoWork(object sender, DoWorkEventArgs e)
+        {
+            long dirFlash, dirEndFlash;
+
+            // Intento de optimizacion, al menos tiene exito en caso de LX16, ya que el buffer usado tiene una capacidad para LX25
+            dirEndFlash = 0xCFFFF;
+            while(dirEndFlash > 0)
+            {
+                if (prog_buffer[dirEndFlash] != 0xff) break;
+                dirEndFlash--;
+            }
+
+            //// Borrado de la memoria ///////////////////////////////////////////////
+            for (dirFlash = 0; dirFlash <= dirEndFlash; dirFlash += 0x010000)
+            {
+                backWkr.ReportProgress((int)(100 * dirFlash / dirEndFlash), 0);
+                espera_eraseok = true;
+                tiempo_prog_flash = 0;
+                try
+                {
+                    serialPort1.Write("W25Q128_erase_block " + ((dirFlash >> 16) & 0xff) + "\r");
+                }
+                catch(Exception)
+                { }
+                // espera a respuesta a comando de programación
+                while (espera_eraseok == true) // espera 2 segundos
+                {
+                    if (tiempo_prog_flash > 2000)
+                    {
+                        MessageBox.Show("Timeout en programación de Flash");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return; // el DSP no responde se aborta programacion
+                    }
+                }
+            }
+            
+            //// Programacion ///////////////////////////////////////////////
+            for (dirFlash = 0; dirFlash <= dirEndFlash; dirFlash += 256)
+            {
+                backWkr.ReportProgress((int)(100 * dirFlash / dirEndFlash), 1);
+
+                espera_writepageack = true;
+                tiempo_prog_flash = 0;
+                try
+                {
+                    serialPort1.Write("W25Q128_write_page " + dirFlash + "\r");
+                }
+                catch(Exception)
+                { }
+                // espera a que el DSP atienda a comando de programación
+                while (espera_writepageack == true) // espera 2 segundos
+                {
+                    if (tiempo_prog_flash > 2000)
+                    {
+                        MessageBox.Show("Timeout en programación de Flash");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return; // el DSP no responde se aborta programacion
+                    }
+                }
+                espera_writepageok = true;
+                espera_writepageerrchk = true;
+                tiempo_prog_flash = 0;
+                byte checksum = (byte)(((dirFlash >> 16) & 0xff) ^ ((dirFlash >> 8) & 0xff) ^ (dirFlash & 0xff));
+                //for (int i = 0; i < 256; i++)
+                //{
+                //    checksum ^= prog_buffer[dirFlash + i];
+                //    serialPort1.Write(prog_buffer[dirFlash + i].ToString("X2"));
+
+                //}
+                //serialPort1.Write(checksum.ToString("X2"));
+                for (int i = 0; i < 256; i++)
+                {
+                    checksum ^= prog_buffer[dirFlash + i];
+
+                }
+                try
+                {
+                    serialPort1.Write(prog_buffer, (int)dirFlash, 256);
+                    serialPort1.Write(new byte[] { checksum }, 0, 1);
+                }
+                catch(Exception)
+                { }
+                while ((espera_writepageok == true) && (espera_writepageerrchk == true)) // espera 2 segundos
+                {
+                    if (espera_writepageerrchk == false)
+                    {
+                        MessageBox.Show("Error de checksum en transmision de binario");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return;
+                    }
+                    if (tiempo_prog_flash > 2000)
+                    {
+                        MessageBox.Show("Timeout en programación de Flash");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return; // el DSP no responde se aborta programacion
+                    }
+                }
+            }
+            /// Verificacion /////////////////////////////////////////////////
+            for (dirFlash = 0; dirFlash <= dirEndFlash; dirFlash += 256)
+            {
+                backWkr.ReportProgress((int)(100 * dirFlash / dirEndFlash), 2);
+
+                espera_readpage = true;
+                tiempo_prog_flash = 0;
+                try
+                {
+                    serialPort1.Write("W25Q128_read_page " + dirFlash + "\r");
+                }
+                catch(Exception)
+                { }
+                // espera a que el picoblaze atienda a comando de programación
+                while (espera_readpage == true) // espera 2 segundos
+                {
+                    if (tiempo_prog_flash > 2000)
+                    {
+                        MessageBox.Show("Timeout en programación de Flash");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return; // el DSP no responde se aborta programacion
+                    }
+                }
+                for (int i = 0; i < 256; i++)
+                {
+                    if (pag_flash[i] != prog_buffer[dirFlash + i])
+                    {
+                        MessageBox.Show("Error verificacion de borrado de flash");
+                        backWkr.ReportProgress(0, 3);
+                        test = TipoTest.NO_TEST;
+                        return; // Error de verificacion
+                    }
+                }
+            }
+
+            backWkr.ReportProgress(0, 3);
+            MessageBox.Show("Programacion de SPI FLASH completada");
+            test = TipoTest.NO_TEST;
+        }
+
+        void backWkr_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            // get the data...
+            int estado = (int)e.UserState;
+            int porcentaje = e.ProgressPercentage;
+            switch (estado)
+            {
+                case 0:
+                    if(form_progreso == null) form_progreso = new Form2();
+                    form_progreso.Text = "Borrado de la memoria";
+                    form_progreso.Show();
+                    form_progreso.BringToFront();
+                    form_progreso.progressBarCargaFirmware.Value = porcentaje;
+                    break;
+                case 1:
+                    form_progreso.Text = "Programación de Flash";
+                    form_progreso.BringToFront();
+                    form_progreso.progressBarCargaFirmware.Value = porcentaje;
+                    break;
+                case 2:
+                    form_progreso.Text = "Verificación de la programación";
+                    form_progreso.BringToFront();
+                    form_progreso.progressBarCargaFirmware.Value = porcentaje;
+                    break;
+                case 3:
+                    form_progreso.Close();
+                    form_progreso.Dispose();
+                    form_progreso = null;
+                    break;
+            }
+
+        }
 
 
     }

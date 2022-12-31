@@ -128,6 +128,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.botonProgramarFlash = new System.Windows.Forms.Button();
             this.buttonIgnorarSN = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.botonConectarDesconectar = new System.Windows.Forms.Button();
@@ -425,6 +426,7 @@
             this.label81 = new System.Windows.Forms.Label();
             this.textBoxOTPADCREFSEL = new System.Windows.Forms.TextBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxCalibraOFFTRIM = new System.Windows.Forms.PictureBox();
             this.label82 = new System.Windows.Forms.Label();
             this.buttonCalibrarOFFTRIM = new System.Windows.Forms.Button();
             this.textBoxOTPADCOFFTRIM = new System.Windows.Forms.TextBox();
@@ -490,11 +492,11 @@
             this.labelVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.check_AMC1305M25 = new System.Windows.Forms.CheckBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15003 = new System.Windows.Forms.RadioButton();
             this.radioButtonSeleccionBRD15001 = new System.Windows.Forms.RadioButton();
-            this.check_AMC1305M25 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLed3)).BeginInit();
@@ -634,6 +636,7 @@
             this.tabPage3.SuspendLayout();
             this.groupBox16.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCalibraOFFTRIM)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodManchester)).BeginInit();
@@ -1795,19 +1798,31 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.botonProgramarFlash);
             this.groupBox2.Controls.Add(this.buttonIgnorarSN);
             this.groupBox2.Controls.Add(this.button12);
             this.groupBox2.Controls.Add(this.botonConectarDesconectar);
             this.groupBox2.Controls.Add(this.comboBoxCOMs);
             this.groupBox2.Controls.Add(this.groupBox27);
-            this.groupBox2.Location = new System.Drawing.Point(495, 97);
+            this.groupBox2.Location = new System.Drawing.Point(495, 98);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(178, 161);
+            this.groupBox2.Size = new System.Drawing.Size(178, 193);
             this.groupBox2.TabIndex = 35;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Conexion USB-SERIE";
+            // 
+            // botonProgramarFlash
+            // 
+            this.botonProgramarFlash.Enabled = false;
+            this.botonProgramarFlash.Location = new System.Drawing.Point(10, 68);
+            this.botonProgramarFlash.Name = "botonProgramarFlash";
+            this.botonProgramarFlash.Size = new System.Drawing.Size(93, 23);
+            this.botonProgramarFlash.TabIndex = 70;
+            this.botonProgramarFlash.Text = "Programar Flash";
+            this.botonProgramarFlash.UseVisualStyleBackColor = true;
+            this.botonProgramarFlash.Click += new System.EventHandler(this.botonProgramarFlash_Click);
             // 
             // buttonIgnorarSN
             // 
@@ -1854,24 +1869,24 @@
             // groupBox27
             // 
             this.groupBox27.Controls.Add(this.textBoxPing);
-            this.groupBox27.Location = new System.Drawing.Point(4, 66);
+            this.groupBox27.Location = new System.Drawing.Point(4, 97);
             this.groupBox27.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox27.Name = "groupBox27";
             this.groupBox27.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox27.Size = new System.Drawing.Size(170, 85);
+            this.groupBox27.Size = new System.Drawing.Size(170, 91);
             this.groupBox27.TabIndex = 65;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "Versiones de firmware e ids / num serie de dispositivos";
             // 
             // textBoxPing
             // 
-            this.textBoxPing.Location = new System.Drawing.Point(4, 28);
+            this.textBoxPing.Location = new System.Drawing.Point(4, 29);
             this.textBoxPing.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPing.Multiline = true;
             this.textBoxPing.Name = "textBoxPing";
             this.textBoxPing.ReadOnly = true;
             this.textBoxPing.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxPing.Size = new System.Drawing.Size(162, 48);
+            this.textBoxPing.Size = new System.Drawing.Size(162, 57);
             this.textBoxPing.TabIndex = 64;
             // 
             // groupBox3
@@ -5109,9 +5124,9 @@
             // 
             this.groupBox16.Controls.Add(this.label81);
             this.groupBox16.Controls.Add(this.textBoxOTPADCREFSEL);
-            this.groupBox16.Location = new System.Drawing.Point(328, 390);
+            this.groupBox16.Location = new System.Drawing.Point(342, 390);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(124, 41);
+            this.groupBox16.Size = new System.Drawing.Size(110, 41);
             this.groupBox16.TabIndex = 86;
             this.groupBox16.TabStop = false;
             this.groupBox16.Text = "Reg. ADCREFSEL";
@@ -5119,7 +5134,7 @@
             // label81
             // 
             this.label81.AutoSize = true;
-            this.label81.Location = new System.Drawing.Point(8, 18);
+            this.label81.Location = new System.Drawing.Point(7, 18);
             this.label81.Name = "label81";
             this.label81.Size = new System.Drawing.Size(29, 13);
             this.label81.TabIndex = 0;
@@ -5127,15 +5142,16 @@
             // 
             // textBoxOTPADCREFSEL
             // 
-            this.textBoxOTPADCREFSEL.Location = new System.Drawing.Point(44, 15);
+            this.textBoxOTPADCREFSEL.Location = new System.Drawing.Point(42, 15);
             this.textBoxOTPADCREFSEL.Name = "textBoxOTPADCREFSEL";
             this.textBoxOTPADCREFSEL.ReadOnly = true;
-            this.textBoxOTPADCREFSEL.Size = new System.Drawing.Size(56, 20);
+            this.textBoxOTPADCREFSEL.Size = new System.Drawing.Size(57, 20);
             this.textBoxOTPADCREFSEL.TabIndex = 1;
             this.textBoxOTPADCREFSEL.Text = "FFFF";
             // 
             // groupBox15
             // 
+            this.groupBox15.Controls.Add(this.pictureBoxCalibraOFFTRIM);
             this.groupBox15.Controls.Add(this.label82);
             this.groupBox15.Controls.Add(this.buttonCalibrarOFFTRIM);
             this.groupBox15.Controls.Add(this.textBoxOTPADCOFFTRIM);
@@ -5144,15 +5160,24 @@
             this.groupBox15.Controls.Add(this.label79);
             this.groupBox15.Location = new System.Drawing.Point(21, 390);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(301, 41);
+            this.groupBox15.Size = new System.Drawing.Size(317, 41);
             this.groupBox15.TabIndex = 85;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Reg. ADCOFFTRIM";
             // 
+            // pictureBoxCalibraOFFTRIM
+            // 
+            this.pictureBoxCalibraOFFTRIM.Location = new System.Drawing.Point(142, 17);
+            this.pictureBoxCalibraOFFTRIM.Name = "pictureBoxCalibraOFFTRIM";
+            this.pictureBoxCalibraOFFTRIM.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxCalibraOFFTRIM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxCalibraOFFTRIM.TabIndex = 127;
+            this.pictureBoxCalibraOFFTRIM.TabStop = false;
+            // 
             // label82
             // 
             this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(255, 10);
+            this.label82.Location = new System.Drawing.Point(275, 9);
             this.label82.Name = "label82";
             this.label82.Size = new System.Drawing.Size(40, 26);
             this.label82.TabIndex = 93;
@@ -5179,7 +5204,7 @@
             // 
             // textBoxCalibracion
             // 
-            this.textBoxCalibracion.Location = new System.Drawing.Point(209, 15);
+            this.textBoxCalibracion.Location = new System.Drawing.Point(235, 15);
             this.textBoxCalibracion.Name = "textBoxCalibracion";
             this.textBoxCalibracion.Size = new System.Drawing.Size(40, 20);
             this.textBoxCalibracion.TabIndex = 88;
@@ -5190,7 +5215,7 @@
             // label96
             // 
             this.label96.AutoSize = true;
-            this.label96.Location = new System.Drawing.Point(140, 18);
+            this.label96.Location = new System.Drawing.Point(169, 18);
             this.label96.Name = "label96";
             this.label96.Size = new System.Drawing.Size(63, 13);
             this.label96.TabIndex = 90;
@@ -5457,9 +5482,9 @@
             this.groupBox29.Controls.Add(this.labelLeyendaT6);
             this.groupBox29.Controls.Add(this.labelLeyendaT9);
             this.groupBox29.Controls.Add(this.labelLeyendaT8);
-            this.groupBox29.Location = new System.Drawing.Point(495, 263);
+            this.groupBox29.Location = new System.Drawing.Point(495, 295);
             this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(178, 319);
+            this.groupBox29.Size = new System.Drawing.Size(178, 280);
             this.groupBox29.TabIndex = 66;
             this.groupBox29.TabStop = false;
             this.groupBox29.Text = "Resultados de tests";
@@ -5467,7 +5492,7 @@
             // labelSugerenciaADCOFFTRIM
             // 
             this.labelSugerenciaADCOFFTRIM.AutoSize = true;
-            this.labelSugerenciaADCOFFTRIM.Location = new System.Drawing.Point(8, 290);
+            this.labelSugerenciaADCOFFTRIM.Location = new System.Drawing.Point(67, 223);
             this.labelSugerenciaADCOFFTRIM.Name = "labelSugerenciaADCOFFTRIM";
             this.labelSugerenciaADCOFFTRIM.Size = new System.Drawing.Size(41, 13);
             this.labelSugerenciaADCOFFTRIM.TabIndex = 137;
@@ -5516,7 +5541,7 @@
             // pictureBoxWorking
             // 
             this.pictureBoxWorking.Image = global::TestFuncionalBRD15001.Properties.Resources.large_gears;
-            this.pictureBoxWorking.Location = new System.Drawing.Point(142, 254);
+            this.pictureBoxWorking.Location = new System.Drawing.Point(143, 243);
             this.pictureBoxWorking.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBoxWorking.Name = "pictureBoxWorking";
             this.pictureBoxWorking.Size = new System.Drawing.Size(30, 32);
@@ -5795,6 +5820,17 @@
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Selección de placa a testar";
             // 
+            // check_AMC1305M25
+            // 
+            this.check_AMC1305M25.AutoSize = true;
+            this.check_AMC1305M25.Location = new System.Drawing.Point(422, 63);
+            this.check_AMC1305M25.Name = "check_AMC1305M25";
+            this.check_AMC1305M25.Size = new System.Drawing.Size(147, 17);
+            this.check_AMC1305M25.TabIndex = 4;
+            this.check_AMC1305M25.Text = "Usa AMC1305M25 (NTC)";
+            this.check_AMC1305M25.UseVisualStyleBackColor = true;
+            this.check_AMC1305M25.CheckedChanged += new System.EventHandler(this.check_AMC1305M25_CheckedChanged);
+            // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
@@ -5840,17 +5876,6 @@
             this.radioButtonSeleccionBRD15001.Text = "Conjunto de placas BRD15001/10030_2001 (Lista de material V4 a V10)";
             this.radioButtonSeleccionBRD15001.UseVisualStyleBackColor = true;
             this.radioButtonSeleccionBRD15001.CheckedChanged += new System.EventHandler(this.radioButtonSeleccionBRD15001_CheckedChanged);
-            // 
-            // check_AMC1305M25
-            // 
-            this.check_AMC1305M25.AutoSize = true;
-            this.check_AMC1305M25.Location = new System.Drawing.Point(422, 63);
-            this.check_AMC1305M25.Name = "check_AMC1305M25";
-            this.check_AMC1305M25.Size = new System.Drawing.Size(147, 17);
-            this.check_AMC1305M25.TabIndex = 4;
-            this.check_AMC1305M25.Text = "Usa AMC1305M25 (NTC)";
-            this.check_AMC1305M25.UseVisualStyleBackColor = true;
-            this.check_AMC1305M25.CheckedChanged += new System.EventHandler(this.check_AMC1305M25_CheckedChanged);
             // 
             // Form1
             // 
@@ -6042,6 +6067,7 @@
             this.groupBox16.PerformLayout();
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCalibraOFFTRIM)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMedVoltRMS)).EndInit();
@@ -6539,6 +6565,8 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.CheckBox check_AMC1305M25;
+        private System.Windows.Forms.Button botonProgramarFlash;
+        private System.Windows.Forms.PictureBox pictureBoxCalibraOFFTRIM;
     }
 }
 
