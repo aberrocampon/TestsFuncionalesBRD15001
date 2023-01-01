@@ -57,6 +57,7 @@ namespace TestFuncionalBRD15001
         private volatile bool espera_writepageok = false;
         private volatile bool espera_writepageerrchk = false;
         private volatile bool espera_readpage = false;
+        private volatile bool espera_reconfiguracion = false;
         private volatile byte[] pag_flash = new byte[256];
         private byte[] prog_buffer = new byte[0xD0000]; // Maxima capacidad para un bitstream de LX25, 13 bloques de 64Kbytes (8 bloques si LX16)
         private volatile int tiempo_prog_flash = 0;
@@ -4742,7 +4743,7 @@ namespace TestFuncionalBRD15001
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
                 "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:", "canal16=", "estadopll=",
                 "SPV_ALARMS=", "W25Q128_erase_block:ok", "W25Q128_write_page:ACK", "W25Q128_write_page:errchk", "W25Q128_write_page:ok",
-                "W25Q128_PAGE=0x"};
+                "W25Q128_PAGE=0x", "W25Q128_reconfiguration:ok"};
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -5337,6 +5338,14 @@ namespace TestFuncionalBRD15001
                                         espera_readpage = false;
                                     }
                                     break;
+                                case 53:
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        // contador_comandos--; No es un comando emitido por el timer2 sino por el hilo de progracion de FLASH
+                                        espera_reconfiguracion = false;
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -5788,7 +5797,7 @@ namespace TestFuncionalBRD15001
                     if (tiempo_prog_flash > 2000)
                     {
                         MessageBox.Show("Timeout en programación de Flash");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return; // el DSP no responde se aborta programacion
                     }
@@ -5814,7 +5823,7 @@ namespace TestFuncionalBRD15001
                     if (tiempo_prog_flash > 2000)
                     {
                         MessageBox.Show("Timeout en programación de Flash");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return; // el DSP no responde se aborta programacion
                     }
@@ -5847,14 +5856,14 @@ namespace TestFuncionalBRD15001
                     if (espera_writepageerrchk == false)
                     {
                         MessageBox.Show("Error de checksum en transmision de binario");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return;
                     }
                     if (tiempo_prog_flash > 2000)
                     {
                         MessageBox.Show("Timeout en programación de Flash");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return; // el DSP no responde se aborta programacion
                     }
@@ -5873,13 +5882,13 @@ namespace TestFuncionalBRD15001
                 }
                 catch(Exception)
                 { }
-                // espera a que el picoblaze atienda a comando de programación
+                // espera a que el DSP atienda a comando de lectura de FLASH
                 while (espera_readpage == true) // espera 2 segundos
                 {
                     if (tiempo_prog_flash > 2000)
                     {
                         MessageBox.Show("Timeout en programación de Flash");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return; // el DSP no responde se aborta programacion
                     }
@@ -5889,14 +5898,41 @@ namespace TestFuncionalBRD15001
                     if (pag_flash[i] != prog_buffer[dirFlash + i])
                     {
                         MessageBox.Show("Error verificacion de borrado de flash");
-                        backWkr.ReportProgress(0, 3);
+                        backWkr.ReportProgress(0, 4);
                         test = TipoTest.NO_TEST;
                         return; // Error de verificacion
                     }
                 }
             }
-
-            backWkr.ReportProgress(0, 3);
+            // Reconfiguración ////////////////////////////////////////////////////////////////
+            espera_reconfiguracion = true;
+            tiempo_prog_flash = 0;
+            try
+            {
+                serialPort1.Write("W25Q128_reconfiguration\r");
+            }
+            catch (Exception)
+            { }
+            // espera a que el DSP atienda a comando reconfiguracion
+            while (espera_reconfiguracion == true) // espera 5 segundos
+            {
+                System.Threading.Thread.Sleep(100);
+                backWkr.ReportProgress((int)(100 * tiempo_prog_flash / 5000), 3);
+                if (tiempo_prog_flash > 5000)
+                {
+                    MessageBox.Show("Timeout en solicitud de reconfiguración");
+                    backWkr.ReportProgress(0, 4);
+                    test = TipoTest.NO_TEST;
+                    return; // el DSP no responde se aborta programacion
+                }
+            }
+            backWkr.ReportProgress(0, 4);
+            try
+            {
+                serialPort1.Write("ping\r");
+            }
+            catch (Exception)
+            { }
             MessageBox.Show("Programacion de SPI FLASH completada");
             test = TipoTest.NO_TEST;
         }
@@ -5926,6 +5962,11 @@ namespace TestFuncionalBRD15001
                     form_progreso.progressBarCargaFirmware.Value = porcentaje;
                     break;
                 case 3:
+                    form_progreso.Text = "Solicitando reconfiguración...";
+                    form_progreso.BringToFront();
+                    form_progreso.progressBarCargaFirmware.Value = porcentaje;
+                    break;
+                case 4:
                     form_progreso.Close();
                     form_progreso.Dispose();
                     form_progreso = null;
