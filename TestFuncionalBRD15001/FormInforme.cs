@@ -131,10 +131,17 @@ namespace TestFuncionalBRD15001
             {
                 saveFileDialogInforme.FileName = "INF_TESTS_BRD15003_" + cad_versiones_hw + "_" + dateTime.ToString("hh-mm-ss_dd-MM-yyyy");
             }
+
+            if (Directory.Exists(Properties.Settings.Default.directorioInformes))
+            {
+                saveFileDialogInforme.InitialDirectory = Properties.Settings.Default.directorioInformes;
+            }
             DialogResult res_dial_guarda_fic = saveFileDialogInforme.ShowDialog();
             
             if(res_dial_guarda_fic == DialogResult.OK)
             {
+                Properties.Settings.Default.directorioInformes = Path.GetDirectoryName(saveFileDialogInforme.FileName);
+
                 StreamWriter writer = new StreamWriter(saveFileDialogInforme.FileName, false);
                 writer.Write(contenido);
                 writer.Close();

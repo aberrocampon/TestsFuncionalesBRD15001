@@ -351,6 +351,13 @@ namespace TestFuncionalBRD15001
             backWkr.ProgressChanged += backWkr_ProgressChanged;
             backWkr.DoWork += backWkr_DoWork;
 
+            Closing += OnClosing;
+
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
 
         private void util_Desconectar()
@@ -5672,7 +5679,10 @@ namespace TestFuncionalBRD15001
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "c:\\";
+                if (Directory.Exists(Properties.Settings.Default.directorioW25))
+                {
+                    openFileDialog.InitialDirectory = Properties.Settings.Default.directorioW25;//"c:\\";
+                }
                 openFileDialog.Filter = "ficheros W25 (*.w25)|*.w25|Todos los ficheros (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
@@ -5681,6 +5691,7 @@ namespace TestFuncionalBRD15001
                 {
                     //Get the path of specified file
                     filePath = openFileDialog.FileName;
+                    Properties.Settings.Default.directorioW25 = Path.GetDirectoryName(filePath);
 
                     //Read the contents of the file into a stream
                     Stream fileStream = openFileDialog.OpenFile();

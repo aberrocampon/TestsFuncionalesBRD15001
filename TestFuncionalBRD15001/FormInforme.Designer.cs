@@ -196,6 +196,7 @@
             // saveFileDialogInforme
             // 
             this.saveFileDialogInforme.Filter = "Fichero de Texto (*.txt)|*.txt";
+            this.saveFileDialogInforme.RestoreDirectory = true;
             this.saveFileDialogInforme.Title = "Guardar Informe de Resultados de Tests";
             // 
             // buttonInformeCerrar

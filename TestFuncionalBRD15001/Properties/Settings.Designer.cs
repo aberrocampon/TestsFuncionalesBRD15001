@@ -22,5 +22,29 @@ namespace TestFuncionalBRD15001.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string directorioW25 {
+            get {
+                return ((string)(this["directorioW25"]));
+            }
+            set {
+                this["directorioW25"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string directorioInformes {
+            get {
+                return ((string)(this["directorioInformes"]));
+            }
+            set {
+                this["directorioInformes"] = value;
+            }
+        }
     }
 }
