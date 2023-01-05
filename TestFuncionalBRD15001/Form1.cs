@@ -88,6 +88,9 @@ namespace TestFuncionalBRD15001
         private string cadena_dsp_classid = "";
         private string cadena_dsp_revid = "";
         private string cadena_FLASH_JEDEC_ID = "";
+        private string cadena_FPGA_IDCODE = "";
+        private uint fpga_idcode = 0;
+        private string cadena_FPGA_DEVICE = "";
         private int valor_OTP_ADCREFSEL = 0;
         private int valor_OTP_ADCOFFTRIM = 0;
         private string buffer_rx = "";
@@ -773,7 +776,7 @@ namespace TestFuncionalBRD15001
                     }
                     pictureBoxCalibraOFFTRIM.Image = TestFuncionalBRD15001.Properties.Resources.gnome_help;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return;
                 }
@@ -894,6 +897,7 @@ namespace TestFuncionalBRD15001
             informe += "* USB-SERIE VID: " + ((cadena_USB_UART_VID.Length!=0)? cadena_USB_UART_VID : "NO CONOCIDO") + "\r\n";
             informe += "* USB-SERIE PID: " + ((cadena_USB_UART_PID.Length != 0) ? cadena_USB_UART_PID : "NO CONOCIDO") + "\r\n";
             informe += "* USB-SERIE SN: " + ((cadena_USB_UART_SN.Length != 0) ? cadena_USB_UART_SN : "NO CONOCIDO") + "\r\n";
+            informe += "* FPGA IDCODE = " + ((cadena_FPGA_IDCODE.Length != 0) ? (cadena_FPGA_IDCODE + " (" + cadena_FPGA_DEVICE + ")") : "NO CONOCIDO") + "\r\n";
             informe += "* ID unico de la FPGA (DNA): " + ((cadena_id_dna.Length != 0) ? cadena_id_dna : "NO CONOCIDO") + "\r\n";
             informe += "* DSP PARTID = " + ((cadena_dsp_partid.Length != 0) ? cadena_dsp_partid : "NO CONOCIDO") + "\r\n";
             informe += "* DSP CLASSID = " + ((cadena_dsp_classid.Length != 0) ? cadena_dsp_classid : "NO CONOCIDO") + "\r\n";
@@ -1683,6 +1687,9 @@ namespace TestFuncionalBRD15001
                 cadena_dsp_classid = "";
                 cadena_dsp_revid = "";
                 cadena_FLASH_JEDEC_ID = "";
+                cadena_FPGA_IDCODE = "";
+                cadena_FPGA_DEVICE = "";
+                fpga_idcode = 0;
             }
             //if(!flag_cambia_versiones) leyenda_resultados_tests[(int)TipoTest.TEST_LEER_VERSIONES] = -1;
             //flag_cambia_versiones = false;
@@ -4792,7 +4799,7 @@ namespace TestFuncionalBRD15001
                                                                       p_ntc[6] * resistencia + p_ntc[7];
                                                     resistenciasNTC[ntc] = resistencia_pol.ToString(System.Globalization.CultureInfo.InvariantCulture);
                                                 }
-                                                catch (Exception ex)
+                                                catch (Exception)
                                                 {
                                                     
                                                 }
@@ -4905,6 +4912,41 @@ namespace TestFuncionalBRD15001
                                         }
                                         else respuesta_ok = false;
 
+                                        if (buffer_rx.Contains("FPGA_IDCODE:0x") && buffer_rx.Contains("-"))
+                                        {
+                                            cadena_FPGA_IDCODE = buffer_rx.Substring(buffer_rx.IndexOf("FPGA_IDCODE:0x"));
+                                            cadena_FPGA_IDCODE = cadena_FPGA_IDCODE.Substring(cadena_FPGA_IDCODE.IndexOf("0x") + 2);
+                                            cadena_FPGA_IDCODE = cadena_FPGA_IDCODE.Substring(0, cadena_FPGA_IDCODE.IndexOf("-"));
+                                                try
+                                                {
+                                                    fpga_idcode = Convert.ToUInt32(cadena_FPGA_IDCODE.Substring(0, 8), 16);
+                                                    switch(fpga_idcode & 0xFFFFFFF)
+                                                    {
+                                                        case 0x4000093:
+                                                            cadena_FPGA_DEVICE = "XC6SLX4";
+                                                            break;
+                                                        case 0x4001093:
+                                                            cadena_FPGA_DEVICE = "XC6SLX9";
+                                                            break;
+                                                        case 0x4002093:
+                                                            cadena_FPGA_DEVICE = "XC6SLX16";
+                                                            break;
+                                                        case 0x4004093:
+                                                            cadena_FPGA_DEVICE = "XC6SLX25";
+                                                            break;
+                                                        default:
+                                                            cadena_FPGA_DEVICE = "DESCONOCIDO";
+                                                            break;
+                                                    }   
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    fpga_idcode = 0;
+                                                    cadena_FPGA_DEVICE = "DESCONOCIDO";
+                                                }
+                                        }
+                                        else respuesta_ok = false;
+
                                         buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                         contador_comandos--;
 
@@ -4912,6 +4954,7 @@ namespace TestFuncionalBRD15001
                                         {
                                             cadena_versiones = "FPGA_VER:0x" + cadena_ver_fpga + "\r\n" +
                                                                "FIRMWARE_VER:" + cadena_ver_firmware + "\r\n" +
+                                                               "FPGA IDCODE:0x" + cadena_FPGA_IDCODE + "\r\n" +
                                                                "FPGA_ID_DNA:0x" + cadena_id_dna + "\r\n" +
                                                                "DSP_PARTID:0x" + cadena_dsp_partid + "\r\n" +
                                                                "DSP_CLASSID:0x" + cadena_dsp_classid + "\r\n" +
@@ -5665,6 +5708,12 @@ namespace TestFuncionalBRD15001
             string fileContent = string.Empty;
             string filePath = string.Empty;
 
+            if (fpga_idcode == 0)
+            {
+                MessageBox.Show("Device ID de la FPGA desconocido");
+                return;
+            }
+
             if (test != TipoTest.NO_TEST)
             {
                 timer1.Enabled = false;
@@ -5683,7 +5732,7 @@ namespace TestFuncionalBRD15001
                 {
                     openFileDialog.InitialDirectory = Properties.Settings.Default.directorioW25;//"c:\\";
                 }
-                openFileDialog.Filter = "ficheros W25 (*.w25)|*.w25|Todos los ficheros (*.*)|*.*";
+                openFileDialog.Filter = "ficheros SPI (*.spi)|*.spi|Todos los ficheros (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
@@ -5711,13 +5760,13 @@ namespace TestFuncionalBRD15001
                         dirFlash = 0;
 
                         //reconocimiento de un formato de fichero derivado de un MCS standard, salvo por:
-                        // extension de fichero W25
-                        // Primera linea W25Q128
+                        // extension de fichero SPI
+                        // Primera linea: "SPI-FLASH-MEMORY-BITSTREAM"
                         // Segunda y tercera linea comentarios para aclarar su uso solo en el modelo de placa
                         // al que se aplica correctamente es decir, placas de version PCB 06 con memoria SPI FLASH W25Q128
                         bool bFormatoW25_OK = true;
                         string linea = reader.ReadLine();
-                        if (linea != "W25Q128") bFormatoW25_OK = false;
+                        if (linea != "SPI-FLASH-MEMORY-BITSTREAM") bFormatoW25_OK = false;
                         else
                         {
                             linea = reader.ReadLine();
@@ -5731,7 +5780,7 @@ namespace TestFuncionalBRD15001
 
                         if(!bFormatoW25_OK)
                         {
-                            MessageBox.Show("Formato de fichero .W25 incorrecto");
+                            MessageBox.Show("Formato de fichero .SPI incorrecto");
                             test = TipoTest.NO_TEST;
                             return;
                         }
@@ -5749,12 +5798,6 @@ namespace TestFuncionalBRD15001
                                 dirFlash = (dirFlash & 0xffff) | ((Convert.ToInt64(linea.Substring(9, 4), 16)) << 16);
                             }
 
-                            if (dirFlash >= 0xD0000)
-                            {
-                                MessageBox.Show("Direccion en .W25 superior a 0x0CFFFF");
-                                return;
-                            }
-
                             if (tipoLinMCS == 4) continue;
                             if (tipoLinMCS == 1) break;
                             if (tipoLinMCS != 0) continue;
@@ -5763,6 +5806,12 @@ namespace TestFuncionalBRD15001
                             offsetLin = 0;
                             while (bytesLinMCS > 0)
                             {
+                                if (dirFlash >= 0xD0000)
+                                {
+                                    MessageBox.Show("Direccion en .SPI superior a 0x0CFFFF");
+                                    return;
+                                }
+
                                 prog_buffer[dirFlash] = Convert.ToByte(linea.Substring(9 + offsetLin, 2), 16);
 
                                 offsetLin += 2;
@@ -5772,6 +5821,79 @@ namespace TestFuncionalBRD15001
 
                         }
                     }
+
+                    // Busqueda de especificacion de tipo de dispositivo FPGA
+                    // Hay que buscar el configuration packet 0x31C2 : Type 1 packet header to Write 2 Words from IDCODE register
+                    UInt32 bitstream_idcode = 0; // Inicialmente se desconoce el idcode del bitstream
+                    for(dirFlash = 0; dirFlash < 0xD0000; dirFlash += 2)
+                    {
+                        UInt16 d;
+                        d = (UInt16)(((UInt16)prog_buffer[dirFlash] << 8) | (UInt16)prog_buffer[dirFlash + 1]);
+
+                        if (d == 0x31C2)
+                        {
+                            // Es un configuration packet tipo 1, de escritura, con 2 palabras desde el IDCODE register. 
+                            // Por tanto las proximas 2 palabras son el ID del bitstream
+                            dirFlash += 2;
+                            if (dirFlash >= (0xD0000 - 4)) break; // No hay mas array, por tanto: No se ha podido leer el idcode del bitstream, salir del bucle con bitstream_idcode = 0
+                            bitstream_idcode = ((UInt32)prog_buffer[dirFlash] << 24) | ((UInt32)prog_buffer[dirFlash + 1] << 16) | ((UInt32)prog_buffer[dirFlash + 2] << 8) | (UInt32)prog_buffer[dirFlash + 3];
+                            break;
+                        }
+
+                        if ((d == 0xFFFF) || (d == 0xAA99) || (d == 0x5566) || (d == 0x2000)) continue; // Dummy or sync words or NOOP
+                        
+                        if((d & 0xE000) == 0x2000) // Se trata de un configuration packet tipo 1, usar su word count para descartar sus datos
+                        {
+                            UInt16 wc;
+                            wc = (UInt16)(d & 0x1F); // word count
+                            dirFlash += 2*wc;
+                            continue;
+                        }
+
+                        if ((d & 0xE000) == 0x4000) // Se trata de un configuration packet tipo 2, usar su word count para descartar sus datos
+                        {
+                            UInt32 wc;
+                            wc = ((((UInt32)prog_buffer[dirFlash + 2] << 8) | (UInt32)prog_buffer[dirFlash + 3]) & 0x0FFF) << 16; // parte alta del word count de 28 bits
+                            wc |= (((UInt32)prog_buffer[dirFlash + 4] << 8) | (UInt32)prog_buffer[dirFlash + 5]);               // parte baja del word count de 28 bits
+                            dirFlash += 2*(2 + wc);
+                            continue;
+                        }
+
+                        // configuration packet desconocido
+                        break;
+                    }
+
+                    if (bitstream_idcode == 0)
+                    {
+                        MessageBox.Show("Device ID del fichero .SPI desconocido");
+                        return;
+                    }
+
+                    string cadena_bitstream_idcode = "";
+                    switch (bitstream_idcode & 0xFFFFFFF)
+                    {
+                        case 0x4000093:
+                            cadena_bitstream_idcode = "XC6SLX4";
+                            break;
+                        case 0x4001093:
+                            cadena_bitstream_idcode = "XC6SLX9";
+                            break;
+                        case 0x4002093:
+                            cadena_bitstream_idcode = "XC6SLX16";
+                            break;
+                        case 0x4004093:
+                            cadena_bitstream_idcode = "XC6SLX25";
+                            break;
+                        default:
+                            cadena_bitstream_idcode = "DESCONOCIDO";
+                            break;
+                    }
+                    if ((fpga_idcode & 0xFFFFFFF) != bitstream_idcode)
+                    {
+                        MessageBox.Show("Device ID del fichero .SPI (0x" + bitstream_idcode.ToString("X8") + ", " + cadena_bitstream_idcode + ") no coincide con el reconocido en la FPGA");
+                        return;
+                    }
+
                     backWkr.RunWorkerAsync();
                 }
                 else test = TipoTest.NO_TEST;
