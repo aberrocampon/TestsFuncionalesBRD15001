@@ -136,6 +136,9 @@
             this.groupBox27 = new System.Windows.Forms.GroupBox();
             this.textBoxPing = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxAD_NTC = new System.Windows.Forms.PictureBox();
+            this.textBoxAD_NTC = new System.Windows.Forms.TextBox();
+            this.label80 = new System.Windows.Forms.Label();
             this.label90 = new System.Windows.Forms.Label();
             this.textBoxToleranciaNTC4 = new System.Windows.Forms.TextBox();
             this.textBoxToleranciaNTC3 = new System.Windows.Forms.TextBox();
@@ -538,6 +541,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox27.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAD_NTC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC2)).BeginInit();
@@ -1804,7 +1808,7 @@
             this.groupBox2.Controls.Add(this.botonConectarDesconectar);
             this.groupBox2.Controls.Add(this.comboBoxCOMs);
             this.groupBox2.Controls.Add(this.groupBox27);
-            this.groupBox2.Location = new System.Drawing.Point(495, 98);
+            this.groupBox2.Location = new System.Drawing.Point(515, 97);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
@@ -1891,6 +1895,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.pictureBoxAD_NTC);
+            this.groupBox3.Controls.Add(this.textBoxAD_NTC);
+            this.groupBox3.Controls.Add(this.label80);
             this.groupBox3.Controls.Add(this.label90);
             this.groupBox3.Controls.Add(this.textBoxToleranciaNTC4);
             this.groupBox3.Controls.Add(this.textBoxToleranciaNTC3);
@@ -1925,14 +1932,43 @@
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.textNTC0);
             this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Location = new System.Drawing.Point(0, 292);
+            this.groupBox3.Location = new System.Drawing.Point(217, 227);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(274, 165);
+            this.groupBox3.Size = new System.Drawing.Size(274, 199);
             this.groupBox3.TabIndex = 36;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Lectura de NTCs";
+            // 
+            // pictureBoxAD_NTC
+            // 
+            this.pictureBoxAD_NTC.Location = new System.Drawing.Point(248, 166);
+            this.pictureBoxAD_NTC.Name = "pictureBoxAD_NTC";
+            this.pictureBoxAD_NTC.Size = new System.Drawing.Size(21, 14);
+            this.pictureBoxAD_NTC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxAD_NTC.TabIndex = 134;
+            this.pictureBoxAD_NTC.TabStop = false;
+            // 
+            // textBoxAD_NTC
+            // 
+            this.textBoxAD_NTC.Location = new System.Drawing.Point(92, 164);
+            this.textBoxAD_NTC.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxAD_NTC.Name = "textBoxAD_NTC";
+            this.textBoxAD_NTC.ReadOnly = true;
+            this.textBoxAD_NTC.Size = new System.Drawing.Size(151, 20);
+            this.textBoxAD_NTC.TabIndex = 133;
+            this.textBoxAD_NTC.Text = "Desconocido";
+            this.textBoxAD_NTC.DoubleClick += new System.EventHandler(this.textBoxAD_NTC_DoubleClick);
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(6, 167);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(61, 13);
+            this.label80.TabIndex = 132;
+            this.label80.Text = "Dispositivo:";
             // 
             // label90
             // 
@@ -2950,7 +2986,7 @@
             this.groupBox5.Controls.Add(this.numericUpDownTurbina1);
             this.groupBox5.Controls.Add(this.label35);
             this.groupBox5.Controls.Add(this.label33);
-            this.groupBox5.Location = new System.Drawing.Point(282, 324);
+            this.groupBox5.Location = new System.Drawing.Point(2, 294);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(187, 107);
             this.groupBox5.TabIndex = 38;
@@ -3105,9 +3141,9 @@
             this.groupBox6.Controls.Add(this.textBoxRS422);
             this.groupBox6.Controls.Add(this.checkBoxEnableRX_RS422);
             this.groupBox6.Controls.Add(this.checkBoxEnableTX_RS422);
-            this.groupBox6.Location = new System.Drawing.Point(222, 3);
+            this.groupBox6.Location = new System.Drawing.Point(217, 3);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(157, 106);
+            this.groupBox6.Size = new System.Drawing.Size(157, 109);
             this.groupBox6.TabIndex = 39;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "RS422";
@@ -4708,7 +4744,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 485);
+            this.tabControl1.Size = new System.Drawing.Size(506, 485);
             this.tabControl1.TabIndex = 63;
             // 
             // tabPage2
@@ -4717,13 +4753,13 @@
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.groupBox32);
             this.tabPage2.Controls.Add(this.groupBox6);
-            this.tabPage2.Controls.Add(this.groupBox28);
             this.tabPage2.Controls.Add(this.groupBox3);
+            this.tabPage2.Controls.Add(this.groupBox28);
             this.tabPage2.Controls.Add(this.groupBox5);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 459);
+            this.tabPage2.Size = new System.Drawing.Size(498, 459);
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Lect. NTCs, Cont Vel turbinas, COMs,...";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -4739,7 +4775,7 @@
             this.groupBox33.Controls.Add(this.label83);
             this.groupBox33.Controls.Add(this.pictureBoxFRAMEscritura1);
             this.groupBox33.Controls.Add(this.button9);
-            this.groupBox33.Location = new System.Drawing.Point(370, 185);
+            this.groupBox33.Location = new System.Drawing.Point(391, 58);
             this.groupBox33.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox33.Name = "groupBox33";
             this.groupBox33.Padding = new System.Windows.Forms.Padding(2);
@@ -4839,7 +4875,7 @@
             // 
             this.groupBox32.Controls.Add(this.pictureBoxSRAM);
             this.groupBox32.Controls.Add(this.button8);
-            this.groupBox32.Location = new System.Drawing.Point(370, 124);
+            this.groupBox32.Location = new System.Drawing.Point(391, 3);
             this.groupBox32.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox32.Name = "groupBox32";
             this.groupBox32.Padding = new System.Windows.Forms.Padding(2);
@@ -4874,7 +4910,7 @@
             this.groupBox28.Controls.Add(this.groupBox30);
             this.groupBox28.Controls.Add(this.pictureBoxCAN);
             this.groupBox28.Controls.Add(this.button7);
-            this.groupBox28.Location = new System.Drawing.Point(222, 124);
+            this.groupBox28.Location = new System.Drawing.Point(217, 116);
             this.groupBox28.Name = "groupBox28";
             this.groupBox28.Size = new System.Drawing.Size(124, 106);
             this.groupBox28.TabIndex = 40;
@@ -4980,7 +5016,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(470, 459);
+            this.tabPage1.Size = new System.Drawing.Size(498, 459);
             this.tabPage1.TabIndex = 1;
             this.tabPage1.Text = "Ent/Sal dig, TX/RX Opt, ...";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -5115,7 +5151,7 @@
             this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage3.Size = new System.Drawing.Size(470, 459);
+            this.tabPage3.Size = new System.Drawing.Size(498, 459);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Canales ADC";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -5327,7 +5363,7 @@
             this.tabPage4.Controls.Add(this.groupBox14);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(470, 459);
+            this.tabPage4.Size = new System.Drawing.Size(498, 459);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Recepción de stream codificado en Sigma-Delta";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -5482,7 +5518,7 @@
             this.groupBox29.Controls.Add(this.labelLeyendaT6);
             this.groupBox29.Controls.Add(this.labelLeyendaT9);
             this.groupBox29.Controls.Add(this.labelLeyendaT8);
-            this.groupBox29.Location = new System.Drawing.Point(495, 295);
+            this.groupBox29.Location = new System.Drawing.Point(515, 298);
             this.groupBox29.Name = "groupBox29";
             this.groupBox29.Size = new System.Drawing.Size(178, 280);
             this.groupBox29.TabIndex = 66;
@@ -5760,7 +5796,7 @@
             this.labelVersion});
             this.statusStrip1.Location = new System.Drawing.Point(0, 587);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(676, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(697, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 67;
             this.statusStrip1.Text = "statusStrip1";
@@ -5786,7 +5822,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(285, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(306, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "Progreso test actual";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -5815,7 +5851,7 @@
             this.groupBox13.Controls.Add(this.radioButtonSeleccionBRD15001);
             this.groupBox13.Location = new System.Drawing.Point(9, 5);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(660, 87);
+            this.groupBox13.Size = new System.Drawing.Size(684, 87);
             this.groupBox13.TabIndex = 68;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Selección de placa a testar";
@@ -5829,6 +5865,7 @@
             this.check_AMC1305M25.TabIndex = 4;
             this.check_AMC1305M25.Text = "Usa AMC1305M25 (NTC)";
             this.check_AMC1305M25.UseVisualStyleBackColor = true;
+            this.check_AMC1305M25.Visible = false;
             this.check_AMC1305M25.CheckedChanged += new System.EventHandler(this.check_AMC1305M25_CheckedChanged);
             // 
             // radioButton2
@@ -5881,7 +5918,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 609);
+            this.ClientSize = new System.Drawing.Size(697, 609);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox29);
@@ -5939,6 +5976,7 @@
             this.groupBox27.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAD_NTC)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNTC2)).EndInit();
@@ -6567,6 +6605,9 @@
         private System.Windows.Forms.CheckBox check_AMC1305M25;
         private System.Windows.Forms.Button botonProgramarFlash;
         private System.Windows.Forms.PictureBox pictureBoxCalibraOFFTRIM;
+        private System.Windows.Forms.PictureBox pictureBoxAD_NTC;
+        private System.Windows.Forms.TextBox textBoxAD_NTC;
+        private System.Windows.Forms.Label label80;
     }
 }
 

@@ -75,6 +75,8 @@ namespace TestFuncionalBRD15001
         private string buffer_tx_rs422_test = "";
         private string[] resistenciasNTC;
         private double correccionNTC = 1.0;
+        private int tipoAD_NTC = -1; // En principio desconocido
+        private bool cambia_tipoAD_NTC = false;
         private double[] refNTCs = { 20000.0, 11000.0, 4700.0, 2000.0, 1000.0 };//{ -1.0, -1.0, -1.0, -1.0, -1.0 };
         private int leeNTC;
         private string cadena_USB_UART_VID = "";
@@ -1174,6 +1176,20 @@ namespace TestFuncionalBRD15001
                 informe += "\r\n";
 
                 informe += "********** Test de sensado de termistores NTC: **********\r\n";
+                informe += "**** Reconocimiento de AD (U44, U45, U46, U47 y U48): ****\r\n";
+                informe += "* RESULTADO: ";
+                if(tipoAD_NTC == 0)
+                {
+                    informe += "AD7403BRIZ\r\n";
+                }
+                else if(tipoAD_NTC == 1)
+                {
+                    informe += "AMC1305M25\r\n";
+                }
+                else
+                {
+                    informe += "Desconocido\r\n";
+                }
                 informe += "**** Medida de resistencia NTC 1 (CON27): ****\r\n";
                 informe += "* RESULTADO: ";
                 if (test_ntcs_ok_fallo[0] == 1) informe += "OK\r\n";
@@ -1415,6 +1431,12 @@ namespace TestFuncionalBRD15001
             FormInforme fi = new FormInforme(seleccionPlaca, informe, leyenda_resultados_tests, cadena_USB_UART_VID + cadena_USB_UART_PID + "_" + cadena_USB_UART_SN + "_" + cadena_id_dna);
             fi.ShowDialog();
             fi.Close();
+        }
+
+        private void textBoxAD_NTC_DoubleClick(object sender, EventArgs e)
+        {
+            buffer_tx += "lee_selec_NTC\r"; // Lectura de la seleccion
+            contador_comandos++;
         }
 
         private void checkBoxEnableTX_RS422_CheckedChanged(object sender, EventArgs e)
@@ -1662,6 +1684,11 @@ namespace TestFuncionalBRD15001
                     //if (i != ((int)TipoTest.TEST_LEER_VERSIONES))    // tras correo de Joaquin Silva de Arteixo en el que se extraña de esto, lo pongo a marca '?' tambien. Quizas es mas coherente
                     leyenda_resultados_tests[i] = -1;
                 }
+
+                textBoxAD_NTC.Text = "Desconocido";
+                pictureBoxAD_NTC.Visible = false;
+                buffer_tx += "lee_selec_NTC\r"; // Lectura de la seleccion
+                contador_comandos++;
             }
             else
             {
@@ -3926,6 +3953,136 @@ namespace TestFuncionalBRD15001
 
                     break;
 
+                case TipoTest.TEST_NTCS:
+
+                    if (contador_test == 0)
+                    {
+                        foreach (PictureBox pb in marcasNTCs)
+                        {
+                            pb.Visible = false;
+                        }
+
+                        tipoAD_NTC = 0; // Asumir AD7403
+                        progressBarTestActual.Value = 0;
+                        pictureBoxAD_NTC.Visible = false;
+                        textBoxAD_NTC.Text = "Desconocido";
+
+                        //respuesta_test_sram = -1;
+                        //buffer_tx += "testsram\r";
+                        //contador_comandos++;
+
+                        contador_test = 1;
+
+                        //timeout_secuencia_test = 0;
+                    }
+                    else if (contador_test < 20) // 2 segundos
+                    {
+                        contador_test++;
+                        progressBarTestActual.Value = 50 * contador_test / 20;
+                    }
+                    else if (contador_test == 20)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            try
+                            {
+                                test_ntcs_medidas[i] = double.Parse(resistenciasNTC[i], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Test de medidas de resistencias NTCs");
+                                return;
+                            }
+                        }
+
+                        testNTC();
+                        int contador_oks = 0;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (test_ntcs_ok_fallo[i] == 1) contador_oks++;
+                        }
+
+                        if (contador_oks == 5)
+                        {
+                            buffer_tx += "selec_NTC_0\r"; // Solicita al DSP marcado con AD7403
+                            contador_comandos++;
+                            buffer_tx += "lee_selec_NTC\r"; // Lectura de la seleccion
+                            contador_comandos++;
+                            leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = 1;
+                            actualiza_marcas_leyenda_resultados_tests();
+
+                            timer1.Enabled = false;
+                            test = TipoTest.NO_TEST;
+
+                            progressBarTestActual.Value = 100;
+
+                            foreach (PictureBox pb in marcasNTCs)
+                            {
+                                pb.Visible = true;
+                            }
+
+                            return;
+                        }
+
+                        contador_test++;
+                        tipoAD_NTC = 1; // Asumir AMC1305
+                        progressBarTestActual.Value = 50;
+                    }
+                    else if (contador_test < 40) // 2 segundos
+                    {
+                        contador_test++;
+                        progressBarTestActual.Value = 100 * contador_test / 40;
+                    }
+                    else if (contador_test == 40)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            try
+                            {
+                                test_ntcs_medidas[i] = double.Parse(resistenciasNTC[i], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Test de medidas de resistencias NTCs");
+                                return;
+                            }
+                        }
+
+                        testNTC();
+                        progressBarTestActual.Value = 100;
+                        timer1.Enabled = false;
+                        test = TipoTest.NO_TEST;
+
+                        foreach (PictureBox pb in marcasNTCs)
+                        {
+                            pb.Visible = true;
+                        }
+
+                        int contador_oks = 0;
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (test_ntcs_ok_fallo[i] == 1) contador_oks++;
+                        }
+
+                        if (contador_oks == 5)
+                        {
+                            buffer_tx += "selec_NTC_1\r"; // Solicita al DSP marcado con AD7403
+                            contador_comandos++;
+                            buffer_tx += "lee_selec_NTC\r"; // Lectura de la seleccion
+                            contador_comandos++;
+                            leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = 1;
+                            actualiza_marcas_leyenda_resultados_tests();
+
+                            return;
+                        }
+
+                        tipoAD_NTC = -1;
+                        leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = 0;
+                        actualiza_marcas_leyenda_resultados_tests();
+                    }
+
+                    break;
+
                 case TipoTest.NO_TEST:
 
                     break;
@@ -4671,6 +4828,31 @@ namespace TestFuncionalBRD15001
             // timer para detectar timeout cuando se programa la SPI FLASH
             tiempo_prog_flash++;
 
+            // respuestas de comandos de lectura del tipo de AD de NTC
+            if (cambia_tipoAD_NTC)
+            {
+                if (tipoAD_NTC == 0)
+                {
+                    textBoxAD_NTC.Text = "AD7403BRIZ";
+                    pictureBoxAD_NTC.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                    pictureBoxAD_NTC.Visible = true;
+                }
+                else if (tipoAD_NTC == 1)
+                {
+                    textBoxAD_NTC.Text = "AMC1305M25";
+                    pictureBoxAD_NTC.Image = TestFuncionalBRD15001.Properties.Resources.Green_Tick_300px;
+                    pictureBoxAD_NTC.Visible = true;
+                }
+                else
+                {
+                    textBoxAD_NTC.Text = "Desconocido";
+                    pictureBoxAD_NTC.Image = TestFuncionalBRD15001.Properties.Resources.Red_Cross_300px;
+                    pictureBoxAD_NTC.Visible = true;
+                }
+
+                cambia_tipoAD_NTC = false;
+            }
+
         }
 
         private void textBoxRefSupv_TextChanged(object sender, EventArgs e)
@@ -4757,7 +4939,7 @@ namespace TestFuncionalBRD15001
                 "testsram:ok", "testsram:fallo", "testfram:borrado", "testfram:escritura", "testfram:bloqueo",
                 "testfram:ok", "testfram:fallo", "leertc=", "escrtc:ok", "ERROR DE INTERPRETE:", "canal16=", "estadopll=",
                 "SPV_ALARMS=", "W25Q128_erase_block:ok", "W25Q128_write_page:ACK", "W25Q128_write_page:errchk", "W25Q128_write_page:ok",
-                "W25Q128_PAGE=0x", "W25Q128_reconfiguration:ok"};
+                "W25Q128_PAGE=0x", "W25Q128_reconfiguration:ok", "selec_NTC_0:ok", "selec_NTC_1:ok", "lee_selec_NTC=" };
 
             buffer_rx += serialPort1.ReadExisting();
 
@@ -4783,27 +4965,43 @@ namespace TestFuncionalBRD15001
                                             buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
                                             contador_comandos--;
                                             // Correccion a la medida de las NTC, a causa del cambio del componente AD7403BRIZ a AMC1305M25-Q1
-                                            if (correccionNTC != 1.0)
+                                            
+                                            double resistencia, resistencia_pol = 50.0;
+
+                                            try
                                             {
-                                                double resistencia, resistencia_pol;
-                                                double[] p_ntc = { 6.288120111874878e-26, -4.818892126578098e-21, 1.530791712937810e-16, -2.411995750619682e-12,
-                                                    2.134919926091619e-08, -5.183744968656842e-05, 1.305174655786496e+00, 2.099394029698490e+02}; // coeficientes de polinomio order 7 para componente AMC1305
+                                                resistencia = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
 
-                                                try
+                                                if(tipoAD_NTC == 0) // Componente original AD7403
                                                 {
-                                                    resistencia = double.Parse(resistenciasNTC[ntc], System.Globalization.CultureInfo.InvariantCulture);
-
-                                                    resistencia_pol = p_ntc[0] * Math.Pow(resistencia, 7.0) + p_ntc[1] * Math.Pow(resistencia, 6.0) +
-                                                                      p_ntc[2] * Math.Pow(resistencia, 5.0) + p_ntc[3] * Math.Pow(resistencia, 4.0) +
-                                                                      p_ntc[4] * Math.Pow(resistencia, 3.0) + p_ntc[5] * Math.Pow(resistencia, 2.0) +
-                                                                      p_ntc[6] * resistencia + p_ntc[7];
-                                                    resistenciasNTC[ntc] = resistencia_pol.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                                                    resistencia_pol = resistencia;
                                                 }
-                                                catch (Exception)
+                                                else if(tipoAD_NTC == 1) // Componente alternativo AMC1305M25
                                                 {
+                                                    double[] p_ntc = { -2.323495160772411e-42, 3.134349264538716e-37, -1.805880209560663e-32, 5.806483329440464e-28, -1.139410921331624e-23, 1.400967599612110e-19,
+                                                        -1.061530867202310e-15, 4.713526576730509e-12, -9.634690289407035e-09, 4.308452559072969e-05, 1.176623106549358e+00, 2.430709447257015e+02
+                                                        }; // coeficientes de polinomio order 11 para componente AMC1305
+
+
+                                                    resistencia_pol = p_ntc[0] * Math.Pow(resistencia, 11.0) + p_ntc[1] * Math.Pow(resistencia, 10.0) +
+                                                                      p_ntc[2] * Math.Pow(resistencia, 9.0) + p_ntc[3] * Math.Pow(resistencia, 8.0) +
+                                                                      p_ntc[4] * Math.Pow(resistencia, 7.0) + p_ntc[5] * Math.Pow(resistencia, 6.0) +
+                                                                      p_ntc[6] * Math.Pow(resistencia, 5.0) + p_ntc[7] * Math.Pow(resistencia, 4.0) +
+                                                                      p_ntc[8] * Math.Pow(resistencia, 3.0) + p_ntc[9] * Math.Pow(resistencia, 2.0) +
+                                                                      p_ntc[10] * resistencia + p_ntc[11];
+                                                }
+                                                else
+                                                {
+                                                    resistencia_pol = resistencia;//50.0; // Si descononido entonces valor bajo de corriente
+                                                }
                                                     
-                                                }
+                                                resistenciasNTC[ntc] = resistencia_pol.ToString(System.Globalization.CultureInfo.InvariantCulture);
                                             }
+                                            catch (Exception)
+                                            {
+                                                    
+                                            }
+                                            
                                         }
                                         else
                                         {
@@ -5396,6 +5594,26 @@ namespace TestFuncionalBRD15001
                                         espera_reconfiguracion = false;
                                     }
                                     break;
+                                case 54: // selec_NTC_0:ok
+                                case 55: // selec_NTC_1:ok
+                                    if (buffer_rx.Length >= (cad_parser[j].Length + 2))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length + 2);
+                                        contador_comandos--;
+                                    }
+                                    break;
+                                case 56: // lee_selec_NTC=
+                                    if ((buffer_rx.Length >= (cad_parser[j].Length + 3)) && buffer_rx.Contains("\r\n"))
+                                    {
+                                        buffer_rx = buffer_rx.Substring(cad_parser[j].Length);
+                                        tipoAD_NTC = Convert.ToInt32(buffer_rx.Substring(0, buffer_rx.IndexOf("\r\n")));
+                                        if ((tipoAD_NTC != 0) && (tipoAD_NTC != 1) && (tipoAD_NTC != -1)) tipoAD_NTC = -1;
+                                        cambia_tipoAD_NTC = true;
+
+                                        buffer_rx = buffer_rx.Substring(buffer_rx.IndexOf("\r\n") + 2);
+                                        contador_comandos--;
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -5453,10 +5671,10 @@ namespace TestFuncionalBRD15001
                 }
             }
 
-            foreach (PictureBox pb in marcasNTCs)
-            {
-                pb.Visible = true;
-            }
+            //foreach (PictureBox pb in marcasNTCs)
+            //{
+                //pb.Visible = true;
+            //}
 
         }
 
@@ -5469,6 +5687,7 @@ namespace TestFuncionalBRD15001
             // configurados como referencia
 
             if (!serialPort1.IsOpen) return;
+            if ((test != TipoTest.NO_TEST) || !serialPort1.IsOpen) return;
 
             // Comprobar que todos los valores de referencia y tolerancias se han definido
             for (int i = 0; i < 5; i++)
@@ -5511,16 +5730,13 @@ namespace TestFuncionalBRD15001
             leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = -1;
             actualiza_marcas_leyenda_resultados_tests();
 
-            testNTC();
+            //////////////////////////////////////////////////
+            /// Test y reconocimiento de AD montado
+            //////////////////////////////////////////////////
 
-            for (int i = 0, contador_oks = 0; i < 5; i++)
-            {
-                if (test_ntcs_ok_fallo[i] == 1) contador_oks++;
-                if ((i == 4) && (contador_oks == 5)) leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = 1;
-                else leyenda_resultados_tests[(int)TipoTest.TEST_NTCS] = 0;
-            }
-
-            actualiza_marcas_leyenda_resultados_tests();
+            test = TipoTest.TEST_NTCS;
+            contador_test = 0;
+            timer1.Enabled = true;
         }
 
         private void button12_Click(object sender, EventArgs e)
