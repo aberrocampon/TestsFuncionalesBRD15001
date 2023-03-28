@@ -4412,7 +4412,7 @@ namespace TestFuncionalBRD15001
             labelTimeout.Text = "Time out: " + timeout_esperarespuesta;
             labelComandoActual.Text = "Comando actual: " + comando_actual;
 
-            if (test != TipoTest.PROGRAMACION_FLASH)
+            if ((test != TipoTest.PROGRAMACION_FLASH) && (test != TipoTest.TEST_FRAM))
             {
                 if (contador_comandos > 0)
                 {
